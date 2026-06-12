@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Localiza&Co · Simulador de Frota</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+[data-theme="dark"]{
+  --green:#00C853;--green-l:#00E676;--green-bg:#00C85312;--green-bd:#00C85330;
+  --bg:#090D0B;--s1:#101710;--s2:#141F14;--s3:#1A271A;
+  --bd:#1E2B1E;--bd2:#243824;
+  --text:#E8FFF0;--muted:#6B9478;--muted2:#3D5A47;
+  --red:#FF4060;--red-bg:#FF406012;--red-bd:#FF406030;
+  --amber:#FFB300;--tip-bg:#1A2E1A;--tip-bd:#243824;
+  --topbar-from:#003D18;--topbar-to:#005A22;--topbar-bd:#004D1E;
+  --input-bg:#141F14;--shadow:0 2px 12px #00000040;
+  --tab-active-bg:#00C85318;--tab-active-bd:#00C85350;
+}
+[data-theme="light"]{
+  --green:#009624;--green-l:#007A1E;--green-bg:#00962408;--green-bd:#00962420;
+  --bg:#F0F5F1;--s1:#FFFFFF;--s2:#F4F8F5;--s3:#EAF2EC;
+  --bd:#D4E4D8;--bd2:#C0D8C6;
+  --text:#0D2014;--muted:#4A7057;--muted2:#7A9E88;
+  --red:#D4002A;--red-bg:#D4002A0A;--red-bd:#D4002A25;
+  --amber:#C47A00;--tip-bg:#FFFFFF;--tip-bd:#C0D8C6;
+  --topbar-from:#004D1E;--topbar-to:#006B2E;--topbar-bd:#005A22;
+  --input-bg:#FFFFFF;--shadow:0 2px 12px #00000018;
+  --tab-active-bg:#00962410;--tab-active-bd:#00962440;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;transition:background .25s,color .25s}
+
+/* ── TOPBAR ── */
+.topbar{background:linear-gradient(135deg,var(--topbar-from),var(--topbar-to));border-bottom:1px solid var(--topbar-bd);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;flex-shrink:0}
+.logo-name{font-size:16px;font-weight:800;color:#fff}
+.logo-name em{color:#7EFFA8;font-style:normal}
+.logo-sub{font-size:11px;color:#7FD49A;font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.profile-switcher{display:flex;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);border-radius:20px;overflow:hidden;padding:3px;gap:3px}
+.p-btn{padding:5px 16px;border:none;background:transparent;color:rgba(255,255,255,.65);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;border-radius:16px;transition:all .2s;white-space:nowrap}
+.p-btn.active{background:var(--green);color:#fff}
+.theme-toggle{width:52px;height:28px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.18);cursor:pointer;position:relative;display:flex;align-items:center;padding:0 4px;transition:background .25s;flex-shrink:0}
+.tt-knob{width:22px;height:22px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 4px #00000030}
+[data-theme="light"] .tt-knob{transform:translateX(24px)}
+
+/* ── TABS ── */
+.tabs-bar{display:flex;gap:4px;padding:16px 20px 0;border-bottom:1px solid var(--bd);background:var(--s1);position:sticky;top:56px;z-index:100;transition:background .25s,border-color .25s}
+.tab{padding:9px 20px;border:1px solid transparent;border-bottom:none;border-radius:8px 8px 0 0;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;background:transparent;font-family:inherit}
+.tab:hover{color:var(--text);background:var(--s2)}
+.tab.active{color:var(--green);background:var(--tab-active-bg);border-color:var(--tab-active-bd);border-bottom-color:var(--s1)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── PAGE ── */
+.page{max-width:1280px;margin:0 auto;padding:20px 20px 40px}
+
+/* ── HERO ── */
+.result-hero{
+  display:grid;
+  grid-template-columns:1fr 1fr 320px;
+  gap:14px;
+  margin-bottom:16px;
+}
+.rh-card{border-radius:12px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;overflow:hidden;transition:all .25s}
+.rh-card::before{content:'';position:absolute;inset:0;opacity:.06;background:radial-gradient(circle at 80% 50%,#fff,transparent)}
+.rh-card.winner{background:var(--green);border:1px solid var(--green)}
+.rh-card.winner .rh-badge,
+.rh-card.winner .rh-title,
+.rh-card.winner .rh-value,
+.rh-card.winner .rh-sub,
+.rh-card.winner .rh-mes-label,
+.rh-card.winner .rh-mes{color:#FFFFFF}
+.rh-card.loser{background:var(--s1);border:1px solid var(--bd);box-shadow:var(--shadow)}
+.rh-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,.08);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.rh-badge.win{background:rgba(255,255,255,.18);color:#FFFFFF}
+.rh-title{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.rh-value{font-size:36px;font-weight:900;letter-spacing:-2px;line-height:1;color:var(--text)}
+.rh-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.rh-right{text-align:right;flex-shrink:0}
+.rh-mes-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+.rh-mes{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-1px}
+
+/* ── BANNER ── */
+.econ-banner {
+display: none;
+}
+.econ-banner.red-banner{background:var(--red-bg);border-color:var(--red-bd)}
+.econ-icon{font-size:28px;flex-shrink:0}
+.econ-body{flex:1}
+.econ-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px}
+.econ-list{font-size:12px;color:var(--muted);line-height:1.9}
+.econ-value-block{text-align:right;flex-shrink:0}
+.econ-val-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:2px}
+.econ-val{font-size:30px;font-weight:900;letter-spacing:-2px;color:var(--green)}
+.econ-val.red{color:var(--red)}
+.econ-period{font-size:11px;color:var(--muted)}
+
+.grid{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:16px;
+  align-items:start;
+}
+
+.left-column,
+.right-column{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.full{
+  grid-column:auto;
+}
+
+.scard-body{
+  padding:10px 12px;
+}
+
+.alg-strip{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+}
+
+.topbar-pdf{
+  height:34px;
+  padding:0 14px;
+  border:none;
+  border-radius:18px;
+  background:var(--green);
+  color:#fff;
+  font-family:inherit;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  transition:.2s;
+}
+
+.topbar-pdf:hover{
+  opacity:.85;
+}
+
+@media(max-width:900px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* ── SCARD ── */
+.scard{background:var(--s1);border:1px solid var(--bd);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);transition:background .25s,border-color .25s}
+.scard-header{padding:12px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;background:var(--s2)}
+.scard-header-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--green-bg);border:1px solid var(--green-bd);flex-shrink:0}
+.scard-header-title{font-size:12px;font-weight:700;color:var(--text);flex:1}
+.scard-header-sub{font-size:11px;color:var(--muted)}
+.scard-body{padding:10px 12px;}
+
+/* ── FIELDS ── */
+.frow{display:grid;grid-template-columns:1fr 130px;align-items:center;gap:10px;margin-bottom:10px}
+.frow:last-child{margin-bottom:0}
+.frow-label{font-size:12px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:5px}
+.tip{width:15px;height:15px;border-radius:50%;background:var(--s3);border:1px solid var(--bd2);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--muted2);cursor:help;position:relative;flex-shrink:0}
+.tip:hover::after{content:attr(data-tip);position:absolute;left:20px;top:-4px;background:var(--tip-bg);border:1px solid var(--tip-bd);border-radius:7px;padding:6px 10px;font-size:11px;font-weight:400;color:var(--text);z-index:300;box-shadow:var(--shadow);min-width:180px;max-width:260px;white-space:normal;line-height:1.4}
+.input-wrap{display:flex;align-items:center;background:var(--input-bg);border:1px solid var(--bd2);border-radius:8px;overflow:hidden;transition:border-color .2s,background .25s}
+.input-wrap:focus-within{border-color:var(--green)}
+.input-wrap input,.input-wrap select{background:transparent;border:none;outline:none;padding:7px 10px;color:var(--text);font-family:inherit;font-size:12px;font-weight:500;width:100%;min-width:0}
+.input-unit{padding:0 10px 0 4px;font-size:11px;font-weight:600;color:var(--muted2);white-space:nowrap;flex-shrink:0}
+select option{background:var(--s2);color:var(--text)}
+
+.mini-chips{display:grid;gap:8px;margin-top:8px}
+.mini-chips.cols2{grid-template-columns:1fr 1fr}
+.mini-chips.cols3{grid-template-columns:1fr 1fr 1fr}
+.chip{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;text-align:center;transition:background .25s,border-color .25s}
+.chip-label{font-size:10px;color:var(--muted);margin-bottom:2px}
+.chip-val{font-size:13px;font-weight:700;color:var(--text)}
+.chip-val.red{color:var(--red)}
+.chip-val.green{color:var(--green)}
+
+.subtotal-row{background:var(--green-bg);border:1px solid var(--green-bd);border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.subtotal-row label{font-size:11px;color:var(--muted);font-weight:500}
+.subtotal-row strong{font-size:13px;font-weight:800;color:var(--green)}
+
+/* ── COMPARATIVO ── */
+.comp-grid{display:grid;grid-template-columns:1fr 50px 1fr}
+.comp-side{padding:18px}
+.comp-vs-col{display:flex;align-items:center;justify-content:center;border-left:1px solid var(--bd);border-right:1px solid var(--bd)}
+.vs-badge{width:38px;height:38px;border-radius:50%;border:2px solid var(--bd2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted)}
+.comp-side-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.cstt-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.metric{margin-bottom:14px}
+.metric-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:8px}
+.metric-name{font-size:12px;font-weight:500;color:var(--muted)}
+.metric-name small{display:block;font-size:10px;color:var(--muted2);margin-top:1px}
+.metric-val{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap}
+.metric-val.neg{color:var(--red)}
+.track{height:8px;background:var(--s3);border-radius:4px;overflow:hidden}
+.fill{height:100%;border-radius:4px;background:var(--green);transition:width .4s cubic-bezier(.4,0,.2,1);min-width:4px}
+.fill.neg{background:var(--red)}
+.comp-div{height:1px;background:var(--bd);margin:14px 0}
+.comp-total{background:var(--bg);border:1px solid var(--bd2);border-radius:10px;padding:14px;margin-top:16px;transition:all .25s}
+.comp-total.winner-block{background:var(--green-bg);border-color:var(--green-bd)}
+.ct-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px}
+.ct-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.ct-row:last-child{margin-bottom:0}
+.ct-lbl{font-size:12px;color:var(--muted)}
+.ct-val{font-size:13px;font-weight:700;color:var(--green)}
+.ct-val.big{font-size:24px;font-weight:900;letter-spacing:-1.5px}
+
+/* ── ALUGUEL ── */
+.alg-strip{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+}
+.alg-col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px}
+.list-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--s2);border-radius:8px;border:1px solid var(--bd);margin-bottom:6px}
+.list-item span{font-size:12px;color:var(--muted)}
+.list-item strong{font-size:12px;font-weight:700;color:var(--text)}
+.list-item strong.green{color:var(--green)}
+
+/* ── WARNING ── */
+.warning-box{background:#1E1000;border:1px solid #4A3000;border-radius:8px;padding:8px 12px;font-size:11px;color:#C4902A;margin-top:8px;display:none}
+[data-theme="light"] .warning-box{background:#FFF8EC;border-color:#E8C060;color:#8A5A00}
+
+/* ── MEMÓRIA ── */
+.mem-toggle{display:flex;align-items:center;gap:8px;padding:12px 18px;cursor:pointer;border-top:1px solid var(--bd);background:var(--s2);font-size:11px;font-weight:600;color:var(--muted);user-select:none}
+.mem-toggle:hover{color:var(--text)}
+.mem-arrow{transition:transform .2s;font-size:10px;margin-left:auto}
+.mem-dots{display:flex;gap:5px}
+.mem-dot{width:10px;height:10px;border-radius:50%}
+.mem-body{padding:16px 18px;font-family:'Fira Code','SF Mono',Consolas,monospace;font-size:11.5px;color:#6FD98A;white-space:pre-wrap;line-height:1.65;background:#050A06;display:none}
+[data-theme="light"] .mem-body{background:#F0F8F2;color:#1A6B30}
+.mem-body.open{display:block}
+
+/* ── PDF BUTTON ── */
+.pdf-btn{display:inline-flex;align-items:center;gap:7px;background:var(--green);color:#fff;font-family:inherit;font-size:12px;font-weight:700;border:none;border-radius:8px;padding:8px 18px;cursor:pointer;transition:opacity .2s;margin:12px 18px 14px}
+.pdf-btn:hover{opacity:.85}
+[data-theme="light"] .pdf-btn{color:#003D18}
+
+/* ── GLOSSÁRIO ── */
+.gloss-page{padding:24px}
+.gloss-intro{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;max-width:780px}
+.gloss-section{margin-bottom:32px}
+.gloss-section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.gloss-section-title::after{content:'';flex:1;height:1px;background:var(--bd2)}
+.gloss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.gloss-card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow);transition:border-color .2s,background .25s}
+.gloss-card:hover{border-color:var(--green-bd)}
+.gloss-card-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.gloss-card-icon{font-size:18px;flex-shrink:0}
+.gloss-card-term{font-size:13px;font-weight:700;color:var(--text)}
+.gloss-card-tag{font-size:10px;font-weight:600;color:var(--green);background:var(--green-bg);border:1px solid var(--green-bd);border-radius:10px;padding:2px 8px;margin-left:auto;white-space:nowrap}
+.gloss-card-def{font-size:12px;color:var(--muted);line-height:1.65}
+.gloss-card-formula{margin-top:8px;background:var(--s2);border-left:3px solid var(--green-bd);border-radius:0 6px 6px 0;padding:6px 10px;font-family:'Fira Code',Consolas,monospace;font-size:11px;color:var(--green);line-height:1.6}
+[data-theme="light"] .gloss-card-formula{color:#006B20}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+
+@media(max-width:900px){
+  .result-hero,.grid,.alg-strip,.comp-grid,.gloss-grid{grid-template-columns:1fr}
+  .comp-vs-col{display:none}
+}
+
+/* ── PRINT / PDF ── */
+@media print{
+  body{background:#fff!important;color:#000!important;font-size:12pt}
+  .topbar,.tabs-bar,.pdf-btn,.mem-toggle{display:none!important}
+  .mem-body{display:block!important;background:#f8f8f8!important;color:#1A4A28!important;border:1px solid #ccc!important;padding:16px!important;border-radius:6px!important}
+  .print-only{display:block!important}
+  *{box-shadow:none!important;transition:none!important}
+}
+.print-only{display:none}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-mark">L&</div>
+    <div>
+      <div class="logo-name">Localiza<em>&amp;Co</em></div>
+      <div class="logo-sub">Simulador de Frota</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="profile-switcher">
+      <button class="p-btn" id="btnPresumido" data-profile="presumido" type="button">Lucro Presumido</button>
+      <button class="p-btn active" id="btnReal" data-profile="real" type="button">Lucro Real</button>
+    </div>
+
+    <button class="topbar-pdf" onclick="exportPDF()">
+      📄 Exportar PDF
+    </button>
+
+    <div class="theme-toggle" id="themeToggle" title="Alternar tema">
+      <div class="tt-knob" id="ttKnob">🌙</div>
+    </div>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab active" id="tabSim" onclick="switchTab('sim')">📊 Simulador</button>
+  <button class="tab" id="tabGloss" onclick="switchTab('gloss')">📖 Glossário</button>
+</div>
+
+<!-- ═══════════ TAB: SIMULADOR ═══════════ -->
+<div class="tab-panel active" id="panelSim">
+<div class="page">
+
+  <div class="result-hero">
+    <div class="rh-card loser" id="cardFrota">
+      <div>
+        <div class="rh-badge" id="badgeFrota">🚗 Frota Própria</div>
+        <div class="rh-title">Custo efetivo anual</div>
+        <div class="rh-value" id="kpiFrota">R$ 0</div>
+        <div class="rh-sub" id="kpiFrotaSub">custo efetivo anual</div>
+      </div>
+      <div class="rh-right">
+        <div class="rh-mes-label">por mês</div>
+        <div class="rh-mes" id="kpiFrotaMes">R$ 0</div>
+      </div>
+    </div>
+    <div class="rh-card loser" id="cardAluguel">
+      <div>
+        <div class="rh-badge" id="badgeAluguel">🔑 Aluguel</div>
+        <div class="rh-title">Custo efetivo anual</div>
+        <div class="rh-value" id="kpiAluguel">R$ 0</div>
+        <div class="rh-sub" id="kpiAluguelSub">custo efetivo anual</div>
+      </div>
+      <div class="rh-right">
+        <div class="rh-mes-label">por mês</div>
+        <div class="rh-mes" id="kpiAluguelMes">R$ 0</div>
+      </div>
+    </div>
+
+    <div class="rh-card loser" id="cardEconomia">
+      <div>
+        <div class="rh-badge" id="badgeEconomia">💰 Diferença</div>
+        <div class="rh-title" id="kpiEconomiaTitle">Diferença anual</div>
+        <div class="rh-value" id="kpiEconomia">R$ 0</div>
+        <div class="rh-sub" id="kpiEconomiaSub">economia estimada</div>
+      </div>
+    </div>
+
+  </div>
+
+  
+
+  <div class="econ-banner" id="econBanner">
+    <div class="econ-icon" id="econIcon">💡</div>
+    <div class="econ-body">
+      <div class="econ-title" id="econTitle">Analisando...</div>
+      <div class="econ-list" id="econList">—</div>
+    </div>
+    <div class="econ-value-block">
+      <div class="econ-val-label">Economia estimada</div>
+      <div class="econ-val" id="econVal">R$ 0</div>
+      <div class="econ-period" id="econPeriod">por ano</div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- COLUNA ESQUERDA: FROTA PRÓPRIA -->
+    <div class="left-column">
+  
+      <div class="scard">
+        <div class="scard-header">
+          <div class="scard-header-icon">🚗</div>
+          <div>
+            <div class="scard-header-title">Aquisição do Veículo</div>
+            <div class="scard-header-sub">Preço, desconto e entrada</div>
+          </div>
+        </div>
+  
+        <div class="scard-body">
+          <div class="frow">
+            <div class="frow-label">Preço de tabela</div>
+            <div class="input-wrap">
+              <div class="input-unit">R$</div>
+              <input id="valorVeiculoBruto" type="number" value="85000" step="1000"/>
+            </div>
+          </div>
+  
+          <div class="frow">
+            <div class="frow-label">Desconto negociado <span class="tip" data-tip="Desconto obtido na compra em relação ao preço de tabela.">?</span></div>
+            <div class="input-wrap">
+              <input id="descontoPct" type="number" value="10" step="0.1"/>
+              <div class="input-unit">%</div>
+            </div>
+          </div>
+  
+          <div class="frow">
+            <div class="frow-label">Entrada <span class="tip" data-tip="Percentual do valor final pago à vista. O restante é financiado.">?</span></div>
+            <div class="input-wrap">
+              <input id="entradaPct" type="number" value="50" step="1"/>
+              <div class="input-unit">%</div>
+            </div>
+          </div>
+  
+          <div class="mini-chips cols3">
+            <div class="chip"><div class="chip-label">Valor final</div><div class="chip-val" id="outValorFinal">R$ 0</div></div>
+            <div class="chip"><div class="chip-label">Desconto</div><div class="chip-val red" id="outDesconto">R$ 0</div></div>
+            <div class="chip"><div class="chip-label">Entrada</div><div class="chip-val" id="outEntrada">R$ 0</div></div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="scard">
+        <div class="scard-header">
+          <div class="scard-header-icon">🏦</div>
+          <div>
+            <div class="scard-header-title">Financiamento</div>
+            <div class="scard-header-sub">Parcelas, juros e custo de oportunidade</div>
+          </div>
+        </div>
+  
+        <div class="scard-body">
+          <div class="frow">
+            <div class="frow-label">Nº de parcelas</div>
+            <div class="input-wrap">
+              <select id="parcelas">
+                <option value="1">À vista</option>
+                <option value="12" selected>12 meses</option>
+                <option value="24">24 meses</option>
+                <option value="36">36 meses</option>
+                <option value="48">48 meses</option>
+                <option value="60">60 meses</option>
+              </select>
+            </div>
+          </div>
+  
+          <div class="frow">
+            <div class="frow-label">Juros mensais <span class="tip" data-tip="Taxa de juros do financiamento. Use 0 para compra sem juros.">?</span></div>
+            <div class="input-wrap">
+              <input id="jurosMensalPct" type="number" value="0" step="0.1"/>
+              <div class="input-unit">% a.m.</div>
+            </div>
+          </div>
+  
+          <div class="frow">
+            <div class="frow-label">Custo de oportunidade <span class="tip" data-tip="Taxa de retorno anual usada para estimar o custo de oportunidade do capital comprometido no período.">?</span></div>
+            <div class="input-wrap">
+              <input id="oportunidadePct" type="number" value="14.5" step="0.1"/>
+              <div class="input-unit">% a.a.</div>
+            </div>
+          </div>
+  
+          <div class="mini-chips cols2">
+            <div class="chip"><div class="chip-label">Parcela mensal</div><div class="chip-val" id="outParcela">R$ 0</div></div>
+            <div class="chip"><div class="chip-label">Total de juros</div><div class="chip-val red" id="outJurosAno">R$ 0</div></div>
+          </div>
+  
+          <div class="subtotal-row">
+            <label>Custo de aquisição / ano</label>
+            <strong id="outAquisicaoAno">R$ 0</strong>
+          </div>
+        </div>
+      </div>
+  
+      <div class="scard">
+        <div class="scard-header">
+          <div class="scard-header-icon">📉</div>
+          <div>
+            <div class="scard-header-title">Depreciação</div>
+            <div class="scard-header-sub">Perda de valor anual do veículo</div>
+          </div>
+        </div>
+  
+        <div class="scard-body">
+          <div class="frow">
+            <div class="frow-label">Tipo <span class="tip" data-tip="Contábil: 20% a.a. conforme legislação fiscal. Real/Mercado: baseada na desvalorização real do veículo.">?</span></div>
+            <div class="input-wrap">
+              <select id="modoDepreciacao">
+                <option value="contabil" selected>Contábil (20%)</option>
+                <option value="real">Real / Mercado</option>
+              </select>
+            </div>
+          </div>
+  
+          <div class="frow">
+            <div class="frow-label">Taxa</div>
+            <div class="input-wrap">
+              <input id="depreciacaoPct" type="number" value="20" step="0.1"/>
+              <div class="input-unit">% a.a.</div>
+            </div>
+          </div>
+  
+          <div class="subtotal-row">
+            <label>Depreciação anual</label>
+            <strong id="outDepreciacao">R$ 0</strong>
+          </div>
+        </div>
+      </div>
+  
+      <div class="scard">
+        <div class="scard-header">
+          <div class="scard-header-icon">🔧</div>
+          <div>
+            <div class="scard-header-title">Custos Operacionais</div>
+            <div class="scard-header-sub">Manutenção, seguro, IPVA, indisponibilidade e administração</div>
+          </div>
+        </div>
+  
+        <div class="scard-body">
+          <div class="frow"><div class="frow-label">Manutenção <span class="tip" data-tip="% anual sobre o valor do veículo. Inclui revisões, pneus, peças e mão de obra.">?</span></div><div class="input-wrap"><input id="manutencaoPct" type="number" value="1.5" step="0.1"/><div class="input-unit">%</div></div></div>
+          <div class="frow"><div class="frow-label">Seguro anual</div><div class="input-wrap"><input id="seguroPct" type="number" value="2" step="0.1"/><div class="input-unit">%</div></div></div>
+  
+          <div class="frow">
+            <div class="frow-label">Estado (IPVA)</div>
+            <div class="input-wrap">
+              <select id="estado">
+                <option value="0">Isento – 0,0%</option>
+                <option value="2">Acre – 2,0%</option>
+                <option value="3">Amapá – 3,0%</option>
+                <option value="2">Espírito Santo – 2,0%</option>
+                <option value="2.5">Maranhão – 2,5%</option>
+                <option value="3">Mato Grosso do Sul – 3,0%</option>
+                <option value="2.5">Pará – 2,5%</option>
+                <option value="3">Piauí – 3,0%</option>
+                <option value="3">Sergipe – 3,0%</option>
+                <option value="3">Mato Grosso – 3,0%</option>
+                <option value="4">Minas Gerais – 4,0%</option>
+                <option value="4">Rio de Janeiro – 4,0%</option>
+                <option value="3.75">Goiás – 3,75%</option>
+                <option value="4">São Paulo – 4,0%</option>
+                <option value="2.5">Bahia – 2,5%</option>
+                <option value="3.5">Ceará – 3,5%</option>
+                <option value="2">Santa Catarina – 2,0%</option>
+                <option value="2">Pernambuco – 2,0%</option>
+                <option value="3">Rio Grande do Norte – 3,0%</option>
+                <option value="3.5">Distrito Federal – 3,5%</option>
+                <option value="2.5">Paraíba – 2,5%</option>
+                <option value="4">Tocantins – 4,0%</option>
+                <option value="1">Teste – 1,0%</option>
+                <option value="3.5">Paraná – 3,5%</option>
+                <option value="3.25">Alagoas – 3,25%</option>
+                <option value="3">Rio Grande do Sul – 3,0%</option>
+                <option value="3">Amazonas – 3,0%</option>
+                <option value="3">Rondônia – 3,0%</option>
+                <option value="3">Roraima – 3,0%</option>
+              </select>
+            </div>
+          </div>
+  
+          <div class="frow"><div class="frow-label">Licenciamento <span class="tip" data-tip="Taxa de licenciamento anual. Varia por estado e valor do veículo.">?</span></div><div class="input-wrap"><input id="licenciamentoPct" type="number" value="0" step="0.1"/><div class="input-unit">%</div></div></div>
+          <div class="frow"><div class="frow-label">Custo de indisponibilidade / ano <span class="tip" data-tip="Gastos anuais com locação temporária, Uber, táxi ou veículos substitutos durante períodos de manutenção, sinistro ou indisponibilidade da frota.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="indisponibilidadeAno" type="number" value="0" step="500"/></div></div>
+          <div class="frow"><div class="frow-label">Adm. frota / mês <span class="tip" data-tip="Custo mensal com gestão: sistemas, RH dedicado, controles internos etc.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="admFrotaMensal" type="number" value="0" step="50"/></div></div>
+          
+
+          <div class="mini-chips cols3">
+            <div class="chip">
+              <div class="chip-label">Manutenção</div>
+              <div class="chip-val" id="vManut">R$ 0</div>
+            </div>
+            <div class="chip">
+              <div class="chip-label">Seguro</div>
+              <div class="chip-val" id="vSeguro">R$ 0</div>
+            </div>
+            <div class="chip">
+              <div class="chip-label">IPVA</div>
+              <div class="chip-val" id="vIpva">R$ 0</div>
+            </div>
+          </div>
+          
+
+
+
+
+          <div class="subtotal-row">
+            <label>Custo operacional / ano</label>
+            <strong id="outOperacionalAno">R$ 0</strong>
+          </div>
+        </div>
+      </div>
+  
+      <div class="scard">
+        <div class="scard-header">
+          <div class="scard-header-icon">💰</div>
+          <div>
+            <div class="scard-header-title">Benefícios Tributários <span class="tip" data-tip="Disponível apenas no Lucro Real. No Presumido, despesas não geram créditos diretos de IRPJ/CSLL.">?</span></div>
+            <div class="scard-header-sub">Créditos sobre despesas dedutíveis</div>
+          </div>
+        </div>
+  
+        <div class="scard-body">
+          <div class="frow"><div class="frow-label">PIS/COFINS</div><div class="input-wrap"><input id="pisPropPct" type="number" value="9.25" step="0.01"/><div class="input-unit">%</div></div></div>
+          <div class="frow"><div class="frow-label">IRPJ</div><div class="input-wrap"><input id="irpjPropPct" type="number" value="25" step="0.1"/><div class="input-unit">%</div></div></div>
+          <div class="frow"><div class="frow-label">CSLL</div><div class="input-wrap"><input id="csllPropPct" type="number" value="9" step="0.1"/><div class="input-unit">%</div></div></div>
+  
+          <div class="warning-box" id="tributosNote">
+            ⚠️ No Lucro Presumido os benefícios tributários são zerados — as despesas operacionais não geram créditos diretos de IRPJ/CSLL.
+          </div>
+  
+          <div class="mini-chips cols2" style="margin-top:10px">
+            <div class="chip"><div class="chip-label">Crédito — Frota</div><div class="chip-val green" id="outTributosProp">R$ 0</div></div>
+            <div class="chip"><div class="chip-label">Crédito — Aluguel</div><div class="chip-val green" id="outTributosAluguel">R$ 0</div></div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  
+    <!-- COLUNA DIREITA: ALUGUEL + COMPARATIVO -->
+    <div class="right-column">
+  
+      <div class="scard">
+        <div class="scard-header">
+          <div class="scard-header-icon">🔑</div>
+          <div>
+            <div class="scard-header-title">Configuração do Aluguel</div>
+            <div class="scard-header-sub">Parâmetros da frota terceirizada</div>
+          </div>
+        </div>
+  
+        <div class="scard-body">
+          <div class="alg-strip">
+            <div>
+              <div class="alg-col-title">Parâmetros</div>
+              <div class="frow"><div class="frow-label">Atividade fim? <span class="tip" data-tip="Se o veículo é usado diretamente na atividade-fim, as despesas são totalmente dedutíveis.">?</span></div><div class="input-wrap"><select id="atividadeFim"><option value="sim">Sim</option><option value="nao">Não</option></select></div></div>
+              <div class="frow"><div class="frow-label">Mensalidade</div><div class="input-wrap"><div class="input-unit">R$</div><input id="aluguelMensal" type="number" value="2800" step="100"/></div></div>
+              <div class="frow"><div class="frow-label">Adm. / mês</div><div class="input-wrap"><div class="input-unit">R$</div><input id="admAluguel" type="number" value="0" step="50"/></div></div>
+            </div>
+  
+            <div>
+              <div class="alg-col-title">Custos Anuais</div>
+              <div class="list-item"><span>Aluguel anual</span><strong id="outAluguelAnual">R$ 0</strong></div>
+              <div class="list-item"><span>Administrativo</span><strong id="outAdmAluguel">R$ 0</strong></div>
+              <div class="subtotal-row"><label>Total bruto</label><strong id="outTotalAluguelBruto">R$ 0</strong></div>
+            </div>
+  
+            <div>
+              <div class="alg-col-title">Créditos Tributários</div>
+              <div class="list-item"><span>PIS/COFINS</span><strong class="green" id="outPisAluguel">R$ 0</strong></div>
+              <div class="list-item"><span>IRPJ</span><strong class="green" id="outIrpjAluguel">R$ 0</strong></div>
+              <div class="list-item"><span>CSLL</span><strong class="green" id="outCsllAluguel">R$ 0</strong></div>
+              <div class="subtotal-row"><label>Deduções totais</label><strong id="outTributosAluguelTotal">R$ 0</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="scard">
+        <div class="scard-header">
+          <div class="scard-header-icon">⚖️</div>
+          <div>
+            <div class="scard-header-title">Comparativo Anual</div>
+            <div class="scard-header-sub">Custo total líquido de cada alternativa</div>
+          </div>
+        </div>
+  
+        <div class="comp-grid">
+          <div class="comp-side">
+            <div class="comp-side-title"><span class="cstt-dot" style="background:var(--green)"></span>Frota Própria</div>
+  
+            <div class="metric"><div class="metric-top"><div class="metric-name">(+) Custo de aquisição<small>Entrada + parcelas + custo de oportunidade</small></div><div class="metric-val" id="cmpAquisicao">R$ 0</div></div><div class="track"><div class="fill" id="barAquisicao"></div></div></div>
+            <div class="metric"><div class="metric-top"><div class="metric-name">(+) Custos operacionais</div><div class="metric-val" id="cmpOperacional">R$ 0</div></div><div class="track"><div class="fill" id="barOperacional"></div></div></div>
+            <div class="metric"><div class="metric-top"><div class="metric-name">(−) Benefícios tributários</div><div class="metric-val neg" id="cmpTributosProp">R$ 0</div></div><div class="track"><div class="fill neg" id="barTributosProp"></div></div></div>
+            <div class="metric"><div class="metric-top"><div class="metric-name">(−) Valor de revenda<small>Veículo − depreciação − saldo financiamento</small></div><div class="metric-val neg" id="cmpRevenda">R$ 0</div></div><div class="track"><div class="fill neg" id="barRevenda"></div></div></div>
+  
+            <div class="comp-div"></div>
+  
+            <div class="comp-total" id="totalFrota">
+              <div class="ct-label">= Custo Efetivo</div>
+              <div class="ct-row"><span class="ct-lbl">Anual</span><span class="ct-val big" id="cmpFrotaAno">R$ 0</span></div>
+              <div class="ct-row"><span class="ct-lbl">Mensal</span><span class="ct-val" id="cmpFrotaMes">R$ 0</span></div>
+            </div>
+          </div>
+  
+          <div class="comp-vs-col">
+            <div class="vs-badge">VS</div>
+          </div>
+  
+          <div class="comp-side">
+            <div class="comp-side-title"><span class="cstt-dot" style="background:var(--amber)"></span>Aluguel</div>
+  
+            <div class="metric"><div class="metric-top"><div class="metric-name">(+) Custo total de aluguel<small>Mensalidade × 12 + administrativo</small></div><div class="metric-val" id="cmpAluguelBruto">R$ 0</div></div><div class="track"><div class="fill" id="barAluguel"></div></div></div>
+            <div class="metric" style="margin-top:62px"><div class="metric-top"><div class="metric-name">(−) Benefícios tributários</div><div class="metric-val neg" id="cmpTributosAluguel">R$ 0</div></div><div class="track"><div class="fill neg" id="barTributosAluguel"></div></div></div>
+  
+            <div class="comp-div" style="margin-top:94px"></div>
+  
+            <div class="comp-total" id="totalAluguel">
+              <div class="ct-label">= Custo Efetivo</div>
+              <div class="ct-row"><span class="ct-lbl">Anual</span><span class="ct-val big" id="cmpAluguelAno">R$ 0</span></div>
+              <div class="ct-row"><span class="ct-lbl">Mensal</span><span class="ct-val" id="cmpAluguelMes">R$ 0</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="scard">
+          <div class="mem-toggle" onclick="toggleMem()">
+            <div class="mem-dots">
+              <span class="mem-dot" style="background:var(--green)"></span>
+              <span class="mem-dot" style="background:var(--amber)"></span>
+              <span class="mem-dot" style="background:var(--red)"></span>
+            </div>
+            Memória de cálculo
+            <span class="mem-arrow" id="memArrow">▼</span>
+          </div>
+        
+          <div class="mem-body" id="memoriaCalculo"></div>
+        </div>
+   
+
+
+    </div><!-- right-column -->
+
+  </div><!-- grid -->
+</div><!-- grid -->
+</div><!-- page -->
+</div><!-- /panelSim -->
+
+<!-- ═══════════ TAB: GLOSSÁRIO ═══════════ -->
+<div class="tab-panel" id="panelGloss">
+<div class="gloss-page">
+
+  <p class="gloss-intro">Referência completa de todos os termos, variáveis e fórmulas utilizados no simulador. Use como guia durante a apresentação ao cliente ou para aprofundar a análise financeira.</p>
+
+  <!-- AQUISIÇÃO -->
+  <div class="gloss-section">
+    <div class="gloss-section-title">🚗 Aquisição &amp; Veículo</div>
+    <div class="gloss-grid">
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🏷️</div><div class="gloss-card-term">Preço de Tabela</div><div class="gloss-card-tag">Input</div></div>
+        <div class="gloss-card-def">Valor bruto do veículo conforme tabela FIPE ou preço de venda da concessionária, antes de qualquer negociação.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🤝</div><div class="gloss-card-term">Desconto Negociado</div><div class="gloss-card-tag">Input %</div></div>
+        <div class="gloss-card-def">Percentual de desconto obtido na compra. Aplicado sobre o preço de tabela para chegar ao valor final da aquisição.</div>
+        <div class="gloss-card-formula">Valor Final = Preço de Tabela × (1 − Desconto%)</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">💵</div><div class="gloss-card-term">Valor da Entrada</div><div class="gloss-card-tag">Input %</div></div>
+        <div class="gloss-card-def">Percentual do valor final pago à vista no ato da compra. O saldo restante é financiado. Quanto maior a entrada, menor o custo de financiamento, mas maior o custo de oportunidade.</div>
+        <div class="gloss-card-formula">Entrada = Valor Final × Entrada%
+Financiado = Valor Final − Entrada</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCIAMENTO -->
+  <div class="gloss-section">
+    <div class="gloss-section-title">🏦 Financiamento</div>
+    <div class="gloss-grid">
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">📅</div><div class="gloss-card-term">Parcelas</div><div class="gloss-card-tag">Input</div></div>
+        <div class="gloss-card-def">Número de meses para pagamento do valor financiado. Financiamentos acima de 12 meses fazem com que parte das parcelas ocorra fora do primeiro ano analisado.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">📈</div><div class="gloss-card-term">Juros Mensais</div><div class="gloss-card-tag">Input % a.m.</div></div>
+        <div class="gloss-card-def">Taxa de juros cobrada mensalmente sobre o saldo devedor. Calculada pelo método Price (tabela francesa), onde cada parcela tem o mesmo valor nominal.</div>
+        <div class="gloss-card-formula">Parcela = PV × [i(1+i)ⁿ / ((1+i)ⁿ−1)]
+onde PV = valor financiado, i = juros/mês, n = parcelas</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🎯</div><div class="gloss-card-term">Custo de Oportunidade</div><div class="gloss-card-tag">Input % a.a.</div></div>
+        <div class="gloss-card-def">Retorno potencial que a empresa deixa de capturar ao comprometer recursos na aquisição do veículo. A base considera entrada e parcelas pagas no ano, utilizando a taxa anual informada pelo usuário.</div>
+        <div class="gloss-card-formula">Custo Oportunidade = (Entrada + Parcelas_Ano) × Taxa%</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🧾</div><div class="gloss-card-term">Custo de Aquisição / Ano</div><div class="gloss-card-tag">Calculado</div></div>
+        <div class="gloss-card-def">Soma de todos os desembolsos relacionados à compra no primeiro ano: entrada paga, parcelas pagas no ano e custo de oportunidade do capital imobilizado.</div>
+        <div class="gloss-card-formula">Aq.Ano = Entrada + Parcelas_Ano + Custo_Oportunidade</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPERACIONAL -->
+  <div class="gloss-section">
+    <div class="gloss-section-title">🔧 Custos Operacionais</div>
+    <div class="gloss-grid">
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🔩</div><div class="gloss-card-term">Manutenção</div><div class="gloss-card-tag">Input %</div></div>
+        <div class="gloss-card-def">Custo anual estimado com revisões preventivas, troca de pneus, peças e mão de obra. Expresso como percentual do valor do veículo. Referência de mercado: 1,5% a 2,5% a.a.</div>
+        <div class="gloss-card-formula">Manutenção = Valor Veículo × Taxa%</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🛡️</div><div class="gloss-card-term">Seguro Anual</div><div class="gloss-card-tag">Input %</div></div>
+        <div class="gloss-card-def">Prêmio anual de seguro contra danos, furto e responsabilidade civil. Varia conforme perfil da empresa, uso do veículo e cobertura contratada. Referência típica: 2% a 4% a.a.</div>
+        <div class="gloss-card-formula">Seguro = Valor Veículo × Taxa%</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🏛️</div><div class="gloss-card-term">IPVA</div><div class="gloss-card-tag">Por estado</div></div>
+        <div class="gloss-card-def">Imposto sobre Propriedade de Veículos Automotores. Calculado sobre o valor venal do veículo, com alíquota definida por cada estado. Pago anualmente ao governo estadual.</div>
+        <div class="gloss-card-formula">IPVA = Valor Veículo × Alíquota Estadual%</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">📋</div><div class="gloss-card-term">Licenciamento</div><div class="gloss-card-tag">Input %</div></div>
+        <div class="gloss-card-def">Taxa de licenciamento anual obrigatória para circulação do veículo. Inclui o DPVAT (seguro obrigatório). O valor varia conforme estado e categoria do veículo.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">⏸️</div><div class="gloss-card-term">Custo de Indisponibilidade da Frota</div><div class="gloss-card-tag">Input R$/ano</div></div>
+        <div class="gloss-card-def">Despesa anual necessária para manter a operação funcionando quando o veículo próprio está indisponível por manutenção, sinistro, pane ou reparo. Pode incluir locação temporária, aplicativos de transporte, táxis ou veículos reserva.</div>
+        <div class="gloss-card-formula">Indisponibilidade = Valor anual informado pelo usuário</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">👨‍💼</div><div class="gloss-card-term">Custo Administrativo</div><div class="gloss-card-tag">Input R$/mês</div></div>
+        <div class="gloss-card-def">Custo mensal de gestão da frota própria: sistemas de rastreamento, pessoal dedicado, controles internos, processos de multas e documentação. Frequentemente negligenciado na análise de custos.</div>
+        <div class="gloss-card-formula">Adm. Anual = Adm. Mensal × 12</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPRECIAÇÃO -->
+  <div class="gloss-section">
+    <div class="gloss-section-title">📉 Depreciação</div>
+    <div class="gloss-grid">
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">📊</div><div class="gloss-card-term">Depreciação Contábil / Fiscal</div><div class="gloss-card-tag">20% a.a.</div></div>
+        <div class="gloss-card-def">Taxa definida pela legislação fiscal brasileira (RIR/2018) para veículos de uso da empresa. Permite deduzir 20% ao ano do valor do bem na apuração do IRPJ e CSLL no regime de Lucro Real.</div>
+        <div class="gloss-card-formula">Depreciação = Valor Veículo × 20%
+Vida útil fiscal: 5 anos</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🚘</div><div class="gloss-card-term">Depreciação Real / Mercado</div><div class="gloss-card-tag">Variável</div></div>
+        <div class="gloss-card-def">Desvalorização efetiva do veículo conforme tabela FIPE e condições de mercado. Geralmente entre 8% e 15% no primeiro ano, variando com modelo, km rodados e conservação. Impacta diretamente o valor de revenda.</div>
+        <div class="gloss-card-formula">Referência: 10–15% a.a. (carros populares)
+          8–12% a.a. (veículos premium)</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">💰</div><div class="gloss-card-term">Valor de Revenda</div><div class="gloss-card-tag">Calculado</div></div>
+        <div class="gloss-card-def">Valor líquido estimado que a empresa recupera ao vender o veículo ao final do período analisado, descontando a depreciação acumulada e o saldo devedor do financiamento.</div>
+        <div class="gloss-card-formula">Revenda = Valor Veículo − Depreciação − Saldo_Financ.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRIBUTOS -->
+  <div class="gloss-section">
+    <div class="gloss-section-title">💰 Tributos &amp; Regimes Fiscais</div>
+    <div class="gloss-grid">
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🏢</div><div class="gloss-card-term">Lucro Real</div><div class="gloss-card-tag">Regime</div></div>
+        <div class="gloss-card-def">Regime tributário onde o IRPJ e CSLL incidem sobre o lucro líquido real da empresa. Permite deduzir despesas operacionais e depreciação, gerando créditos tributários sobre os custos da frota própria e do aluguel.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🏬</div><div class="gloss-card-term">Lucro Presumido</div><div class="gloss-card-tag">Regime</div></div>
+        <div class="gloss-card-def">Regime simplificado onde o IRPJ e CSLL incidem sobre uma margem presumida de lucro (varia por atividade). Não permite deduzir despesas específicas, zerando os benefícios tributários no simulador.</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">📌</div><div class="gloss-card-term">PIS/COFINS</div><div class="gloss-card-tag">1,65% / 7,6%</div></div>
+        <div class="gloss-card-def">Contribuições federais sobre o faturamento. No regime não cumulativo (Lucro Real), permite o aproveitamento de créditos sobre aquisições e despesas, incluindo frota e aluguéis de veículos ligados à atividade.</div>
+        <div class="gloss-card-formula">Crédito PIS = Base × 1,65%
+Crédito COFINS = Base × 7,6%</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">📌</div><div class="gloss-card-term">IRPJ</div><div class="gloss-card-tag">15% + adicional</div></div>
+        <div class="gloss-card-def">Imposto de Renda da Pessoa Jurídica. Alíquota de 15% sobre o lucro real, com adicional de 10% sobre o lucro que exceder R$ 20.000/mês. As despesas dedutíveis (frota, aluguel) reduzem a base de cálculo.</div>
+        <div class="gloss-card-formula">Economia IRPJ = Despesa Dedutível × 15%</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">📌</div><div class="gloss-card-term">CSLL</div><div class="gloss-card-tag">9%</div></div>
+        <div class="gloss-card-def">Contribuição Social sobre o Lucro Líquido. Alíquota de 9% para empresas em geral. Segue as mesmas regras de dedutibilidade do IRPJ — despesas com frota e aluguel reduzem a base de cálculo.</div>
+        <div class="gloss-card-formula">Economia CSLL = Despesa Dedutível × 9%</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🧮</div><div class="gloss-card-term">Base de Crédito — Frota Própria</div><div class="gloss-card-tag">Calculado</div></div>
+        <div class="gloss-card-def">No Lucro Real, a base para cálculo dos benefícios tributários da frota própria é a soma dos custos operacionais com a depreciação anual — ambos dedutíveis da base de IRPJ/CSLL.</div>
+        <div class="gloss-card-formula">Base = Operacional_Ano + Depreciação_Anual</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="gloss-section">
+    <div class="gloss-section-title">⚖️ Resultado Final</div>
+    <div class="gloss-grid">
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🏁</div><div class="gloss-card-term">Custo Efetivo — Frota Própria</div><div class="gloss-card-tag">Resultado</div></div>
+        <div class="gloss-card-def">Custo total anual real da frota própria, considerando todos os desembolsos, menos os benefícios tributários e o valor recuperável na revenda do veículo.</div>
+        <div class="gloss-card-formula">Custo = Aquisição_Ano + Operacional_Ano
+        − Tributos − Revenda</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">🏁</div><div class="gloss-card-term">Custo Efetivo — Aluguel</div><div class="gloss-card-tag">Resultado</div></div>
+        <div class="gloss-card-def">Custo total anual do aluguel, descontados os benefícios tributários gerados pelas despesas com locação (dedutíveis no Lucro Real) e somado o custo administrativo.</div>
+        <div class="gloss-card-formula">Custo = (Aluguel × 12) + Adm. Anual − Tributos</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">📐</div><div class="gloss-card-term">Economia / Diferença</div><div class="gloss-card-tag">Resultado</div></div>
+        <div class="gloss-card-def">Diferença entre os custos efetivos das duas alternativas. Positivo = aluguel mais econômico. Negativo = frota própria mais econômica. O percentual indica a magnitude da vantagem sobre o custo da opção mais cara.</div>
+        <div class="gloss-card-formula">Economia = Custo_Frota_Própria − Custo_Aluguel
+% = |Economia| / Custo_Frota_Própria</div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-card-header"><div class="gloss-card-icon">⚠️</div><div class="gloss-card-term">Limitações da Simulação</div><div class="gloss-card-tag">Atenção</div></div>
+        <div class="gloss-card-def">Este simulador realiza projeções baseadas nos parâmetros informados e não constitui consultoria financeira ou tributária. Os resultados são estimativas para fins de análise comparativa. Variações de mercado, condições de financiamento e interpretações fiscais podem alterar os valores reais. Consulte seu contador ou consultor financeiro.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /panelGloss -->
+
+<script>
+/* ── ESTADO ── */
+let perfil="real", memOpen=false;
+const el=id=>document.getElementById(id);
+const n=id=>Number(el(id).value)||0;
+const pc=v=>v/100;
+const R=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+const R2=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2,maximumFractionDigits:2});
+const set=(id,v)=>el(id).textContent=v;
+const bar=(id,v,max,neg=false)=>{
+  const w=max<=0?0:Math.max(2,Math.min(100,Math.abs(v)/max*100));
+  const b=el(id);b.style.width=w+"%";b.classList.toggle("neg",neg);
+};
+function pmt(pv,i,n){if(n<=1)return pv;if(i<=0)return pv/n;return pv*(i*Math.pow(1+i,n))/(Math.pow(1+i,n)-1);}
+
+/* ── TEMA ── */
+const html=document.documentElement;
+const knob=el("ttKnob");
+let theme=localStorage.getItem("sim-theme")||"dark";
+function applyTheme(t){html.setAttribute("data-theme",t);knob.textContent=t==="dark"?"🌙":"☀️";theme=t;try{localStorage.setItem("sim-theme",t)}catch(e){}}
+applyTheme(theme);
+el("themeToggle").addEventListener("click",()=>applyTheme(theme==="dark"?"light":"dark"));
+
+/* ── TABS ── */
+function switchTab(t){
+  ["sim","gloss"].forEach(id=>{
+    el("tab"+id.charAt(0).toUpperCase()+id.slice(1)).classList.toggle("active",id===t);
+    el("panel"+id.charAt(0).toUpperCase()+id.slice(1)).classList.toggle("active",id===t);
+  });
+}
+
+/* ── MEMÓRIA ── */
+function toggleMem(){
+  memOpen=!memOpen;
+  el("memoriaCalculo").classList.toggle("open",memOpen);
+  el("memArrow").textContent=memOpen?"▲":"▼";
+}
+
+/* ── EXPORT PDF ── */
+function exportPDF(){
+  const mem=el("memoriaCalculo").textContent;
+  const agora=new Date().toLocaleString("pt-BR");
+  const perfLabel=perfil==="real"?"Lucro Real":"Lucro Presumido";
+
+  const w=window.open("","_blank","width=800,height=700");
+  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="UTF-8"/>
+<title>Simulação Localiza&Co — Memória de Cálculo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:#fff;color:#0D2014;padding:40px;max-width:780px;margin:0 auto}
+  .sim-watermark{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);
+    font-size:72px;font-weight:900;color:rgba(0,150,36,.07);
+    pointer-events:none;white-space:nowrap;z-index:0;letter-spacing:-2px;
+  }
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid #00962430}
+  .logo-block{display:flex;align-items:center;gap:10px}
+  .logo-sq{width:40px;height:40px;background:#009624;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff}
+  .logo-txt{font-size:18px;font-weight:800;color:#0D2014}
+  .logo-txt em{color:#009624;font-style:normal}
+  .logo-sub{font-size:11px;color:#4A7057;font-weight:500}
+  .header-right{text-align:right;font-size:11px;color:#4A7057}
+  .alert{background:#FFFBEC;border:1px solid #E8C060;border-radius:8px;padding:10px 16px;margin-bottom:20px;font-size:12px;color:#7A5000;display:flex;align-items:center;gap:8px}
+  .alert-icon{font-size:16px;flex-shrink:0}
+  .section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#009624;margin-bottom:10px;margin-top:24px;display:flex;align-items:center;gap:8px}
+  .section-title::after{content:'';flex:1;height:1px;background:#C0D8C6}
+  pre{background:#F0F8F2;border:1px solid #C0D8C6;border-radius:8px;padding:16px;font-family:'Fira Code','SF Mono',Consolas,monospace;font-size:11.5px;color:#1A4A28;white-space:pre-wrap;line-height:1.7}
+  .footer{margin-top:28px;padding-top:14px;border-top:1px solid #D4E4D8;font-size:10px;color:#7A9E88;text-align:center;line-height:1.6}
+  @media print{.sim-watermark{position:fixed}.alert,.header,.footer{page-break-inside:avoid}}
+</style>
+</head><body>
+<div class="sim-watermark">SIMULAÇÃO</div>
+<div class="header">
+  <div class="logo-block">
+    <div class="logo-sq">L&</div>
+    <div>
+      <div class="logo-txt">Localiza<em>&amp;Co</em></div>
+      <div class="logo-sub">Simulador de Frota</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div>Gerado em: <strong>${agora}</strong></div>
+    <div>Perfil fiscal: <strong>${perfLabel}</strong></div>
+  </div>
+</div>
+<div class="alert"><div class="alert-icon">⚠️</div><div><strong>DOCUMENTO DE SIMULAÇÃO</strong> — Este relatório é uma estimativa comparativa para fins analíticos. Não constitui proposta comercial, consultoria financeira ou parecer tributário. Os valores são baseados nos parâmetros inseridos pelo usuário e podem divergir da realidade. Consulte seu contador ou consultor financeiro antes de tomar decisões.</div></div>
+<div class="section-title">Memória de Cálculo</div>
+<pre>${mem}</pre>
+<div class="footer">
+  Localiza&amp;Co · Simulador de Frota Própria vs. Aluguel<br/>
+  Documento gerado em ${agora} · <strong>USO INTERNO — SIMULAÇÃO</strong>
+</div>
+<script>window.onload=()=>{window.print()}<\/script>
+</body></html>`);
+  w.document.close();
+}
+
+/* ── CALC ── */
+function calc(){
+  const vBruto=n("valorVeiculoBruto"),desc=vBruto*pc(n("descontoPct")),vV=vBruto-desc;
+  const entr=vV*pc(n("entradaPct")),fin=Math.max(0,vV-entr);
+  const np=n("parcelas"),jm=pc(n("jurosMensalPct")),parc=pmt(fin,jm,np);
+  const totP=parc*np,jTot=Math.max(0,totP-fin);
+  const gParc=np<=12?totP:parc*12,saldo=np<=12?0:Math.max(0,totP-gParc);
+  const baseOportunidade=entr+gParc,opor=baseOportunidade*pc(n("oportunidadePct")),aqAno=entr+gParc+opor;
+  const manut=vV*pc(n("manutencaoPct")),seg=vV*pc(n("seguroPct"));
+  const ipva=vV*pc(Number(el("estado").value)),lic=vV*pc(n("licenciamentoPct"));
+  const parad=n("indisponibilidadeAno"),admF=n("admFrotaMensal")*12;
+  const opAno=manut+seg+ipva+lic+parad+admF;
+  const deprA=vV*pc(n("depreciacaoPct")),deprM=el("modoDepreciacao").value;
+
+
+// Bases separadas
+
+const basePisCofins = perfil==="real"
+  ? Math.max(0, manut + deprA)
+  : 0;
+
+const baseIrpjCsll = perfil==="real"
+  ? Math.max(0, admF + deprA)
+  : 0;
+
+// Créditos
+
+const pisP = basePisCofins * pc(n("pisPropPct"));
+
+const irjP = baseIrpjCsll * pc(n("irpjPropPct"));
+
+const cslP = baseIrpjCsll * pc(n("csllPropPct"));
+
+const tribP = pisP + irjP + cslP;
+  
+  
+  revnd=Math.max(0,vV-deprA-saldo);
+  const fAnoR=aqAno+opAno-tribP-revnd,fAnoPr=aqAno+opAno-revnd;
+  const fAno=perfil==="real"?fAnoR:fAnoPr;
+  const alqM=n("aluguelMensal"),valP=12*alqM,admA=n("admAluguel")*12;
+  const atividadeFim=el("atividadeFim").value==="sim";
+  const baseA=perfil==="real"?valP:0;
+  const pisA=atividadeFim?baseA*pc(n("pisPropPct")):0;
+  const irjA=baseA*pc(n("irpjPropPct")),cslA=baseA*pc(n("csllPropPct"));
+  const tribA=pisA+irjA+cslA,totAlq=valP+admA,cAlq=valP+admA-tribA;
+  const econ=fAno-cAlq,econAbs=Math.abs(econ);
+  set("kpiEconomia", R(econAbs));
+  const venc=econ>50?"aluguel":econ<-50?"propria":"empate";
+  const maxB=Math.max(aqAno,opAno,tribP,revnd,totAlq,tribA,1);
+
+  el("tributosNote").style.display=perfil==="presumido"?"block":"none";
+
+  set("outValorFinal",R(vV));set("outDesconto",R(desc));set("outEntrada",R(entr));
+  set("outParcela",R2(parc));set("outJurosAno",R(jTot));set("outAquisicaoAno",R(aqAno));
+  set("outOperacionalAno",R(opAno));set("outDepreciacao",R(deprA));
+  set("outTributosProp",R(tribP));set("outTributosAluguel",R(tribA));
+  set("outAluguelAnual",R(valP));set("outAdmAluguel",R(admA));set("outTotalAluguelBruto",R(totAlq));
+  set("outPisAluguel",R(pisA));set("outIrpjAluguel",R(irjA));set("outCsllAluguel",R(cslA));
+  set("outTributosAluguelTotal",R(tribA));
+  set("cmpAquisicao",R(aqAno));set("cmpOperacional",R(opAno));
+  set("cmpTributosProp",R(tribP));set("cmpRevenda",R(revnd));
+  set("cmpFrotaAno",R(fAno));set("cmpFrotaMes",R(fAno/12));
+  set("cmpAluguelBruto",R(totAlq));set("cmpTributosAluguel",R(tribA));
+  set("cmpAluguelAno",R(cAlq));set("cmpAluguelMes",R(cAlq/12));
+  set("kpiFrota",R(fAno));set("kpiFrotaMes",R(fAno/12));
+  set("kpiAluguel",R(cAlq));set("kpiAluguelMes",R(cAlq/12));
+
+  bar("barAquisicao",aqAno,maxB);bar("barOperacional",opAno,maxB);
+  bar("barTributosProp",tribP,maxB,true);bar("barRevenda",revnd,maxB,true);
+  bar("barAluguel",totAlq,maxB);bar("barTributosAluguel",tribA,maxB,true);
+
+  const cf=el("cardFrota"),ca=el("cardAluguel"),tf=el("totalFrota"),ta=el("totalAluguel");
+  const bf=el("badgeFrota"),ba=el("badgeAluguel");
+  cf.className="rh-card loser";ca.className="rh-card loser";
+  tf.className="comp-total";ta.className="comp-total";
+  bf.className="rh-badge";ba.className="rh-badge";
+  set("badgeFrota","🚗 Frota Própria");set("badgeAluguel","🔑 Aluguel");
+  set("kpiFrotaSub","custo efetivo anual");set("kpiAluguelSub","custo efetivo anual");
+
+  const banner=el("econBanner");
+  if(venc==="aluguel"){
+    ca.className="rh-card winner";ta.className="comp-total winner-block";
+    ba.className="rh-badge win";set("badgeAluguel","🏆 Aluguel — Vencedor");
+    set("kpiAluguelSub","✅ opção mais econômica");
+    banner.className="econ-banner";
+    set("econIcon","💡");set("econTitle","Locação mais econômica no cenário simulado");
+    el("econList").innerHTML="→ Evita imobilizar capital na compra da frota\n→ Transforma CAPEX em OPEX previsível\n→ Reduz riscos de manutenção, revenda e indisponibilidade\n→ Libera a empresa para focar no negócio principal";
+    set("econVal",R(econAbs));el("econVal").className="econ-val";
+    set("badgeEconomia","💰 Locação mais econômica");
+    set("kpiEconomiaTitle","Economia estimada com locação");
+    set("kpiEconomiaSub","por ano");
+  } else if(venc==="propria"){
+    cf.className="rh-card winner";tf.className="comp-total winner-block";
+    bf.className="rh-badge win";set("badgeFrota","🏆 Frota Própria — Vencedor");
+    set("kpiFrotaSub","✅ opção mais econômica");
+    banner.className="econ-banner red-banner";
+    set("econIcon","🚗");set("econTitle","Frota própria mais econômica no cenário simulado");
+    el("econList").innerHTML="→ Menor custo financeiro no cenário simulado\n→ Melhor aproveitamento do valor residual\n→ Menor dependência de contratos recorrentes\n→ Atenção: considere custos de gestão e manutenção";
+    set("econVal",R(econAbs));el("econVal").className="econ-val red";
+    set("badgeEconomia","💰 Frota própria mais econômica no cenário simulado");
+    set("kpiEconomiaTitle","Diferença favorável à frota própria");
+    set("kpiEconomiaSub","por ano");
+  } else {
+    banner.className="econ-banner";
+    set("econIcon","⚖️");set("econTitle","Empate técnico");
+    el("econList").innerHTML="→ Ajuste os parâmetros para avaliar sensibilidade\n→ Pequenas variações podem definir a melhor opção";
+    set("econVal","R$ 0");el("econVal").className="econ-val";
+    set("badgeEconomia","⚖️ Equivalência econômica");
+    set("kpiEconomiaTitle","Diferença econômica");
+    set("kpiEconomiaSub","empate técnico");
+  }
+
+  el("memoriaCalculo").textContent=
+`Perfil: ${perfil==="real"?"Lucro Real":"Lucro Presumido"} · Depreciação: ${deprM==="contabil"?"Contábil/Fiscal":"Real/Mercado"}
+
+Valor_Final = ${R(vBruto)} − ${R(desc)} = ${R(vV)}
+Entrada     = ${R(entr)} · Financiado: ${R(fin)}
+Parcela     = ${R2(parc)} × ${np}× · Juros: ${R(jTot)}
+Base Oport. = ${R(entr)} + ${R(gParc)} = ${R(baseOportunidade)}
+Aq.Ano      = ${R(entr)} + ${R(gParc)} + ${R(opor)} = ${R(aqAno)}
+
+Op.Ano      = ${R(manut)}+${R(seg)}+${R(ipva)}+${R(lic)}+${R(parad)}+${R(admF)} = ${R(opAno)}
+              Manut. + Seguro + IPVA + Lic. + Indisp. + Adm.
+Depreciação = ${R(deprA)} · Revenda = ${R(revnd)}
+
+Base PIS/COFINS = Manutenção + Depreciação
+                = ${R(manut)} + ${R(deprA)}
+                = ${R(basePisCofins)}
+
+Base IRPJ/CSLL = Adm. Frota + Depreciação
+               = ${R(admF)} + ${R(deprA)}
+               = ${R(baseIrpjCsll)}
+
+PIS/COFINS = ${R(pisP)}
+IRPJ       = ${R(irjP)}
+CSLL       = ${R(cslP)}
+
+Tributos Frota = ${R(tribP)}
+Tributos Aluguel = ${R(pisA)}+${R(irjA)}+${R(cslA)} = ${R(tribA)}
+
+Frota / Ano (Real)      = ${R(fAnoR)}
+Frota / Ano (Presumido) = ${R(fAnoPr)}
+Aluguel / Ano           = ${R(cAlq)}
+
+Diferença = ${R(econ)} → ${venc==="aluguel"?"ALUGUEL vence":venc==="propria"?"FROTA PRÓPRIA vence":"EMPATE"} por ${R(econAbs)}`;
+}
+
+document.querySelectorAll("input,select").forEach(i=>{i.addEventListener("input",calc);i.addEventListener("change",calc);});
+document.querySelectorAll(".p-btn").forEach(b=>{
+  b.addEventListener("click",()=>{
+    perfil=b.dataset.profile;
+    document.querySelectorAll(".p-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");calc();
+  });
+});
+function updateDepreciacaoInput(){
+  const isContabil=el("modoDepreciacao").value==="contabil";
+  el("depreciacaoPct").readOnly=isContabil;
+  if(isContabil) el("depreciacaoPct").value=20;
+  else if(Number(el("depreciacaoPct").value)===20) el("depreciacaoPct").value=10;
+}
+el("modoDepreciacao").addEventListener("change",()=>{updateDepreciacaoInput();calc();});
+updateDepreciacaoInput();
+calc();
+</script>
+</body>
+</html>
