@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR" data-theme="light">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Localiza&Co · Simulador de Frota V3</title>
+<title>Localiza&Co · Simulador Estratégico de Frota</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet"/>
@@ -13,27 +13,29 @@
    VARIÁVEIS DE TEMA
 ══════════════════════════════════════════ */
 [data-theme="dark"]{
-  --green:#00C853; --green-l:#69F0AE; --green-d:#00A844;
-  --green-bg:rgba(0,200,83,.08); --green-bd:rgba(0,200,83,.22);
+  --green:#00843D; --green-l:#4CAF7D; --green-d:#006B2E;
+  --green-bg:rgba(0,132,61,.08); --green-bd:rgba(0,132,61,.22);
   --bg:#070B09; --s1:#0D1410; --s2:#111A12; --s3:#16201A;
   --bd:#1A2A1C; --bd2:#203020;
-  --text:#E0FFE6; --text2:rgba(224,255,230,.75);
+  --text:#E8FFE8; --text2:rgba(232,255,232,.75);
   --muted:#537A60; --muted2:#2F4A38;
   --red:#FF3E5A; --red-bg:rgba(255,62,90,.08); --red-bd:rgba(255,62,90,.22);
   --amber:#FFB300; --amber-bg:rgba(255,179,0,.08); --amber-bd:rgba(255,179,0,.22);
-  --topbar-a:#002010; --topbar-b:#003A1C;
+  --orange:#FF6600; --orange-bg:rgba(255,102,0,.1); --orange-bd:rgba(255,102,0,.3);
+  --topbar-a:#002618; --topbar-b:#003820;
   --input-bg:#09100A; --shadow:0 2px 16px rgba(0,0,0,.55);
   --shadow-lg:0 8px 40px rgba(0,0,0,.65);
 }
 [data-theme="light"]{
-  --green:#007A2A; --green-l:#005A1E; --green-d:#006020;
-  --green-bg:rgba(0,122,42,.06); --green-bd:rgba(0,122,42,.18);
-  --bg:#EBF0EC; --s1:#FFFFFF; --s2:#F3F7F4; --s3:#E8F1EA;
-  --bd:#C8DCC8; --bd2:#B4C8B8;
+  --green:#00843D; --green-l:#006B2E; --green-d:#005A30;
+  --green-bg:rgba(0,132,61,.06); --green-bd:rgba(0,132,61,.18);
+  --bg:#F0F4F1; --s1:#FFFFFF; --s2:#F3F8F4; --s3:#E8F2EA;
+  --bd:#C5DAC8; --bd2:#B0C4B4;
   --text:#091A0C; --text2:rgba(9,26,12,.7);
   --muted:#3A6645; --muted2:#7A9E82;
   --red:#C8002A; --red-bg:rgba(200,0,42,.06); --red-bd:rgba(200,0,42,.18);
   --amber:#9A6000; --amber-bg:rgba(154,96,0,.06); --amber-bd:rgba(154,96,0,.18);
+  --orange:#FF6600; --orange-bg:rgba(255,102,0,.06); --orange-bd:rgba(255,102,0,.2);
   --topbar-a:#003D18; --topbar-b:#005A22;
   --input-bg:#FFFFFF; --shadow:0 2px 12px rgba(0,0,0,.12);
   --shadow-lg:0 8px 32px rgba(0,0,0,.18);
@@ -57,81 +59,129 @@ button{font-family:'Outfit',sans-serif;cursor:pointer}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
 
 /* ══════════════════════════════════════════
-   TELA DE LOGIN
+   TELA DE INÍCIO — TEMA LIGHT CORPORATIVO
 ══════════════════════════════════════════ */
 .login-screen{
   min-height:100vh;
   display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(ellipse 80% 60% at 50% 40%, #003A1C 0%, #001408 55%, #000A05 100%);
+  background:#F0F4F1;
   position:relative;overflow:hidden;
 }
 .login-bg-ring{
-  position:absolute;border-radius:50%;border:1px solid rgba(0,200,83,.06);pointer-events:none;
+  position:absolute;border-radius:50%;border:1px solid rgba(0,132,61,.07);pointer-events:none;
 }
-.login-bg-ring:nth-child(1){width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%)}
-.login-bg-ring:nth-child(2){width:900px;height:900px;top:50%;left:50%;transform:translate(-50%,-50%)}
-.login-bg-ring:nth-child(3){width:1200px;height:1200px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.login-bg-ring:nth-child(1){width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.login-bg-ring:nth-child(2){width:800px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.login-bg-ring:nth-child(3){width:1100px;height:1100px;top:50%;left:50%;transform:translate(-50%,-50%)}
 
 .login-card{
   position:relative;z-index:1;
-  background:rgba(11,17,13,.92);
-  border:1px solid rgba(0,200,83,.18);
+  background:#FFFFFF;
+  border:1px solid #C5DAC8;
   border-radius:20px;
-  padding:48px 44px;
-  width:100%;max-width:420px;
-  backdrop-filter:blur(24px);
-  box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(0,200,83,.08);
+  padding:44px 44px;
+  width:100%;max-width:460px;
+  box-shadow:0 4px 40px rgba(0,100,50,.1),0 1px 0 rgba(0,132,61,.08);
   animation:loginIn .55s cubic-bezier(.22,1,.36,1) both;
 }
 @keyframes loginIn{
   from{opacity:0;transform:translateY(28px) scale(.97)}
   to{opacity:1;transform:translateY(0) scale(1)}
 }
-.login-logo-wrap{display:flex;align-items:center;gap:12px;margin-bottom:32px}
-.login-logo-mark{
-  width:46px;height:46px;
-  background:var(--green);border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:17px;font-weight:900;color:#fff;flex-shrink:0;
-  box-shadow:0 0 24px rgba(0,200,83,.35);
-}
-.login-logo-name{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.4px}
-.login-logo-name em{color:#69F0AE;font-style:normal}
-.login-logo-sub{font-size:11px;color:rgba(105,240,174,.55);font-weight:500}
-.login-headline{font-size:19px;font-weight:700;color:#E0FFE6;margin-bottom:6px;letter-spacing:-.3px}
-.login-desc{font-size:12px;color:rgba(83,122,96,.9);margin-bottom:28px;line-height:1.6}
-.login-field{margin-bottom:14px}
+.login-headline{font-size:20px;font-weight:700;color:#091A0C;margin-bottom:6px;letter-spacing:-.4px}
+.login-desc{font-size:13px;color:#3A6645;margin-bottom:4px;line-height:1.65}
+.login-field{margin-bottom:13px}
 .login-field label{
   display:block;font-size:10px;font-weight:700;
-  color:rgba(83,122,96,.85);
+  color:#3A6645;
   text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;
 }
 .login-field input{
   width:100%;
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(0,200,83,.18);
+  background:#F3F8F4;
+  border:1px solid #C5DAC8;
   border-radius:10px;
   padding:12px 14px;
-  color:#E0FFE6;
+  color:#091A0C;
   font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;
   outline:none;transition:border-color .2s,box-shadow .2s;
 }
-.login-field input::placeholder{color:rgba(83,122,96,.45)}
+.login-field input::placeholder{color:#7A9E82}
 .login-field input:focus{
-  border-color:rgba(0,200,83,.55);
-  box-shadow:0 0 0 3px rgba(0,200,83,.1);
+  border-color:#00843D;
+  box-shadow:0 0 0 3px rgba(0,132,61,.12);
+  background:#fff;
 }
-.login-error{font-size:11px;color:#FF3E5A;margin-bottom:10px;display:none}
+.login-error{font-size:11px;color:#C8002A;margin-bottom:10px;padding:8px 12px;background:rgba(200,0,42,.05);border:1px solid rgba(200,0,42,.15);border-radius:8px}
 .login-btn{
-  width:100%;margin-top:8px;
-  padding:14px;
-  background:var(--green);border:none;border-radius:10px;
-  color:#fff;font-size:14px;font-weight:700;letter-spacing:.2px;
+  width:100%;margin-top:4px;
+  padding:15px;
+  background:#FF6600;border:none;border-radius:10px;
+  color:#fff;font-size:15px;font-weight:700;letter-spacing:.2px;
   transition:all .2s;
 }
-.login-btn:hover{background:#00A844;transform:translateY(-1px);box-shadow:0 6px 22px rgba(0,200,83,.38)}
+.login-btn:hover{background:#E55A00;transform:translateY(-1px);box-shadow:0 6px 22px rgba(255,102,0,.35)}
 .login-btn:active{transform:translateY(0)}
-.login-footer{margin-top:22px;text-align:center;font-size:10px;color:rgba(83,122,96,.5)}
+.login-footer{margin-top:20px;text-align:center;font-size:10px;color:#7A9E82}
+
+/* ── LOGO OFICIAL INTRO ── */
+.localiza-brand{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:26px;padding-bottom:22px;
+  border-bottom:1px solid #E8F2EA;
+}
+.lb-accent{width:5px;height:44px;background:#FF6600;border-radius:3px;flex-shrink:0}
+.localiza-logo-img{height:38px;object-fit:contain;display:block}
+
+/* ── LABEL DE SEÇÃO NA INTRO ── */
+.login-section-label{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.5px;color:#00843D;
+  margin:18px 0 12px;display:flex;align-items:center;gap:8px;
+}
+.login-section-label::after{content:'';flex:1;height:1px;background:rgba(0,132,61,.18)}
+
+/* ── BLOCO DE VALOR ── */
+.login-value-block{
+  background:rgba(0,132,61,.07);
+  border:1px solid rgba(0,132,61,.2);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;margin-top:4px;
+}
+.lvb-title{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:#3A6645;margin-bottom:10px;
+}
+.lvb-item{
+  font-size:12px;color:#091A0C;padding:3px 0;
+  display:flex;align-items:center;gap:9px;
+}
+.lvb-check{
+  color:#FF6600;font-weight:900;font-size:13px;flex-shrink:0;width:14px;text-align:center;
+}
+
+/* ── RESUMO DA FROTA (PAINEL DIREITO) ── */
+.fleet-summary{
+  background:linear-gradient(135deg,rgba(0,132,61,.06),rgba(255,102,0,.05));
+  border:1px solid rgba(255,102,0,.28);
+  border-radius:12px;padding:14px;text-align:center;margin-top:10px;
+}
+.fleet-summary-title{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.2px;color:var(--muted);margin-bottom:8px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.fleet-summary-title::before{content:'';width:3px;height:12px;background:#FF6600;border-radius:2px;flex-shrink:0}
+.fleet-qty-badge{
+  display:inline-block;background:#FF6600;color:#fff;
+  font-size:11px;font-weight:700;padding:3px 12px;
+  border-radius:10px;margin-bottom:10px;
+}
+.fleet-econ-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+.fleet-econ-val{
+  font-size:26px;font-weight:900;letter-spacing:-1.5px;
+  color:#FF6600;font-family:'Playfair Display',serif;
+}
+.fleet-econ-sub{font-size:10px;color:var(--muted);margin-top:3px}
 
 /* ══════════════════════════════════════════
    MAIN APP
@@ -147,15 +197,11 @@ button{font-family:'Outfit',sans-serif;cursor:pointer}
   display:flex;align-items:center;justify-content:space-between;gap:10px;
   position:sticky;top:0;z-index:200;
 }
-.tb-logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
-.tb-logo-mark{
-  width:32px;height:32px;background:var(--green);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:900;color:#fff;flex-shrink:0;
-}
-.tb-logo-name{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.2px;line-height:1.1}
-.tb-logo-name em{color:#7EFFA8;font-style:normal}
-.tb-logo-sub{font-size:10px;color:rgba(126,255,168,.55);font-weight:500}
+.tb-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.tb-logo-accent{width:4px;height:30px;background:#FF6600;border-radius:2px;flex-shrink:0}
+.tb-logo-name{font-size:16px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1.1}
+.tb-logo-name em{color:rgba(255,255,255,.7);font-style:normal;font-weight:400}
+.tb-logo-sub{font-size:10px;color:rgba(255,255,255,.4);font-weight:500}
 
 .tb-client{
   display:flex;align-items:center;gap:9px;
@@ -541,9 +587,8 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
 }
 .num-pop{animation:numPop .22s ease-out}
 
-/* Finalist block */
-#finalist{display:none}
-#finalist.show{display:block;animation:stepIn .35s ease-out}
+/* Finalist block — sempre visível após cálculo */
+#finalist{display:block}
 
 /* ══════════════════════════════════════════
    GLOSSÁRIO
@@ -761,12 +806,53 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
 @media(max-width:1100px){.ev-grid{grid-template-columns:1fr}}
 @media(max-width:900px){.ev-comp{grid-template-columns:1fr}.ev-comp-vs-col{display:none}.ev-alg-strip{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.ev-hero{grid-template-columns:1fr}.ev-chips.c3{grid-template-columns:1fr 1fr}.ev-alg-strip{grid-template-columns:1fr}.ev-frow{grid-template-columns:1fr}}
+
+/* ── CAMPO QUANTIDADE DE VEÍCULOS (PAINEL DIREITO) ── */
+.fleet-qty-row{
+  display:flex;align-items:center;gap:8px;
+  background:var(--s3);border:1px solid var(--bd);
+  border-radius:10px;padding:8px 12px;margin-bottom:16px;
+}
+.fleet-qty-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;flex:1}
+.fleet-qty-ctrl{display:flex;align-items:center;gap:4px}
+.fleet-qty-btn{
+  width:26px;height:26px;border:1px solid var(--bd);border-radius:6px;
+  background:var(--s1);color:var(--text);font-size:16px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .15s,border-color .15s;line-height:1;flex-shrink:0;
+}
+.fleet-qty-btn:hover{background:var(--green-bg);border-color:var(--green-bd);color:var(--green)}
+.fleet-qty-input{
+  width:52px;text-align:center;border:1px solid var(--bd);
+  border-radius:6px;padding:4px 6px;background:var(--s1);
+  color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;
+  outline:none;transition:border-color .2s;
+}
+.fleet-qty-input:focus{border-color:var(--green);box-shadow:0 0 0 2px var(--green-bg)}
+.fleet-qty-unit{font-size:11px;color:var(--muted);white-space:nowrap}
+
+/* ── BOTÃO VOLTAR INÍCIO (TOPBAR) ── */
+.tb-btn-back{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 10px;border-radius:8px;border:1px solid var(--bd);
+  background:transparent;color:var(--muted);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+  font-family:'Outfit',sans-serif;
+}
+.tb-btn-back:hover{background:var(--s3);color:var(--text);border-color:var(--green-bd)}
+
+/* ── MODO APRESENTAÇÃO ── */
+body.pres-mode .left-pane{display:none!important}
+body.pres-mode .wizard-wrap{grid-template-columns:1fr!important}
+body.pres-mode .ev-col-left{display:none!important}
+body.pres-mode .ev-grid{grid-template-columns:1fr!important}
+.tb-btn.pres-active{background:rgba(255,102,0,.12)!important;border-color:rgba(255,102,0,.4)!important;color:#FF6600!important}
 </style>
 </head>
 <body>
 
 <!-- ═══════════════════════════════════════
-     TELA DE LOGIN
+     TELA DE INÍCIO — PREPARAÇÃO DA SIMULAÇÃO
 ════════════════════════════════════════ -->
 <div id="loginScreen">
   <div class="login-screen">
@@ -774,26 +860,46 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
     <div class="login-bg-ring"></div>
     <div class="login-bg-ring"></div>
     <div class="login-card">
-      <div class="login-logo-wrap">
-        <div class="login-logo-mark">L&</div>
-        <div>
-          <div class="login-logo-name">Localiza<em>&Co</em></div>
-          <div class="login-logo-sub">Simulador de Frota Corporativa</div>
-        </div>
+
+      <!-- IDENTIDADE LOCALIZA&CO -->
+      <div class="localiza-brand">
+        <div class="lb-accent"></div>
+        <img class="localiza-logo-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIABAMAAAAGVsnJAAAAHlBMVEVHcEwTdCgGaCkMbikRcSkAZSp43h8AZSp43h8AZSqhPSN/AAAACHRSTlMAFT5lgri74iiLWhcAAAgXSURBVHja7NhBaxNBGIDhSawHb8EqxVtUSuktClJ6q0KR3lJakf6L1tpD/oVol+X7t7KwZNNsE0jSpIF5ntPAR2aZNwSykwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgLTqn5yln3asoUsZ2R/HsATofKqnSrZcbsz+K5w+wF5WTankclWHalKOILQhw2Jz6bKMBOt8j6wAvriLrAG9GkXWA/YisA7yMLQ4wSOt3vM0B+mn9rrY4QJEyD3CTeYCyn2mAenk3SNkGqAkgwIYD3Oce4G/uAa4zDrDUoz/+GEUUl+9nTE9HEeXl59T2uhrdfes9SYButVlx0XuCAK09Dub9I+/+jNpFb970rvX5L/WkGIzvwYYTAZon1/O2svfgMq9Sfhq/2l0vGeA+TTuLysnsa4Ra0SqwOzEtB637p2ZSn/rPzNfhw3jMOOpRs9nXlF7Vmy0XYDg7wPzztwvsNNNWgYNoFP2lA7Q3K/urBSh7CwTojuKB25nT+pxjb2PSv9UC7MSkYrUA52mBAGcx5Xzu9HZmm+EqATpTm92sEuA2LRBgL6aV7S950rD1A6gVKwRob/Zu+QC/ewsEaMo3fs2dFv+ZNZsWqYEgDHc6CeNxQHHxphEVb0H8ys2Pg8xN9rLMzeMeFdxD/kEfV2dCyL8Vocgb+m1CVTP7kdNsKpnqPPt0VXcYiZUU2ecD8JRonw3g3DkVABaAFeAovuQVR7IBpBPZAUgHWQfAArACq9EBsVMBKPqTAECRVgOop7XFCUfxhncz5QHgXJQoGwCmvxYAivzVl6Z510eFrptH+bVp3vbYaS3v/P3MuecXCgBpz49uiebqjXPNt1wAmP5aAH5eAssPC+aevrBcuGLdN/7/Y5JDcn5QAKDJJwH5jP71Ig/AxWdnBVBHk9738BLRo3hV7FAGa9iABBYAZ4tMFWwATjOAlz+cDQAcH7YxEexo0BTA5ydiW8RsAES2X4CBRFBCD6D4GD7ZAUDDCMmfeIzL1je2yZgJQLV85h08lGNjBVBchmA3oOQXiBVOed5Y+F46bZGImQB0y2LTAwYUMAF4eBlCaM0A6sTifz8/WZ14u/ZaLq8SsU4DACQxIA8YSGQC8DiEkGPAEyxF4uLUyqfonkpwbRKxWgsAWQa5kS+pLADehxCyDNhhFHHm704eYoya17n8g3jb7fUAClRT0HyauOJaOf0zDdij4HFmiR6id4BL3Y/0dUoA9VxCcPFAA9YBKOX5cwyAenTlX+d6eiu3js51KgBU9pGRpqcCwKMQQq4BntTD2A/Awwfg0JgVALCTbsmcuBFea8qfzQAexzaVeSA85A43FQ0ARKcDaDLpSgWgDMFoAOcYeXkMAMCjcKfSAcA2YI1mqQLwIJABJgAoPnxW2oHTAygVAOIeCAAtpTACsBtQo5RzH2Q/GACdVQDgJXaRnms5BuQD4MoAP04MANuAVZ3cnRngbxpAFy2j/T0zoLpJALgXc764BQPsRXDUFMFtThE8m2LuSQA+x4D73wa5B6IN3n4XKKd/7dw/TxRBGMfxmT28C90JGL0OEQW6hYTgdWJD7CRKsZ0VuRIhFlsazYVSkyOXfbeGM9lnmWd2MjeYs9jvp31g9vbHZP/MPMeCWdGDkH4NiH0QSp8B6Y/CM2ODj8K+2nooAHUPFIXvuXqQMAP+98vQQUQAPbkHyhF9r52jFcwA/2mEX4ef6s8c/zqsXwMCr8MrmAHet/pePS3GvmtkeS6f2anZKhSAWgoT657LrS1XMQNGcmS1JFZXc+fSdJq+JKZfAwJLYquYAQP3yHKRkkXR385snZ/K57t2auEAZPQrNen06usKZoBvWbzXtiwuE3OetyyZBwNQ90Bhk5bF02eA3hjJ/RsjpVo1f15/0kImj9TCAcjo1/4t2q/NwRIC+J6+NSYTwLc1NlR/5MStsazyP1yN3AYsW6YEMB0uHcBAtngXbOHZHJWeI8/m6LXazwwEsKfvgQtr7oH2ZLCw/m3T9LKWR2+PSwJy/tXsYfVmuKieVBKP/KZ85GAAzmuAqAsy2OtqyQC0HzoA7WOzzeFomO2W0mvttE8cbdtXhXQENms328ZsnFURAQwqR10ZN7stspMqOoC12xbTYAAy+iClRead09Z0V8a1yIxbu2CeBAYLyh4bgO5OkjtyW3Wu2yTjAvjQ9vPpTVI2OoAD/+j+Zrdct8npTtLxPwsg3HMXNokNYOQfXf8h5SrdUp0P2xoly/QAsjIwWMjb2ACetB063CorVd1KPFatsskB6Ckwj9wbfBEbQNZ2aFvoNkmhq7PW6XH+mACyxGbpfmwApmg7dK9sOUOpRk2PmUkOQLdl3w0jA8iiA3gWdWjda7olJdWJe/IgmfQA9BcmciMBhEUG4D38L8lGnb/YKp3zF/asWUkOQAaT60x0APvRAdjjynGlvhbk7bXdLOp0cqckT8eH8qUp5/8IyZemxpWPrA0cN2MeSDGoHwggnt1dNPteHBqvv9Vv7422eV+af1K5Jdm8uB/s87ZZgk0MQNt5GazuJPxigo2lB9sPBNAJ/Y4GICZdD6Df0QDEpOsBrHU0ALHf0QDEpOsB2IkOoOMJTE3XvLl94KfpHLt72fCF/y4NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGGPMH+MmCGWzJBbQAAAAAElFTkSuQmCC" alt="Localiza&Co"/>
       </div>
-      <div class="login-headline">Acesso ao Simulador</div>
-      <div class="login-desc">Ferramenta exclusiva para consultores Localiza&Co. Preencha seus dados de acesso para continuar.</div>
+
+      <!-- APRESENTAÇÃO -->
+      <div class="login-headline">Simulador Estratégico de Frota</div>
+      <div class="login-desc">Compare o custo efetivo entre frota própria e locação corporativa considerando custos operacionais, financeiros e tributários.</div>
+
+      <!-- INFORMAÇÕES DA SIMULAÇÃO -->
+      <div class="login-section-label">Informações da Simulação</div>
+
       <div class="login-field">
-        <label>Matrícula EV</label>
-        <input id="loginMatricula" type="text" placeholder="Ex: EV00001" maxlength="20" autocomplete="off"/>
+        <label>Executivo de Vendas Responsável</label>
+        <input id="startEV" type="text" placeholder="Nome completo do executivo" maxlength="60" autocomplete="off" onkeydown="if(event.key==='Enter')doStart()"/>
       </div>
       <div class="login-field">
-        <label>Código do Cliente</label>
-        <input id="loginCodigo" type="text" placeholder="Ex: CLI-2024" maxlength="30" autocomplete="off"/>
+        <label>Empresa Cliente</label>
+        <input id="startCliente" type="text" placeholder="Razão social ou nome fantasia" maxlength="60" autocomplete="off" onkeydown="if(event.key==='Enter')doStart()"/>
       </div>
-      <div class="login-error" id="loginError">⚠ Preencha todos os campos para continuar.</div>
-      <button class="login-btn" onclick="doLogin()">Entrar no Simulador →</button>
-      <div class="login-footer">Localiza&Co · Uso exclusivo interno · Não compartilhe o acesso</div>
+      <div class="login-field">
+        <label>Quantidade de Veículos</label>
+        <input id="startQtd" type="number" value="1" min="1" max="9999" placeholder="Ex: 10" onkeydown="if(event.key==='Enter')doStart()"/>
+      </div>
+
+      <!-- BLOCO DE VALOR -->
+      <div class="login-value-block">
+        <div class="lvb-title">Ao final da simulação você terá:</div>
+        <div class="lvb-item"><span class="lvb-check">✓</span>Custo efetivo da frota própria</div>
+        <div class="lvb-item"><span class="lvb-check">✓</span>Comparativo com locação corporativa</div>
+        <div class="lvb-item"><span class="lvb-check">✓</span>Economia potencial estimada</div>
+        <div class="lvb-item"><span class="lvb-check">✓</span>Impacto financeiro consolidado da frota</div>
+        <div class="lvb-item"><span class="lvb-check">✓</span>Relatório executivo em PDF</div>
+      </div>
+
+      <div class="login-error" id="startError" style="display:none"></div>
+      <button class="login-btn" onclick="doStart()">Iniciar Simulação →</button>
+      <div class="login-footer">Localiza&amp;Co · Simulador Estratégico de Frota · Uso interno</div>
     </div>
   </div>
 </div>
@@ -806,10 +912,10 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
   <!-- TOPBAR -->
   <header class="topbar">
     <div class="tb-logo">
-      <div class="tb-logo-mark">L&</div>
+      <div class="tb-logo-accent"></div>
       <div>
         <div class="tb-logo-name">Localiza<em>&Co</em></div>
-        <div class="tb-logo-sub">Simulador de Frota</div>
+        <div class="tb-logo-sub">Simulador Estratégico de Frota</div>
       </div>
     </div>
 
@@ -819,16 +925,19 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
     </div>
 
     <div class="tb-right">
-      <button class="tb-btn" onclick="toggleClientPanel()" title="Configurar cliente">
-        👤 <span class="btn-txt">Cliente</span>
+      <button class="tb-btn-back" onclick="goToStart()" title="Voltar à tela inicial">← Início</button>
+      <div class="tb-separator"></div>
+      <button class="tb-btn" onclick="toggleClientPanel()" title="Configurar dados do cliente">
+        <span class="btn-txt">Cliente</span>
       </button>
       <div class="tb-separator"></div>
       <div class="p-sw">
         <button class="p-btn" id="btnPresumido" data-profile="presumido">Presumido</button>
         <button class="p-btn active" id="btnReal" data-profile="real">Lucro Real</button>
       </div>
-      <button class="tb-btn" onclick="switchTab('gloss')">📖 <span class="btn-txt">Glossário</span></button>
-      <button class="tb-btn green" onclick="exportPDF()">📄 <span class="btn-txt">PDF</span></button>
+      <button class="tb-btn" id="presBtn" onclick="togglePresentation()" title="Ocultar campos de entrada para apresentação"><span class="btn-txt">Apresentação</span></button>
+      <button class="tb-btn" onclick="switchTab('gloss')"><span class="btn-txt">Glossário</span></button>
+      <button class="tb-btn green" onclick="exportPDF()"><span class="btn-txt">Exportar PDF</span></button>
       <div class="theme-btn" id="themeBtn" title="Alternar tema"><div class="tt-k" id="ttK">🌙</div></div>
     </div>
   </header>
@@ -847,9 +956,9 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
 
   <!-- TABS -->
   <div class="tabs-bar">
-    <button class="tab active" id="tabSim" onclick="switchTab('sim')">📊 Simulador Cliente</button>
-    <button class="tab" id="tabEv" onclick="switchTab('ev')">⚡ Simulador EV</button>
-    <button class="tab" id="tabGloss" onclick="switchTab('gloss')">📖 Glossário</button>
+    <button class="tab active" id="tabSim" onclick="switchTab('sim')">Simulador</button>
+    <button class="tab" id="tabEv" onclick="switchTab('ev')">Análise Detalhada</button>
+    <button class="tab" id="tabGloss" onclick="switchTab('gloss')">Glossário</button>
   </div>
 
   <!-- ═══ TAB: SIMULADOR ═══ -->
@@ -977,7 +1086,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
 
         <div class="nav-btns">
           <button class="btn-back" onclick="goStep(0)">← Voltar</button>
-          <button class="btn-next" onclick="goStep(2)">Próximo: O Ralo Financeiro →</button>
+          <button class="btn-next" onclick="goStep(2)">Próximo: Custos Operacionais →</button>
         </div>
       </div>
 
@@ -992,7 +1101,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
             <span class="slider-name">Manutenção anual</span>
             <span class="slider-val"><span id="slManut">1.5</span>% · <span id="slManutR">R$ 0</span></span>
           </div>
-          <input type="range" id="manutencaoPct" min="0" max="50" step="0.5" value="1.5" oninput="sliderUpdate('manutencaoPct','slManut','slManutR');calc()"/>
+          <input type="range" id="manutencaoPct" min="0" max="10" step="0.1" value="1.5" oninput="sliderUpdate('manutencaoPct','slManut','slManutR');calc()"/>
           <div class="slider-hint">Revisões, pneus, peças e mão de obra. Referência: 1,5–2,5%</div>
         </div>
 
@@ -1001,7 +1110,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
             <span class="slider-name">Seguro anual</span>
             <span class="slider-val"><span id="slSeg">2.0</span>% · <span id="slSegR">R$ 0</span></span>
           </div>
-          <input type="range" id="seguroPct" min="0" max="50" step="0.5" value="2" oninput="sliderUpdate('seguroPct','slSeg','slSegR');calc()"/>
+          <input type="range" id="seguroPct" min="0" max="15" step="0.1" value="2" oninput="sliderUpdate('seguroPct','slSeg','slSegR');calc()"/>
           <div class="slider-hint">Cobertura compreensiva + responsabilidade civil. Referência: 2–4%</div>
         </div>
 
@@ -1047,7 +1156,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
         <div class="field-group">
           <div class="f-label">Custo de indisponibilidade / ano <span class="tip" data-tip="Gastos anuais com aluguel temporário, Uber ou táxi durante manutenção, sinistro ou pane do veículo próprio.">?</span></div>
           <div class="input-row">
-            <div class="input-wrap"><div class="input-unit">R$</div><input id="indisponibilidadeAno" type="number" value="0" step="500" oninput="calc()"/></div>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="indisponibilidadeAno" type="number" value="3000" step="500" oninput="calc()"/></div>
             <div class="chip"><div class="chip-l">Impacto/ano</div><div class="chip-v r" id="outIndisp">R$ 0</div></div>
           </div>
         </div>
@@ -1074,7 +1183,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
         </div>
 
         <div class="field-group">
-          <div class="f-label">Licenciamento <span class="tip" data-tip="Taxa anual de licenciamento + DPVAT.">?</span></div>
+          <div class="f-label">Licenciamento <span class="tip" data-tip="Taxa anual de licenciamento e emplacamento.">?</span></div>
           <div class="input-row">
             <div class="input-wrap"><input id="licenciamentoPct" type="number" value="0" step="0.1" oninput="calc()"/><div class="input-unit">%</div></div>
             <div class="chip"><div class="chip-l">Lic./ano</div><div class="chip-v r" id="outLic">R$ 0</div></div>
@@ -1102,7 +1211,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
 
       <!-- ── STEP 4: FISCAL ── -->
       <div class="step-panel" id="step3">
-        <div class="step-eyebrow">Passo 4 de 4 — Grand Finale</div>
+        <div class="step-eyebrow">Passo 4 de 4</div>
         <div class="step-title">Impacto Tributário e Comparativo</div>
         <div class="step-subtitle">Aqui são considerados os efeitos tributários de cada modelo, permitindo a comparação definitiva entre frota própria e locação com base no custo efetivo.</div>
 
@@ -1183,6 +1292,17 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
     <!-- RIGHT PANE: EXECUTIVE DASHBOARD -->
     <div class="right-pane">
 
+      <!-- CAMPO QUANTIDADE DE VEÍCULOS -->
+      <div class="fleet-qty-row">
+        <span class="fleet-qty-label">Frota</span>
+        <div class="fleet-qty-ctrl">
+          <button class="fleet-qty-btn" onclick="changeQty(-1)">−</button>
+          <input id="qtdVeiculosInput" class="fleet-qty-input" type="number" value="1" min="1" max="9999" oninput="updateQty(this.value)"/>
+          <button class="fleet-qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <span class="fleet-qty-unit">veículos</span>
+      </div>
+
       <div class="dash-block-title">Custo Acumulado — Frota Própria</div>
 
       <div class="thermo" id="th0">
@@ -1227,7 +1347,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
         <div class="ce-sub">por ano · mensal: <strong id="bigFrotaMes">R$ 0</strong></div>
       </div>
 
-      <!-- FINALIST: aparece no step 4 -->
+      <!-- COMPARATIVO: visível desde o início -->
       <div id="finalist">
         <div class="dash-div"></div>
         <div class="comp-label">Comparativo</div>
@@ -1247,7 +1367,16 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
         <div class="econ-pill" id="econPill">
           <div class="ep-label" id="epLabel">Economia estimada com locação</div>
           <div class="ep-val" id="epVal">R$ 0</div>
-          <div class="ep-sub" id="epSub">por ano</div>
+          <div class="ep-sub" id="epSub">por veículo / ano</div>
+        </div>
+
+        <!-- RESUMO DA FROTA -->
+        <div class="fleet-summary" id="fleetSummary" style="display:none">
+          <div class="fleet-summary-title">Impacto da Frota</div>
+          <div class="fleet-qty-badge" id="fleetQtyBadge">0 veículos</div>
+          <div class="fleet-econ-label" id="fleetEconLabel">Economia total estimada</div>
+          <div class="fleet-econ-val" id="fleetEconVal">R$ 0</div>
+          <div class="fleet-econ-sub" id="fleetEconSub">por ano · toda a frota</div>
         </div>
       </div>
 
@@ -1267,8 +1396,8 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
     <!-- Mini Bar -->
     <div class="ev-bar">
       <div class="ev-bar-left">
-        <span class="ev-badge-tag">⚡ Simulador EV</span>
-        <span class="ev-bar-desc">Painel de consulta rápida · Todas as variáveis visíveis · Uso interno</span>
+        <span class="ev-badge-tag">Análise Detalhada</span>
+        <span class="ev-bar-desc">Painel técnico completo · Todas as variáveis visíveis · Análise avançada</span>
       </div>
       <div class="ev-bar-right">
         <div class="ev-sw">
@@ -1366,8 +1495,8 @@ input[type=range]{width:100%;accent-color:var(--green);height:6px;cursor:pointer
             <div class="ev-frow"><div class="ev-flabel">Manutenção <span class="tip" data-tip="% anual sobre valor do veículo. Ref: 1,5–2,5%">?</span></div><div class="input-wrap"><input id="ev_manutencaoPct" type="number" value="1.5" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
             <div class="ev-frow"><div class="ev-flabel">Seguro anual</div><div class="input-wrap"><input id="ev_seguroPct" type="number" value="2" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
             <div class="ev-frow"><div class="ev-flabel">Estado (IPVA)</div><div class="input-wrap"><select id="ev_estado" onchange="calcEV()"><option value="0">Isento – 0,0%</option><option value="2">Acre – 2,0%</option><option value="3.25">Alagoas – 3,25%</option><option value="3">Amapá – 3,0%</option><option value="3">Amazonas – 3,0%</option><option value="2.5">Bahia – 2,5%</option><option value="3.5">Ceará – 3,5%</option><option value="3.5">Distrito Federal – 3,5%</option><option value="2">Espírito Santo – 2,0%</option><option value="3.75">Goiás – 3,75%</option><option value="2.5">Maranhão – 2,5%</option><option value="3">Mato Grosso – 3,0%</option><option value="3">Mato Grosso do Sul – 3,0%</option><option value="4">Minas Gerais – 4,0%</option><option value="2.5">Pará – 2,5%</option><option value="2.5">Paraíba – 2,5%</option><option value="3.5">Paraná – 3,5%</option><option value="2">Pernambuco – 2,0%</option><option value="3">Piauí – 3,0%</option><option value="4">Rio de Janeiro – 4,0%</option><option value="3">Rio Grande do Norte – 3,0%</option><option value="3">Rio Grande do Sul – 3,0%</option><option value="3">Rondônia – 3,0%</option><option value="3">Roraima – 3,0%</option><option value="2">Santa Catarina – 2,0%</option><option value="4">São Paulo – 4,0%</option><option value="3">Sergipe – 3,0%</option><option value="4">Tocantins – 4,0%</option></select></div></div>
-            <div class="ev-frow"><div class="ev-flabel">Licenciamento <span class="tip" data-tip="Taxa anual + DPVAT.">?</span></div><div class="input-wrap"><input id="ev_licenciamentoPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
-            <div class="ev-frow"><div class="ev-flabel">Indisponibilidade/ano <span class="tip" data-tip="Aluguel temporário ou transporte substituto durante manutenção/sinistro.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_indisponibilidadeAno" type="number" value="0" step="500" oninput="calcEV()"/></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Licenciamento <span class="tip" data-tip="Taxa anual de licenciamento e emplacamento.">?</span></div><div class="input-wrap"><input id="ev_licenciamentoPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Indisponibilidade/ano <span class="tip" data-tip="Aluguel temporário ou transporte substituto durante manutenção/sinistro.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_indisponibilidadeAno" type="number" value="3000" step="500" oninput="calcEV()"/></div></div>
             <div class="ev-frow"><div class="ev-flabel">Adm. frota / mês <span class="tip" data-tip="Gestão interna: sistemas, RH, controles.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_admFrotaMensal" type="number" value="0" step="50" oninput="calcEV()"/></div></div>
             <div class="ev-chips c3">
               <div class="ev-chip"><div class="ev-chip-l">Manutenção</div><div class="ev-chip-v" id="ev_vManut">R$ 0</div></div>
@@ -1542,7 +1671,9 @@ let clientName = "";
 let clientLogoData = null;
 let loginMatricula = "";
 let loginCodigo = "";
+let qtdVeiculos = 1;
 let clientPanelOpen = false;
+let presMode = false;
 let lastCalc = {};
 
 const el  = id => document.getElementById(id);
@@ -1574,7 +1705,7 @@ function pmt(pv, i, np) {
    TEMA
 ══════════════════════════════════════════ */
 const html = document.documentElement;
-let theme = localStorage.getItem("sim-theme") || "dark";
+let theme = localStorage.getItem("sim-theme") || "light";
 function applyTheme(t) {
   html.setAttribute("data-theme", t);
   const k = el("ttK");
@@ -1585,23 +1716,38 @@ function applyTheme(t) {
 applyTheme(theme);
 
 /* ══════════════════════════════════════════
-   LOGIN
+   INÍCIO DA SIMULAÇÃO
 ══════════════════════════════════════════ */
-function doLogin() {
-  const mat = (el("loginMatricula").value || "").trim();
-  const cod = (el("loginCodigo").value || "").trim();
-  const err = el("loginError");
+function doStart() {
+  const evN  = (el("startEV").value    || "").trim();
+  const cliN = (el("startCliente").value || "").trim();
+  const qty  = parseInt(el("startQtd").value) || 1;
+  const err  = el("startError");
 
-  if (!mat || !cod) {
+  if (!evN) {
+    err.textContent = "Informe o nome do Executivo de Vendas responsável.";
     err.style.display = "block";
-    el("loginMatricula").focus();
+    el("startEV").focus();
     return;
   }
   err.style.display = "none";
-  loginMatricula = mat;
-  loginCodigo    = cod;
 
-  try { localStorage.setItem("sim-login", JSON.stringify({m: mat, c: cod})); } catch(e) {}
+  loginMatricula = evN;
+  loginCodigo    = cliN;
+  clientName     = cliN;
+  qtdVeiculos    = Math.max(1, qty);
+  const qInp = el("qtdVeiculosInput");
+  if (qInp) qInp.value = qtdVeiculos;
+
+  if (cliN) {
+    el("clientNameInput").value = cliN;
+    el("clientNameTopbar").textContent = cliN;
+    el("clientNameTopbar").style.display = "block";
+  }
+
+  try {
+    localStorage.setItem("sim-start", JSON.stringify({ev: evN, cli: cliN, qty: qtdVeiculos}));
+  } catch(e) {}
 
   const ls = el("loginScreen");
   ls.style.transition = "opacity .4s";
@@ -1614,10 +1760,6 @@ function doLogin() {
     calc();
   }, 420);
 }
-
-["loginMatricula","loginCodigo"].forEach(id => {
-  el(id).addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
-});
 
 /* ══════════════════════════════════════════
    PAINEL CLIENTE
@@ -1659,6 +1801,29 @@ function saveClient() {
    TABS
 ══════════════════════════════════════════ */
 function switchTab(t) {
+  const SYNC_FIELDS = [
+    "valorVeiculoBruto","descontoPct","entradaPct","parcelas","jurosMensalPct",
+    "oportunidadePct","manutencaoPct","seguroPct","estado","indisponibilidadeAno",
+    "modoDepreciacao","depreciacaoPct","licenciamentoPct","admFrotaMensal",
+    "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim"
+  ];
+  const fromSim = el("tabSim")?.classList.contains("active");
+  const fromEv  = el("tabEv")?.classList.contains("active");
+
+  if (fromSim && t === "ev") {
+    SYNC_FIELDS.forEach(f => {
+      const src = el(f), dst = el("ev_" + f);
+      if (src && dst) dst.value = src.value;
+    });
+  } else if (fromEv && t === "sim") {
+    SYNC_FIELDS.forEach(f => {
+      const src = el("ev_" + f), dst = el(f);
+      if (src && dst) dst.value = src.value;
+    });
+    sliderUpdate("manutencaoPct","slManut","slManutR");
+    sliderUpdate("seguroPct","slSeg","slSegR");
+  }
+
   ["sim","ev","gloss"].forEach(id => {
     const cap = id[0].toUpperCase() + id.slice(1);
     const tabEl   = el("tab"   + cap);
@@ -1666,8 +1831,46 @@ function switchTab(t) {
     if (tabEl)   tabEl.classList.toggle("active",   id === t);
     if (panelEl) panelEl.classList.toggle("active", id === t);
   });
-  // Recalc active tab on switch
-  if (t === "ev" && Object.keys(lastCalcEV).length === 0) calcEV();
+  if (t === "ev") calcEV();
+  else if (t === "sim") calc();
+}
+
+/* ══════════════════════════════════════════
+   QUANTIDADE DE VEÍCULOS
+══════════════════════════════════════════ */
+function changeQty(delta) {
+  qtdVeiculos = Math.max(1, qtdVeiculos + delta);
+  const inp = el("qtdVeiculosInput");
+  if (inp) inp.value = qtdVeiculos;
+  calc();
+}
+function updateQty(val) {
+  qtdVeiculos = Math.max(1, parseInt(val) || 1);
+  calc();
+}
+
+/* ══════════════════════════════════════════
+   VOLTAR À TELA INICIAL
+══════════════════════════════════════════ */
+function goToStart() {
+  el("mainApp").style.display = "none";
+  const ls = el("loginScreen");
+  ls.style.transition = "none";
+  ls.style.opacity    = "1";
+  ls.style.display    = "block";
+}
+
+/* ══════════════════════════════════════════
+   MODO APRESENTAÇÃO
+══════════════════════════════════════════ */
+function togglePresentation() {
+  presMode = !presMode;
+  document.body.classList.toggle("pres-mode", presMode);
+  const btn = el("presBtn");
+  if (btn) {
+    btn.classList.toggle("pres-active", presMode);
+    btn.querySelector(".btn-txt").textContent = presMode ? "Editar" : "Apresentação";
+  }
 }
 
 /* ══════════════════════════════════════════
@@ -1684,7 +1887,6 @@ function goStep(s) {
   el("th1").style.opacity = s >= 1 ? "1" : "0.3";
   el("th2").style.opacity = s >= 2 ? "1" : "0.3";
   el("th3").style.opacity = s >= 3 ? "1" : "0.3";
-  el("finalist").classList.toggle("show", s >= 3);
   currentStep = s;
   saveLS();
 }
@@ -1859,21 +2061,46 @@ function calc() {
   el("vAluguel").className = "v-card" + (venc === "aluguel" ? " winner" : "");
 
   const ep = el("econPill");
+  const perVeic = qtdVeiculos > 1 ? "por veículo / ano" : "por ano";
   if (venc === "aluguel") {
     ep.className = "econ-pill";
     set("epLabel", "Economia estimada com locação");
     set("epVal",   R(econAbs));
-    set("epSub",   "por ano");
+    set("epSub",   perVeic);
   } else if (venc === "propria") {
     ep.className = "econ-pill red";
     set("epLabel", "Vantagem da frota própria");
     set("epVal",   R(econAbs));
-    set("epSub",   "por ano");
+    set("epSub",   perVeic);
   } else {
     ep.className = "econ-pill";
     set("epLabel", "Diferença econômica");
-    set("epVal",   "R$ 0");
-    set("epSub",   "empate técnico");
+    set("epVal",   "—");
+    set("epSub",   "equivalência econômica");
+  }
+
+  /* ── Resumo da Frota ── */
+  const fs = el("fleetSummary");
+  if (fs) {
+    if (qtdVeiculos > 1) {
+      fs.style.display = "block";
+      set("fleetQtyBadge", qtdVeiculos + " veículo" + (qtdVeiculos !== 1 ? "s" : ""));
+      if (venc === "aluguel") {
+        set("fleetEconLabel", "Economia total com locação");
+        set("fleetEconVal",   R(econAbs * qtdVeiculos));
+        set("fleetEconSub",   "por ano · toda a frota");
+      } else if (venc === "propria") {
+        set("fleetEconLabel", "Vantagem total frota própria");
+        set("fleetEconVal",   R(econAbs * qtdVeiculos));
+        set("fleetEconSub",   "por ano · toda a frota");
+      } else {
+        set("fleetEconLabel", "Equivalência econômica");
+        set("fleetEconVal",   "—");
+        set("fleetEconSub",   "resultado neutro");
+      }
+    } else {
+      fs.style.display = "none";
+    }
   }
 
   saveLS();
@@ -2053,8 +2280,9 @@ body{
     ${logoClientHTML}${nomeClientHTML}
     <div class="meta" style="margin-top:6px">
       <div>Data: <strong>${agora}</strong></div>
-      <div>Matrícula EV: <strong>${loginMatricula || "—"}</strong></div>
-      <div>Código Cliente: <strong>${loginCodigo || "—"}</strong></div>
+      <div>Executivo de Vendas: <strong>${loginMatricula || "—"}</strong></div>
+      <div>Cliente: <strong>${clientName || loginCodigo || "—"}</strong></div>
+      <div>Qtd. de Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div>
       <div>Regime Fiscal: <strong>${perfLabel}</strong></div>
     </div>
   </div>
@@ -2126,9 +2354,33 @@ body{
 <!-- CONCLUSÃO -->
 <div class="stitle">Conclusão da Análise</div>
 <div class="concl">
-  <div class="concl-title">📊 Análise Comparativa — ${clientName || "Simulação"}</div>
+  <div class="concl-title">Análise Comparativa — ${clientName || "Simulação"}</div>
   <div class="concl-text">${conclusao}</div>
 </div>
+
+${qtdVeiculos > 1 ? `
+<!-- IMPACTO DA FROTA -->
+<div class="stitle">Impacto Consolidado da Frota</div>
+<div style="background:#FFF7F2;border:1px solid rgba(255,102,0,.25);border-left:4px solid #FF6600;border-radius:8px;padding:16px 18px;margin-bottom:24px">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#CC5200;margin-bottom:12px">Frota de ${qtdVeiculos} Veículos · Projeção Anual</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+    <div style="text-align:center">
+      <div style="font-size:10px;color:#7A5500;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Custo Total — Frota Própria</div>
+      <div style="font-size:20px;font-weight:800;color:#091A0C;letter-spacing:-1px;font-family:'Playfair Display',serif">${R(c.fAno * qtdVeiculos)}</div>
+      <div style="font-size:10px;color:#7A5500;margin-top:2px">por ano</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:10px;color:#7A5500;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Custo Total — Locação</div>
+      <div style="font-size:20px;font-weight:800;color:#091A0C;letter-spacing:-1px;font-family:'Playfair Display',serif">${R(c.cAlq * qtdVeiculos)}</div>
+      <div style="font-size:10px;color:#7A5500;margin-top:2px">por ano</div>
+    </div>
+    <div style="text-align:center;background:#FF6600;border-radius:8px;padding:10px">
+      <div style="font-size:10px;color:rgba(255,255,255,.8);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">${c.venc === "aluguel" ? "Economia c/ Locação" : c.venc === "propria" ? "Vantagem Frota Própria" : "Equivalência"}</div>
+      <div style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-1px;font-family:'Playfair Display',serif">${R(c.econAbs * qtdVeiculos)}</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.75);margin-top:2px">por ano · toda a frota</div>
+    </div>
+  </div>
+</div>` : ""}
 
 <!-- FOOTER -->
 <div class="footer">
@@ -2175,11 +2427,12 @@ function restoreState() {
   /* Tema */
   applyTheme(theme);
 
-  /* Login */
+  /* Dados da simulação */
   try {
-    const s = JSON.parse(localStorage.getItem("sim-login") || "{}");
-    if (s.m) loginMatricula = s.m;
-    if (s.c) loginCodigo    = s.c;
+    const s = JSON.parse(localStorage.getItem("sim-start") || "{}");
+    if (s.ev)  loginMatricula = s.ev;
+    if (s.cli) loginCodigo    = s.cli;
+    if (s.qty) qtdVeiculos    = Math.max(1, parseInt(s.qty) || 1);
   } catch(e) {}
 
   /* Cliente */
@@ -2222,11 +2475,12 @@ window.addEventListener("DOMContentLoaded", () => {
   applyTheme(theme);
   el("themeBtn").addEventListener("click", () => applyTheme(theme === "dark" ? "light" : "dark"));
 
-  /* Verifica login salvo */
+  /* Restaura dados da simulação anterior no formulário de início */
   try {
-    const s = JSON.parse(localStorage.getItem("sim-login") || "{}");
-    if (s.m) el("loginMatricula").value = s.m;
-    if (s.c) el("loginCodigo").value    = s.c;
+    const s = JSON.parse(localStorage.getItem("sim-start") || "{}");
+    if (s.ev  && el("startEV"))      el("startEV").value      = s.ev;
+    if (s.cli && el("startCliente")) el("startCliente").value = s.cli;
+    if (s.qty && el("startQtd"))     el("startQtd").value     = s.qty;
   } catch(e) {}
 
   /* Wire main simulator inputs (EV inputs have inline handlers) */
@@ -2461,7 +2715,7 @@ function exportPDFEV() {
 
   w.document.write(`<!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"/>
-<title>Simulador EV — ${clientName || "Consulta"}</title>
+<title>Análise Detalhada — ${clientName || "Localiza&Co"}</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2514,8 +2768,8 @@ body{font-family:'Outfit',sans-serif;background:#fff;color:#091A0C;-webkit-print
 <div class="wm">SIMULAÇÃO</div>
 <div class="page">
 <div class="hdr">
-  <div class="hl"><div class="lsq">L&</div><div><div class="ltx">Localiza<em>&Co</em></div><div class="lsb">Simulador de Frota · Consulta Rápida</div><div class="evt">⚡ Simulador EV</div></div></div>
-  <div style="text-align:right">${logoClientHTML}${nomeClientHTML}<div class="meta" style="margin-top:6px"><div>Data: <strong>${agora}</strong></div><div>Matrícula EV: <strong>${loginMatricula||"—"}</strong></div><div>Código Cliente: <strong>${loginCodigo||"—"}</strong></div><div>Regime: <strong>${perfLabel}</strong></div></div></div>
+  <div class="hl"><div class="lsq">L&</div><div><div class="ltx">Localiza<em>&Co</em></div><div class="lsb">Simulador de Frota · Análise Detalhada</div><div class="evt">Análise Técnica Completa</div></div></div>
+  <div style="text-align:right">${logoClientHTML}${nomeClientHTML}<div class="meta" style="margin-top:6px"><div>Data: <strong>${agora}</strong></div><div>Executivo de Vendas: <strong>${loginMatricula||"—"}</strong></div><div>Cliente: <strong>${clientName||loginCodigo||"—"}</strong></div><div>Qtd. Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div><div>Regime: <strong>${perfLabel}</strong></div></div></div>
 </div>
 <div class="disc"><span style="font-size:14px;flex-shrink:0">⚠️</span><div><strong>SIMULAÇÃO INTERNA</strong> — Estimativa comparativa para uso do EV. Não constitui proposta comercial nem consultoria tributária.</div></div>
 <div class="kr">
@@ -2541,9 +2795,9 @@ body{font-family:'Outfit',sans-serif;background:#fff;color:#091A0C;-webkit-print
   </div>
 </div>
 <div class="st">Conclusão</div>
-<div class="concl"><div class="conclt">📊 Análise Comparativa</div><div class="conclp">${conclusao}</div></div>
+<div class="concl"><div class="conclt">Análise Comparativa — ${clientName || "Simulação"}</div><div class="conclp">${conclusao}</div></div>
 <div class="ft">
-  <div class="ftl"><div class="ftlg">L&</div><div><div class="ftb">Localiza&Co · Simulador EV</div><div class="fts">${agora}${clientName?" · "+clientName:""}</div></div></div>
+  <div class="ftl"><div class="ftlg">L&</div><div><div class="ftb">Localiza&Co · Análise Detalhada</div><div class="fts">${agora}${clientName?" · "+clientName:""}</div></div></div>
   <div class="ftd">Documento de uso interno. Não substitui consultoria financeira ou tributária.</div>
 </div>
 </div>
