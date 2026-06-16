@@ -122,6 +122,13 @@ button{font-family:'Outfit',sans-serif;cursor:pointer}
 }
 .login-btn:hover{background:#E55A00;transform:translateY(-1px);box-shadow:0 6px 22px rgba(255,102,0,.35)}
 .login-btn:active{transform:translateY(0)}
+.login-btn-tour{
+  width:100%;margin-top:8px;padding:11px;
+  background:transparent;border:1.5px solid rgba(0,132,61,.35);border-radius:10px;
+  color:#00843D;font-size:13px;font-weight:600;letter-spacing:.1px;cursor:pointer;
+  transition:all .2s;
+}
+.login-btn-tour:hover{background:rgba(0,132,61,.07);border-color:#00843D}
 .login-footer{margin-top:20px;text-align:center;font-size:10px;color:#7A9E82}
 
 /* ── LOGO OFICIAL INTRO ── */
@@ -955,6 +962,259 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
   cursor:pointer;transition:.2s;
 }
 .tour-btn-next:hover{opacity:.88}
+
+/* ══════════════════════════════════════════
+   FROTA COMPOSTA
+══════════════════════════════════════════ */
+.fc-page{max-width:1400px;margin:0 auto;padding:18px 20px 40px}
+.fc-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px;margin-bottom:14px;
+  background:var(--s1);border:1px solid var(--bd);border-radius:12px;
+  gap:12px;flex-wrap:wrap;
+}
+.fc-bar-left{display:flex;align-items:center;gap:10px}
+.fc-layout{display:grid;grid-template-columns:340px 1fr;gap:14px;align-items:start}
+.fc-col-left,.fc-col-right{display:flex;flex-direction:column;gap:10px}
+.fc-add-btn{
+  width:100%;padding:13px;
+  border:2px dashed var(--bd2);border-radius:10px;
+  background:transparent;color:var(--muted);
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.fc-add-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-bg)}
+.fc-model-card{
+  background:var(--s1);border:2px solid var(--bd);
+  border-radius:12px;overflow:hidden;transition:border-color .25s;
+}
+.fc-model-card.winner{border-color:var(--green-bd)}
+.fc-model-card.loser {border-color:var(--red-bd)}
+.fc-model-card.empate{border-color:var(--amber-bd)}
+.fc-mc-head{
+  padding:10px 13px;background:var(--s2);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:7px;
+}
+.fc-mc-icon{font-size:15px;flex-shrink:0}
+.fc-mc-name{font-size:12px;font-weight:700;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fc-mc-qty{font-size:10px;font-weight:700;color:var(--muted);white-space:nowrap}
+.fc-mc-actions{display:flex;gap:4px;flex-shrink:0}
+.fc-mc-btn{
+  width:23px;height:23px;border:1px solid var(--bd);border-radius:5px;
+  background:var(--s1);color:var(--muted);font-size:11px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;
+}
+.fc-mc-btn:hover{border-color:var(--green-bd);color:var(--green);background:var(--green-bg)}
+.fc-mc-btn.del:hover{border-color:var(--red-bd);color:var(--red);background:var(--red-bg)}
+.fc-mc-body{padding:10px 13px}
+.fc-mc-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:12px}
+.fc-mc-row span{color:var(--muted)}
+.fc-mc-row strong{font-weight:700;color:var(--text)}
+.fc-mc-row strong.g{color:var(--green-l)}
+.fc-mc-row strong.r{color:var(--red)}
+.fc-mc-div{height:1px;background:var(--bd);margin:7px 0}
+.fc-rec-badge{
+  font-size:11px;font-weight:700;padding:5px 9px;
+  border-radius:7px;text-align:center;
+}
+.fc-rec-badge.locar {background:var(--green-bg);color:var(--green-l);border:1px solid var(--green-bd)}
+.fc-rec-badge.manter{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
+.fc-rec-badge.empate{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
+.fc-empty{
+  text-align:center;padding:36px 20px;
+  border:2px dashed var(--bd2);border-radius:12px;background:var(--s1);
+}
+.fc-empty-icon{font-size:34px;margin-bottom:10px}
+.fc-empty-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
+.fc-empty-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.fc-hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}
+.fc-kpi{
+  background:var(--s1);border:1px solid var(--bd);border-radius:12px;
+  padding:16px;text-align:center;transition:all .28s;
+}
+.fc-kpi.winner{background:var(--green);border-color:var(--green);box-shadow:0 4px 18px rgba(0,200,83,.22)}
+.fc-kpi.winner .fc-kpi-label,.fc-kpi.winner .fc-kpi-val,.fc-kpi.winner .fc-kpi-sub{color:#fff}
+.fc-kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:7px}
+.fc-kpi-val{font-size:20px;font-weight:800;letter-spacing:-1px;color:var(--text);font-family:'Playfair Display',serif}
+.fc-kpi-sub{font-size:10px;color:var(--muted);margin-top:3px}
+.fc-stitle{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;
+  color:var(--green);margin-bottom:10px;
+  display:flex;align-items:center;gap:7px;
+}
+.fc-stitle::before{content:'';width:3px;height:14px;background:var(--green);border-radius:2px;flex-shrink:0}
+.fc-table-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+.fc-table{width:100%;border-collapse:collapse;font-size:12px}
+.fc-table th{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--muted);padding:8px 11px;text-align:left;
+  border-bottom:1px solid var(--bd);background:var(--s2);
+}
+.fc-table td{padding:9px 11px;border-bottom:1px solid var(--bd);color:var(--text);vertical-align:middle}
+.fc-table tr:last-child td{border-bottom:none}
+.fc-table tr:hover td{background:var(--s2)}
+.fc-estrategia{background:var(--s1);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+.fc-estr-head{
+  padding:13px 16px;
+  background:linear-gradient(135deg,var(--topbar-a),var(--topbar-b));
+  display:flex;align-items:center;justify-content:space-between;
+}
+.fc-estr-htitle{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.85)}
+.fc-estr-hval{font-size:18px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-.8px}
+.fc-estr-body{padding:14px 16px}
+.fc-estr-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px}
+.fc-estr-row:last-of-type{margin-bottom:0}
+.fc-estr-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.fc-estr-text label{font-size:12px;font-weight:700;color:var(--text);display:block;margin-bottom:1px}
+.fc-estr-text small{font-size:11px;color:var(--muted)}
+.fc-estr-total{
+  background:var(--green-bg);border:1px solid var(--green-bd);border-radius:8px;
+  padding:11px 13px;margin-top:11px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.fc-estr-total label{font-size:11px;color:var(--muted);font-weight:500}
+.fc-estr-total strong{font-size:15px;font-weight:900;color:var(--green-l);font-family:'Playfair Display',serif}
+.fc-estr-cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.fc-estr-cmp-item{
+  background:var(--s2);border:1px solid var(--bd);border-radius:7px;
+  padding:8px 10px;
+}
+.fc-estr-cmp-item label{font-size:10px;color:var(--muted);display:block;margin-bottom:2px}
+.fc-estr-cmp-item strong{font-size:13px;font-weight:700;color:var(--green-l)}
+.fc-estr-cmp-item strong.neg{color:var(--red)}
+/* Modal */
+#fcModalOverlay{
+  position:fixed;inset:0;z-index:8000;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+}
+.fc-modal{
+  background:var(--s1);border:1px solid var(--bd);border-radius:16px;
+  width:100%;max-width:630px;max-height:90vh;
+  display:flex;flex-direction:column;
+  box-shadow:0 16px 60px rgba(0,0,0,.35);
+  animation:loginIn .3s cubic-bezier(.22,1,.36,1) both;
+}
+.fc-modal-head{
+  padding:17px 20px;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.fc-modal-head-title{font-size:15px;font-weight:800;color:var(--text)}
+.fc-modal-close{
+  width:27px;height:27px;border:1px solid var(--bd);border-radius:7px;
+  background:var(--s2);color:var(--muted);font-size:16px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;
+}
+.fc-modal-close:hover{border-color:var(--red-bd);color:var(--red);background:var(--red-bg)}
+.fc-modal-body{padding:16px 20px;overflow-y:auto;flex:1}
+.fc-modal-foot{
+  padding:13px 20px;border-top:1px solid var(--bd);
+  display:flex;justify-content:flex-end;gap:9px;flex-shrink:0;
+}
+.fc-modal-cancel{
+  padding:8px 17px;border:1px solid var(--bd2);border-radius:8px;
+  background:transparent;color:var(--muted);
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;
+}
+.fc-modal-cancel:hover{border-color:var(--muted);color:var(--text)}
+.fc-modal-save{
+  padding:8px 20px;border:none;border-radius:8px;
+  background:var(--green);color:#fff;
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;
+}
+.fc-modal-save:hover{opacity:.88}
+.fc-fsec{margin-bottom:16px}
+.fc-fsec:last-child{margin-bottom:0}
+.fc-fsec-title{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  color:var(--green);margin-bottom:9px;
+  display:flex;align-items:center;gap:6px;
+}
+.fc-fsec-title::after{content:'';flex:1;height:1px;background:var(--bd2)}
+.fc-fg{display:flex;flex-direction:column;gap:5px}
+.fc-fg label{font-size:11px;font-weight:600;color:var(--muted)}
+.fc-grid{display:grid;gap:9px}
+.fc-g2{grid-template-columns:1fr 1fr}
+.fc-g3{grid-template-columns:1fr 1fr 1fr}
+.fc-g1{grid-template-columns:1fr}
+/* FC card (lista de modelos) */
+.fc-card{background:var(--s1);border:2px solid var(--bd);border-radius:12px;overflow:hidden;transition:border-color .25s}
+.fc-card.venc-aluguel{border-color:var(--green-bd)}
+.fc-card.venc-propria{border-color:var(--orange,#FF6600)}
+.fc-card-head{padding:9px 12px;background:var(--s2);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fc-card-title{font-size:13px;font-weight:700;color:var(--text)}
+.fc-card-qty{font-size:11px;color:var(--muted);margin-top:1px}
+.fc-card-actions{display:flex;gap:4px;flex-shrink:0}
+.fc-card-btn{padding:3px 9px;border:1px solid var(--bd);border-radius:6px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:.15s;line-height:1.6}
+.fc-card-btn.edit:hover{border-color:var(--green-bd);color:var(--green);background:var(--green-bg)}
+.fc-card-btn.remove:hover{border-color:var(--red-bd);color:var(--red);background:var(--red-bg)}
+.fc-card-body{padding:11px 12px;display:flex;flex-direction:column;gap:8px}
+.fc-card-cmp{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.fc-card-val-block{background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:9px 11px}
+.fc-card-val-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px}
+.fc-card-val-num{font-size:17px;font-weight:800;letter-spacing:-.5px;color:var(--text);font-family:'Playfair Display',serif;line-height:1.1}
+.fc-card-val-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.fc-card-badge{border-radius:8px;padding:7px 11px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.fc-card-badge.aluguel{background:var(--green-bg);border:1px solid var(--green-bd)}
+.fc-card-badge.aluguel .fc-badge-icon{color:var(--green-l)}
+.fc-card-badge.aluguel .fc-badge-label{color:var(--green)}
+.fc-card-badge.aluguel .fc-badge-eco{color:var(--green-l)}
+.fc-card-badge.propria{background:rgba(255,102,0,.08);border:1px solid rgba(255,102,0,.25)}
+.fc-card-badge.propria .fc-badge-icon,.fc-card-badge.propria .fc-badge-label,.fc-card-badge.propria .fc-badge-eco{color:#FF6600}
+.fc-card-badge.empate{background:var(--s2);border:1px solid var(--bd2)}
+.fc-card-badge.empate .fc-badge-icon,.fc-card-badge.empate .fc-badge-label,.fc-card-badge.empate .fc-badge-eco{color:var(--muted)}
+.fc-badge-left{display:flex;align-items:center;gap:6px}
+.fc-badge-icon{font-size:13px}
+.fc-badge-label{font-size:12px;font-weight:700}
+.fc-badge-eco{font-size:11px;font-weight:600}
+/* FC dashboard */
+.fc-dash{display:flex;flex-direction:column;gap:14px}
+.fc-dash-empty{background:var(--s1);border:2px dashed var(--bd2);border-radius:12px;padding:48px 24px;text-align:center;color:var(--muted);font-size:13px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.fc-dash-hero{border-radius:12px;padding:16px 20px;background:linear-gradient(135deg,var(--topbar-a),var(--topbar-b))}
+.fc-dash-hero.aluguel{background:linear-gradient(135deg,#005c2c,#00843D)}
+.fc-dash-hero.propria{background:linear-gradient(135deg,#a63a00,#FF6600)}
+.fc-dash-hero.empate{background:linear-gradient(135deg,#555,#888)}
+.fc-dash-hero-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px}
+.fc-dash-hero-sub{font-size:11px;color:rgba(255,255,255,.8)}
+.fc-kpi-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.fc-dash-kpi{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+.fc-dash-kpi.accent{background:var(--green);border-color:var(--green)}
+.fc-dash-kpi.accent .fc-dash-kpi-label,.fc-dash-kpi.accent .fc-dash-kpi-sub{color:rgba(255,255,255,.75)}
+.fc-dash-kpi.accent .fc-dash-kpi-val{color:#fff}
+.fc-dash-kpi-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px}
+.fc-dash-kpi-val{font-size:16px;font-weight:800;color:var(--green-l);letter-spacing:-.5px;font-family:'Playfair Display',serif}
+.fc-dash-kpi-sub{font-size:9.5px;color:var(--muted);margin-top:2px}
+.fc-dash-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);display:flex;align-items:center;gap:7px}
+.fc-dash-section-title::before{content:'';width:3px;height:14px;background:var(--green);border-radius:2px;flex-shrink:0}
+.fc-dash-note{font-size:10.5px;color:var(--muted);font-style:italic;line-height:1.5}
+/* Botões internos da fc-bar (fundo claro, texto escuro) */
+.fc-bar-btn{
+  height:29px;padding:0 11px;
+  border:1px solid var(--bd2);border-radius:15px;
+  background:var(--s2);color:var(--text);
+  font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;gap:4px;transition:.2s;white-space:nowrap;
+}
+.fc-bar-btn:hover{border-color:var(--green-bd);color:var(--green);background:var(--green-bg)}
+.fc-bar-btn.green{background:var(--green);border-color:var(--green);color:#fff}
+.fc-bar-btn.green:hover{background:var(--green-d)}
+/* FC gráfico de barras */
+.fc-chart{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.fc-ch-row{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center}
+.fc-ch-name{font-size:11px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fc-ch-qty{font-size:10px;color:var(--muted)}
+.fc-ch-bars{display:flex;flex-direction:column;gap:4px}
+.fc-ch-bar-row{display:grid;grid-template-columns:50px 1fr 80px;align-items:center;gap:6px}
+.fc-ch-bar-label{font-size:10px;color:var(--muted);font-weight:600}
+.fc-ch-track{height:8px;background:var(--s2);border-radius:4px;overflow:hidden;position:relative}
+.fc-ch-bar{height:100%;border-radius:4px;transition:width .5s cubic-bezier(.22,1,.36,1)}
+.fc-ch-bar.orange{background:#FF6600}
+.fc-ch-bar.green{background:#00843D}
+.fc-ch-val{font-size:10px;font-weight:700;color:var(--text);text-align:right;white-space:nowrap}
+@media(max-width:1100px){.fc-layout{grid-template-columns:1fr}.fc-kpi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.fc-hero{grid-template-columns:1fr}.fc-g2{grid-template-columns:1fr}.fc-g3{grid-template-columns:1fr 1fr}.fc-kpi-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1007,6 +1267,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 
       <div class="login-error" id="startError" style="display:none"></div>
       <button class="login-btn" onclick="doStart()">Iniciar Simulação →</button>
+      <button class="login-btn-tour" onclick="startWithTour()">▶ Fazer tour pela ferramenta</button>
       <div class="login-footer">Localiza&amp;Co · Simulador Estratégico de Frota · Uso interno</div>
     </div>
   </div>
@@ -1039,14 +1300,8 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <span class="btn-txt">Cliente</span>
       </button>
       <div class="tb-separator"></div>
-      <div class="p-sw">
-        <button class="p-btn" id="btnPresumido" data-profile="presumido">Presumido</button>
-        <button class="p-btn active" id="btnReal" data-profile="real">Lucro Real</button>
-      </div>
       <button class="tb-btn" id="presBtn" onclick="togglePresentation()" title="Ocultar campos de entrada para apresentação"><span class="btn-txt">Apresentação</span></button>
-      <button class="tb-btn" onclick="switchTab('gloss')"><span class="btn-txt">Glossário</span></button>
-      <button class="tb-btn green" onclick="exportPDF()"><span class="btn-txt">Exportar PDF</span></button>
-      <button class="tb-btn" onclick="startTour()" title="Tour guiado — conheça a ferramenta"><span class="btn-txt">Tour</span></button>
+      <button class="tb-btn" onclick="startTour()" title="Tour guiado — conheça a ferramenta">▶ Tour</button>
       <div class="theme-btn" id="themeBtn" title="Alternar tema"><div class="tt-k" id="ttK">🌙</div></div>
     </div>
   </header>
@@ -1067,6 +1322,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
   <div class="tabs-bar">
     <button class="tab active" id="tabSim" onclick="switchTab('sim')">Simulador</button>
     <button class="tab" id="tabEv" onclick="switchTab('ev')">Análise Detalhada</button>
+    <button class="tab" id="tabFc" onclick="switchTab('fc')">⚡ Frota Composta</button>
     <button class="tab" id="tabGloss" onclick="switchTab('gloss')">Glossário</button>
   </div>
 
@@ -1109,7 +1365,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="field-group">
           <div class="f-label">Preço de tabela do veículo</div>
           <div class="input-row">
-            <div class="input-wrap"><div class="input-unit">R$</div><input id="valorVeiculoBruto" type="number" value="85000" step="1000" oninput="calc()"/></div>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="valorVeiculoBruto" type="number" value="0" step="1000" oninput="calc()"/></div>
             <div></div>
           </div>
         </div>
@@ -1117,7 +1373,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="field-group">
           <div class="f-label">Desconto negociado <span class="tip" data-tip="Percentual obtido na negociação da compra. Quanto maior, menor o valor final do veículo.">?</span></div>
           <div class="input-row">
-            <div class="input-wrap"><input id="descontoPct" type="number" value="10" step="0.5" oninput="calc()"/><div class="input-unit">%</div></div>
+            <div class="input-wrap"><input id="descontoPct" type="number" value="0" step="0.5" oninput="calc()"/><div class="input-unit">%</div></div>
             <div class="chip"><div class="chip-l">Economia</div><div class="chip-v g" id="outDesconto">R$ 0</div></div>
           </div>
         </div>
@@ -1125,7 +1381,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="field-group">
           <div class="f-label">Percentual de entrada <span class="tip" data-tip="Valor pago à vista na compra. Sai do caixa da empresa no Dia 1.">?</span></div>
           <div class="input-row">
-            <div class="input-wrap"><input id="entradaPct" type="number" value="50" step="5" oninput="calc()"/><div class="input-unit">%</div></div>
+            <div class="input-wrap"><input id="entradaPct" type="number" value="0" step="5" oninput="calc()"/><div class="input-unit">%</div></div>
             <div class="chip"><div class="chip-l">Saída de caixa</div><div class="chip-v r" id="outEntrada">R$ 0</div></div>
           </div>
         </div>
@@ -1183,7 +1439,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="field-group">
           <div class="f-label">Custo de oportunidade <span class="tip" data-tip="Rendimento que o capital da entrada teria se aplicado (CDI, Tesouro). É o custo invisível de imobilizar dinheiro no veículo.">?</span></div>
           <div class="input-row">
-            <div class="input-wrap"><input id="oportunidadePct" type="number" value="14.5" step="0.5" oninput="calc()"/><div class="input-unit">% a.a.</div></div>
+            <div class="input-wrap"><input id="oportunidadePct" type="number" value="0" step="0.5" oninput="calc()"/><div class="input-unit">% a.a.</div></div>
             <div class="chip"><div class="chip-l">Custo/ano</div><div class="chip-v r" id="outOportunidade">R$ 0</div></div>
           </div>
         </div>
@@ -1210,7 +1466,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
             <span class="slider-name">Manutenção anual</span>
             <span class="slider-val"><span id="slManut">1.5</span>% · <span id="slManutR">R$ 0</span></span>
           </div>
-          <input type="range" id="manutencaoPct" min="0" max="10" step="0.1" value="1.5" oninput="sliderUpdate('manutencaoPct','slManut','slManutR');calc()"/>
+          <input type="range" id="manutencaoPct" min="0" max="10" step="0.1" value="0" oninput="sliderUpdate('manutencaoPct','slManut','slManutR');calc()"/>
           <div class="slider-hint">Revisões, pneus, peças e mão de obra. Referência: 1,5–2,5%</div>
         </div>
 
@@ -1219,7 +1475,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
             <span class="slider-name">Seguro anual</span>
             <span class="slider-val"><span id="slSeg">2.0</span>% · <span id="slSegR">R$ 0</span></span>
           </div>
-          <input type="range" id="seguroPct" min="0" max="15" step="0.1" value="2" oninput="sliderUpdate('seguroPct','slSeg','slSegR');calc()"/>
+          <input type="range" id="seguroPct" min="0" max="15" step="0.1" value="0" oninput="sliderUpdate('seguroPct','slSeg','slSegR');calc()"/>
           <div class="slider-hint">Cobertura compreensiva + responsabilidade civil. Referência: 2–4%</div>
         </div>
 
@@ -1265,7 +1521,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="field-group">
           <div class="f-label">Custo de indisponibilidade / ano <span class="tip" data-tip="Gastos anuais com aluguel temporário, Uber ou táxi durante manutenção, sinistro ou pane do veículo próprio.">?</span></div>
           <div class="input-row">
-            <div class="input-wrap"><div class="input-unit">R$</div><input id="indisponibilidadeAno" type="number" value="3000" step="500" oninput="calc()"/></div>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="indisponibilidadeAno" type="number" value="0" step="500" oninput="calc()"/></div>
             <div class="chip"><div class="chip-l">Impacto/ano</div><div class="chip-v r" id="outIndisp">R$ 0</div></div>
           </div>
         </div>
@@ -1286,7 +1542,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="field-group" id="boxDepreciacaoReal" style="display:none">
           <div class="f-label">Depreciação real / mercado</div>
           <div class="input-wrap">
-            <input id="depreciacaoPct" type="number" value="10" step="0.5" oninput="calc()"/>
+            <input id="depreciacaoPct" type="number" value="0" step="0.5" oninput="calc()"/>
             <div class="input-unit">% a.a.</div>
           </div>
         </div>
@@ -1372,7 +1628,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
           <div class="field-group">
             <div class="f-label">Mensalidade do aluguel</div>
             <div class="input-row">
-              <div class="input-wrap"><div class="input-unit">R$</div><input id="aluguelMensal" type="number" value="2800" step="100" oninput="calc()"/></div>
+              <div class="input-wrap"><div class="input-unit">R$</div><input id="aluguelMensal" type="number" value="0" step="100" oninput="calc()"/></div>
               <div class="chip"><div class="chip-l">Custo anual</div><div class="chip-v a" id="outAluguelAnual">R$ 0</div></div>
             </div>
           </div>
@@ -1568,9 +1824,9 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
             <div><div class="ev-card-title">Aquisição do Veículo</div><div class="ev-card-sub">Preço, desconto e entrada</div></div>
           </div>
           <div class="ev-card-body">
-            <div class="ev-frow"><div class="ev-flabel">Preço de tabela</div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_valorVeiculoBruto" type="number" value="85000" step="1000" oninput="calcEV()"/></div></div>
-            <div class="ev-frow"><div class="ev-flabel">Desconto <span class="tip" data-tip="% de desconto sobre o preço de tabela.">?</span></div><div class="input-wrap"><input id="ev_descontoPct" type="number" value="10" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
-            <div class="ev-frow"><div class="ev-flabel">Entrada <span class="tip" data-tip="% do valor final pago à vista. Saída imediata de caixa.">?</span></div><div class="input-wrap"><input id="ev_entradaPct" type="number" value="50" step="1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Preço de tabela</div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_valorVeiculoBruto" type="number" value="0" step="1000" oninput="calcEV()"/></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Desconto <span class="tip" data-tip="% de desconto sobre o preço de tabela.">?</span></div><div class="input-wrap"><input id="ev_descontoPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Entrada <span class="tip" data-tip="% do valor final pago à vista. Saída imediata de caixa.">?</span></div><div class="input-wrap"><input id="ev_entradaPct" type="number" value="0" step="1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
             <div class="ev-chips c3">
               <div class="ev-chip"><div class="ev-chip-l">Valor final</div><div class="ev-chip-v" id="ev_outValorFinal">R$ 0</div></div>
               <div class="ev-chip"><div class="ev-chip-l">Desconto</div><div class="ev-chip-v g" id="ev_outDesconto">R$ 0</div></div>
@@ -1588,7 +1844,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
           <div class="ev-card-body">
             <div class="ev-frow"><div class="ev-flabel">Nº de parcelas</div><div class="input-wrap"><select id="ev_parcelas" onchange="calcEV()"><option value="1">À vista</option><option value="12" selected>12 meses</option><option value="24">24 meses</option><option value="36">36 meses</option><option value="48">48 meses</option><option value="60">60 meses</option></select></div></div>
             <div class="ev-frow"><div class="ev-flabel">Juros mensais <span class="tip" data-tip="Taxa do financiamento (método Price). 0 = compra sem juros.">?</span></div><div class="input-wrap"><input id="ev_jurosMensalPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%a.m.</div></div></div>
-            <div class="ev-frow"><div class="ev-flabel">Custo de oportunidade <span class="tip" data-tip="Rendimento anual perdido ao imobilizar capital no veículo.">?</span></div><div class="input-wrap"><input id="ev_oportunidadePct" type="number" value="14.5" step="0.1" oninput="calcEV()"/><div class="input-unit">%a.a.</div></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Custo de oportunidade <span class="tip" data-tip="Rendimento anual perdido ao imobilizar capital no veículo.">?</span></div><div class="input-wrap"><input id="ev_oportunidadePct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%a.a.</div></div></div>
             <div class="ev-chips c2">
               <div class="ev-chip"><div class="ev-chip-l">Parcela mensal</div><div class="ev-chip-v" id="ev_outParcela">R$ 0</div></div>
               <div class="ev-chip"><div class="ev-chip-l">Total de juros</div><div class="ev-chip-v r" id="ev_outJuros">R$ 0</div></div>
@@ -1617,11 +1873,11 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
             <div><div class="ev-card-title">Custos Operacionais</div><div class="ev-card-sub">Manutenção, seguro, IPVA e administração</div></div>
           </div>
           <div class="ev-card-body">
-            <div class="ev-frow"><div class="ev-flabel">Manutenção <span class="tip" data-tip="% anual sobre valor do veículo. Ref: 1,5–2,5%">?</span></div><div class="input-wrap"><input id="ev_manutencaoPct" type="number" value="1.5" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
-            <div class="ev-frow"><div class="ev-flabel">Seguro anual</div><div class="input-wrap"><input id="ev_seguroPct" type="number" value="2" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Manutenção <span class="tip" data-tip="% anual sobre valor do veículo. Ref: 1,5–2,5%">?</span></div><div class="input-wrap"><input id="ev_manutencaoPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Seguro anual</div><div class="input-wrap"><input id="ev_seguroPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
             <div class="ev-frow"><div class="ev-flabel">Estado (IPVA)</div><div class="input-wrap"><select id="ev_estado" onchange="calcEV()"><option value="0">Isento – 0,0%</option><option value="2">Acre – 2,0%</option><option value="3.25">Alagoas – 3,25%</option><option value="3">Amapá – 3,0%</option><option value="3">Amazonas – 3,0%</option><option value="2.5">Bahia – 2,5%</option><option value="3.5">Ceará – 3,5%</option><option value="3.5">Distrito Federal – 3,5%</option><option value="2">Espírito Santo – 2,0%</option><option value="3.75">Goiás – 3,75%</option><option value="2.5">Maranhão – 2,5%</option><option value="3">Mato Grosso – 3,0%</option><option value="3">Mato Grosso do Sul – 3,0%</option><option value="4">Minas Gerais – 4,0%</option><option value="2.5">Pará – 2,5%</option><option value="2.5">Paraíba – 2,5%</option><option value="3.5">Paraná – 3,5%</option><option value="2">Pernambuco – 2,0%</option><option value="3">Piauí – 3,0%</option><option value="4">Rio de Janeiro – 4,0%</option><option value="3">Rio Grande do Norte – 3,0%</option><option value="3">Rio Grande do Sul – 3,0%</option><option value="3">Rondônia – 3,0%</option><option value="3">Roraima – 3,0%</option><option value="2">Santa Catarina – 2,0%</option><option value="4">São Paulo – 4,0%</option><option value="3">Sergipe – 3,0%</option><option value="4">Tocantins – 4,0%</option></select></div></div>
             <div class="ev-frow"><div class="ev-flabel">Licenciamento <span class="tip" data-tip="Taxa anual de licenciamento e emplacamento.">?</span></div><div class="input-wrap"><input id="ev_licenciamentoPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
-            <div class="ev-frow"><div class="ev-flabel">Indisponibilidade/ano <span class="tip" data-tip="Aluguel temporário ou transporte substituto durante manutenção/sinistro.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_indisponibilidadeAno" type="number" value="3000" step="500" oninput="calcEV()"/></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Indisponibilidade/ano <span class="tip" data-tip="Aluguel temporário ou transporte substituto durante manutenção/sinistro.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_indisponibilidadeAno" type="number" value="0" step="500" oninput="calcEV()"/></div></div>
             <div class="ev-frow"><div class="ev-flabel">Adm. frota / mês <span class="tip" data-tip="Gestão interna: sistemas, RH, controles.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_admFrotaMensal" type="number" value="0" step="50" oninput="calcEV()"/></div></div>
             <div class="ev-chips c3">
               <div class="ev-chip"><div class="ev-chip-l">Manutenção</div><div class="ev-chip-v" id="ev_vManut">R$ 0</div></div>
@@ -1666,7 +1922,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
               <div>
                 <div class="ev-alg-title">Parâmetros</div>
                 <div class="ev-frow wide"><div class="ev-flabel">Atividade fim? <span class="tip" data-tip="Veículo na atividade-fim = 100% dedutível.">?</span></div><div class="input-wrap"><select id="ev_atividadeFim" onchange="calcEV()"><option value="sim">Sim</option><option value="nao">Não</option></select></div></div>
-                <div class="ev-frow wide"><div class="ev-flabel">Mensalidade</div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_aluguelMensal" type="number" value="2800" step="100" oninput="calcEV()"/></div></div>
+                <div class="ev-frow wide"><div class="ev-flabel">Mensalidade</div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_aluguelMensal" type="number" value="0" step="100" oninput="calcEV()"/></div></div>
                 <div class="ev-frow wide"><div class="ev-flabel">Adm. / mês</div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_admAluguel" type="number" value="0" step="50" oninput="calcEV()"/></div></div>
               </div>
               <div>
@@ -1784,7 +2040,134 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
   </div>
   </div><!-- /panelGloss -->
 
+  <!-- ═══ TAB: FROTA COMPOSTA ═══ -->
+  <div class="tab-panel" id="panelFc">
+  <div class="fc-page">
+
+    <div class="fc-bar">
+      <div class="fc-bar-left">
+        <span class="ev-badge-tag">⚡ Frota Composta</span>
+        <span class="ev-bar-desc">Análise multi-modelo · Estratégia ótima automática</span>
+      </div>
+      <div class="ev-bar-right">
+        <select id="fc_perfil" onchange="selectRegimeFC(this.value)" style="background:var(--s2);border:1px solid var(--bd2);border-radius:8px;padding:5px 10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;outline:none">
+          <option value="real">Lucro Real</option>
+          <option value="presumido">Lucro Presumido</option>
+        </select>
+        <button class="fc-bar-btn" onclick="importarDoSimulador()" title="Importa os dados atuais do Simulador como novo modelo">⬇ Importar do Simulador</button>
+        <button class="fc-bar-btn green" onclick="exportPDFFrota()">📄 PDF</button>
+      </div>
+    </div>
+
+    <div class="fc-layout">
+      <div class="fc-col-left">
+        <button class="fc-add-btn" onclick="openModalModelo(null)">＋ Adicionar Categoria de Veículo</button>
+        <div id="fcModelosList"></div>
+      </div>
+      <div class="fc-col-right" id="fcDashboard"></div>
+    </div>
+
+  </div>
+  </div><!-- /panelFc -->
+
 </div><!-- /mainApp -->
+
+<!-- ═══ MODAL — MODELO DE VEÍCULO ═══ -->
+<div id="fcModalOverlay" style="display:none">
+  <div class="fc-modal">
+    <div class="fc-modal-head">
+      <span class="fc-modal-head-title" id="fcModalTitle">Adicionar Modelo de Veículo</span>
+      <button class="fc-modal-close" onclick="closeModalModelo()">×</button>
+    </div>
+    <div class="fc-modal-body">
+
+      <div class="fc-fsec">
+        <div class="fc-fsec-title">Identificação</div>
+        <div class="fc-grid fc-g2">
+          <div class="fc-fg"><label>Descrição da categoria</label>
+            <div class="input-wrap"><input id="fc_descricao" type="text" placeholder="Ex: Diretores SUV" maxlength="40"/></div></div>
+          <div class="fc-fg"><label>Quantidade de veículos</label>
+            <div class="input-wrap"><input id="fc_qtd" type="number" value="1" min="1" max="9999"/></div></div>
+        </div>
+      </div>
+
+      <div class="fc-fsec">
+        <div class="fc-fsec-title">Aquisição do Veículo</div>
+        <div class="fc-grid fc-g2">
+          <div class="fc-fg"><label>Preço de tabela</label>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_valorVeiculoBruto" type="number" value="85000" step="1000"/></div></div>
+          <div class="fc-fg"><label>Desconto negociado</label>
+            <div class="input-wrap"><input id="fc_descontoPct" type="number" value="10" step="0.5"/><div class="input-unit">%</div></div></div>
+          <div class="fc-fg"><label>Percentual de entrada</label>
+            <div class="input-wrap"><input id="fc_entradaPct" type="number" value="50" step="5"/><div class="input-unit">%</div></div></div>
+          <div class="fc-fg"><label>Financiamento</label>
+            <div class="input-wrap"><select id="fc_parcelas"><option value="1">À vista</option><option value="12" selected>12 meses</option><option value="24">24 meses</option><option value="36">36 meses</option><option value="48">48 meses</option><option value="60">60 meses</option></select></div></div>
+          <div class="fc-fg"><label>Juros mensais</label>
+            <div class="input-wrap"><input id="fc_jurosMensalPct" type="number" value="0" step="0.1"/><div class="input-unit">% a.m.</div></div></div>
+          <div class="fc-fg"><label>Custo de oportunidade</label>
+            <div class="input-wrap"><input id="fc_oportunidadePct" type="number" value="14.5" step="0.5"/><div class="input-unit">% a.a.</div></div></div>
+        </div>
+      </div>
+
+      <div class="fc-fsec">
+        <div class="fc-fsec-title">Custos Operacionais</div>
+        <div class="fc-grid fc-g2">
+          <div class="fc-fg"><label>Manutenção anual</label>
+            <div class="input-wrap"><input id="fc_manutencaoPct" type="number" value="1.5" step="0.1"/><div class="input-unit">% a.a.</div></div></div>
+          <div class="fc-fg"><label>Seguro anual</label>
+            <div class="input-wrap"><input id="fc_seguroPct" type="number" value="2" step="0.1"/><div class="input-unit">% a.a.</div></div></div>
+          <div class="fc-fg" style="grid-column:span 2"><label>Estado (IPVA)</label>
+            <div class="input-wrap"><select id="fc_estado"><option value="0">Isento – 0,0%</option><option value="2">Acre – 2,0%</option><option value="3.25">Alagoas – 3,25%</option><option value="3">Amapá – 3,0%</option><option value="3">Amazonas – 3,0%</option><option value="2.5">Bahia – 2,5%</option><option value="3.5">Ceará – 3,5%</option><option value="3.5">Distrito Federal – 3,5%</option><option value="2">Espírito Santo – 2,0%</option><option value="3.75">Goiás – 3,75%</option><option value="2.5">Maranhão – 2,5%</option><option value="3">Mato Grosso – 3,0%</option><option value="3">Mato Grosso do Sul – 3,0%</option><option value="4">Minas Gerais – 4,0%</option><option value="2.5">Pará – 2,5%</option><option value="2.5">Paraíba – 2,5%</option><option value="3.5">Paraná – 3,5%</option><option value="2">Pernambuco – 2,0%</option><option value="3">Piauí – 3,0%</option><option value="4">Rio de Janeiro – 4,0%</option><option value="3">Rio Grande do Norte – 3,0%</option><option value="3">Rio Grande do Sul – 3,0%</option><option value="3">Rondônia – 3,0%</option><option value="3">Roraima – 3,0%</option><option value="2">Santa Catarina – 2,0%</option><option value="4">São Paulo – 4,0%</option><option value="3">Sergipe – 3,0%</option><option value="4">Tocantins – 4,0%</option></select></div></div>
+          <div class="fc-fg"><label>Licenciamento</label>
+            <div class="input-wrap"><input id="fc_licenciamentoPct" type="number" value="0" step="0.1"/><div class="input-unit">%</div></div></div>
+          <div class="fc-fg"><label>Indisponibilidade / ano</label>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_indisponibilidadeAno" type="number" value="3000" step="500"/></div></div>
+          <div class="fc-fg"><label>Adm. de frota / mês</label>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_admFrotaMensal" type="number" value="0" step="50"/></div></div>
+        </div>
+      </div>
+
+      <div class="fc-fsec">
+        <div class="fc-fsec-title">Depreciação</div>
+        <div class="fc-grid fc-g2">
+          <div class="fc-fg"><label>Modo</label>
+            <div class="input-wrap"><select id="fc_modoDepreciacao" onchange="fcToggleDepr()"><option value="contabil" selected>Contábil / Fiscal (20% a.a.)</option><option value="real">Real / Mercado</option></select></div></div>
+          <div class="fc-fg" id="fc_boxDeprReal" style="display:none"><label>Taxa real</label>
+            <div class="input-wrap"><input id="fc_depreciacaoPct" type="number" value="0" step="0.5"/><div class="input-unit">% a.a.</div></div></div>
+        </div>
+      </div>
+
+      <div class="fc-fsec">
+        <div class="fc-fsec-title">Configuração do Aluguel</div>
+        <div class="fc-grid fc-g2">
+          <div class="fc-fg"><label>Mensalidade</label>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_aluguelMensal" type="number" value="2800" step="100"/></div></div>
+          <div class="fc-fg"><label>Administração / mês</label>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_admAluguel" type="number" value="0" step="50"/></div></div>
+          <div class="fc-fg"><label>Atividade fim?</label>
+            <div class="input-wrap"><select id="fc_atividadeFim"><option value="sim">Sim — dedução total</option><option value="nao">Não</option></select></div></div>
+        </div>
+      </div>
+
+      <div class="fc-fsec">
+        <div class="fc-fsec-title">Benefícios Tributários</div>
+        <div class="fc-grid fc-g3">
+          <div class="fc-fg"><label>PIS/COFINS</label>
+            <div class="input-wrap"><input id="fc_pisPropPct" type="number" value="9.25" step="0.01"/><div class="input-unit">%</div></div></div>
+          <div class="fc-fg"><label>IRPJ</label>
+            <div class="input-wrap"><input id="fc_irpjPropPct" type="number" value="25" step="0.5"/><div class="input-unit">%</div></div></div>
+          <div class="fc-fg"><label>CSLL</label>
+            <div class="input-wrap"><input id="fc_csllPropPct" type="number" value="9" step="0.5"/><div class="input-unit">%</div></div></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="fc-modal-foot">
+      <button class="fc-modal-cancel" onclick="closeModalModelo()">Cancelar</button>
+      <button class="fc-modal-save" onclick="saveModelo()">Salvar Modelo →</button>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════
      TOUR GUIADO
@@ -1890,10 +2273,6 @@ function doStart() {
     el("clientNameTopbar").style.display = "block";
   }
 
-  try {
-    localStorage.setItem("sim-start", JSON.stringify({ev: evN, cli: cliN, qty: qtdVeiculos}));
-  } catch(e) {}
-
   const ls = el("loginScreen");
   ls.style.transition = "opacity .4s";
   ls.style.opacity = "0";
@@ -1903,8 +2282,15 @@ function doStart() {
     app.style.display = "block";
     restoreState();
     calc();
-    initTour();
+    if (window._autoTour) { window._autoTour = false; startTour(); }
   }, 420);
+}
+
+function startWithTour() {
+  if (!el("startEV").value.trim()) el("startEV").value = "Demonstração";
+  if (!el("startCliente").value.trim()) el("startCliente").value = "Empresa Demo";
+  window._autoTour = true;
+  doStart();
 }
 
 /* ══════════════════════════════════════════
@@ -1970,7 +2356,7 @@ function switchTab(t) {
     sliderUpdate("seguroPct","slSeg","slSegR");
   }
 
-  ["sim","ev","gloss"].forEach(id => {
+  ["sim","ev","gloss","fc"].forEach(id => {
     const cap = id[0].toUpperCase() + id.slice(1);
     const tabEl   = el("tab"   + cap);
     const panelEl = el("panel" + cap);
@@ -1979,6 +2365,7 @@ function switchTab(t) {
   });
   if (t === "ev") calcEV();
   else if (t === "sim") calc();
+  else if (t === "fc") calcFrota();
 }
 
 /* ══════════════════════════════════════════
@@ -2630,14 +3017,6 @@ function restoreState() {
   /* Tema */
   applyTheme(theme);
 
-  /* Dados da simulação */
-  try {
-    const s = JSON.parse(localStorage.getItem("sim-start") || "{}");
-    if (s.ev)  loginMatricula = s.ev;
-    if (s.cli) loginCodigo    = s.cli;
-    if (s.qty) qtdVeiculos    = Math.max(1, parseInt(s.qty) || 1);
-  } catch(e) {}
-
   /* Cliente */
   try {
     const s = JSON.parse(localStorage.getItem("sim-client") || "{}");
@@ -2678,13 +3057,7 @@ window.addEventListener("DOMContentLoaded", () => {
   applyTheme(theme);
   el("themeBtn").addEventListener("click", () => applyTheme(theme === "dark" ? "light" : "dark"));
 
-  /* Restaura dados da simulação anterior no formulário de início */
-  try {
-    const s = JSON.parse(localStorage.getItem("sim-start") || "{}");
-    if (s.ev  && el("startEV"))      el("startEV").value      = s.ev;
-    if (s.cli && el("startCliente")) el("startCliente").value = s.cli;
-    if (s.qty && el("startQtd"))     el("startQtd").value     = s.qty;
-  } catch(e) {}
+
 
   /* Wire main simulator inputs (EV inputs have inline handlers) */
   document.querySelectorAll(".left-pane input[type=number], .left-pane select").forEach(inp => {
@@ -2694,6 +3067,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   calc();
   restoreEVState();
+  restoreLSFC();
 });
 
 /* ══════════════════════════════════════════
@@ -3059,47 +3433,58 @@ body{font-family:'Outfit',sans-serif;background:#fff;color:#091A0C;-webkit-print
 const TOUR_STEPS = [
   {
     title: "Bem-vindo ao Simulador Estratégico de Frota",
-    desc: "Esta ferramenta compara o custo real de frota própria versus locação corporativa Localiza&Co, considerando todos os fatores financeiros, operacionais e tributários. Siga os passos para conhecer cada seção.",
-    target: null
+    desc: "Esta ferramenta compara o custo real de frota própria versus locação corporativa Localiza&Co, considerando todos os fatores financeiros, operacionais e tributários. Você verá as 4 abas disponíveis neste tour.",
+    target: null, tab: "sim"
   },
   {
-    title: "Passo 1 — Dados do Veículo",
+    title: "Simulador — Dados do Veículo",
     desc: "Informe o preço de tabela, o desconto negociado e o percentual de entrada. Esses dados formam a base de cálculo de aquisição e a saída imediata de caixa no Dia 1.",
-    target: "#step0",
-    wizardStep: 0
+    target: "#step0", wizardStep: 0, tab: "sim"
   },
   {
-    title: "Passo 2 — Custo de Capital",
-    desc: "Defina o financiamento (método Price) e o custo de oportunidade — o rendimento perdido ao imobilizar capital no veículo. Este é o 'custo invisível' frequentemente ignorado.",
-    target: "#step1",
-    wizardStep: 1
+    title: "Simulador — Custo de Capital",
+    desc: "Defina o financiamento (método Price) e o custo de oportunidade — o rendimento perdido ao imobilizar capital no veículo. Este é o custo invisível frequentemente ignorado.",
+    target: "#step1", wizardStep: 1, tab: "sim"
   },
   {
-    title: "Passo 3 — Custos Operacionais",
+    title: "Simulador — Custos Operacionais",
     desc: "Configure manutenção, seguro, IPVA, licenciamento, indisponibilidade e administração de frota. Esses custos recorrentes representam o peso diário de possuir o veículo.",
-    target: "#step2",
-    wizardStep: 2
+    target: "#step2", wizardStep: 2, tab: "sim"
   },
   {
-    title: "Passo 4 — Impacto Tributário",
-    desc: "Selecione o regime fiscal (Lucro Real ou Presumido) e as alíquotas. No Lucro Real, as despesas com aluguel geram créditos de PIS/COFINS, IRPJ e CSLL que reduzem significativamente o custo.",
-    target: "#step3",
-    wizardStep: 3
+    title: "Simulador — Impacto Tributário",
+    desc: "Configure o regime fiscal (Lucro Real ou Presumido) e as alíquotas diretamente em cada simulação. No Lucro Real, as despesas com aluguel geram créditos de PIS/COFINS, IRPJ e CSLL.",
+    target: "#step3", wizardStep: 3, tab: "sim"
   },
   {
-    title: "Dashboard Executivo",
-    desc: "O painel à direita atualiza em tempo real. Você vê o custo efetivo de cada alternativa, a economia unitária por veículo e — quando há mais de 1 veículo — o impacto financeiro consolidado de toda a frota.",
-    target: ".right-pane"
+    title: "Simulador — Dashboard Executivo",
+    desc: "O painel à direita atualiza em tempo real: custo efetivo de cada alternativa, economia unitária e — para frotas — impacto financeiro consolidado. O vencedor aparece destacado em verde.",
+    target: ".right-pane", tab: "sim"
   },
   {
-    title: "Exportar Relatório PDF",
-    desc: "Gera um relatório executivo completo com resumo financeiro, comparativo visual e conclusão analítica — pronto para apresentação à diretoria. Cada módulo tem seu próprio PDF.",
-    target: ".pdf-btn"
+    title: "Aba: Análise Detalhada",
+    desc: "Painel técnico completo com decomposição linha a linha de cada componente de custo — aquisição, operacional, tributário, depreciação e aluguel. Ideal para apresentações técnicas à controladoria.",
+    target: "#tabEv", tab: "ev"
+  },
+  {
+    title: "Aba: Frota Composta",
+    desc: "Analise frotas heterogêneas com múltiplos modelos de veículos. Cada categoria tem parâmetros independentes. O sistema calcula automaticamente a estratégia ótima (locar ou comprar) por categoria.",
+    target: "#tabFc", tab: "fc"
+  },
+  {
+    title: "Aba: Glossário",
+    desc: "Referência completa de todos os termos e variáveis utilizados nas simulações — do PMT Price ao custo de oportunidade. Útil para alinhar vocabulário com o cliente durante a apresentação.",
+    target: "#tabGloss", tab: "gloss"
+  },
+  {
+    title: "Exportar PDF",
+    desc: "Cada aba tem seu próprio botão de exportação PDF. O relatório inclui um Resumo Executivo com valores unitários e consolidados — pronto para apresentação à diretoria.",
+    target: ".pdf-btn", tab: "sim"
   },
   {
     title: "Tudo pronto!",
-    desc: "Ajuste os parâmetros e veja o comparativo atualizar ao vivo. Use a aba 'Análise Detalhada' para o painel técnico completo e o 'Glossário' para entender cada variável. Para reiniciar este tour, clique em 'Tour' na barra superior.",
-    target: null
+    desc: "Você conheceu as 4 abas do simulador. Ajuste os parâmetros e veja o comparativo atualizar ao vivo. Para repetir este tour a qualquer momento, clique em '▶ Tour' na barra superior.",
+    target: null, tab: "sim"
   }
 ];
 
@@ -3108,11 +3493,7 @@ let tourActive = false;
 let tourTimer = null;
 
 function initTour() {
-  try {
-    if (!localStorage.getItem("sim-tour-done")) {
-      tourTimer = setTimeout(startTour, 900);
-    }
-  } catch(e) {}
+  /* Auto-start removido — usuário escolhe via botão */
 }
 
 function startTour() {
@@ -3150,6 +3531,8 @@ function renderTourStep() {
   const step  = TOUR_STEPS[tourStep];
   const total = TOUR_STEPS.length;
 
+  /* Navega para a aba correta */
+  if (step.tab) switchTab(step.tab);
   /* Navega wizard se necessário */
   if (step.wizardStep !== undefined) goStep(step.wizardStep);
 
@@ -3251,6 +3634,402 @@ function restoreEVState() {
   } catch(e) {}
   autoDeprEV();
   calcEV();
+}
+
+/* ══════════════════════════════════════════
+   FROTA COMPOSTA
+══════════════════════════════════════════ */
+
+let frota    = [];
+let fcPerfil = "real";
+let fcEditId = null;
+
+/* ── Pure calc por modelo ── */
+function calcModelo(m, perfil) {
+  const vBruto = +m.valorVeiculoBruto || 0;
+  const desc   = vBruto * pc(+m.descontoPct || 0);
+  const vV     = vBruto - desc;
+  const entr   = vV * pc(+m.entradaPct || 0);
+  const fin    = Math.max(0, vV - entr);
+  const np     = +m.parcelas || 1;
+  const jm     = pc(+m.jurosMensalPct || 0);
+  const parc   = pmt(fin, jm, np);
+  const totP   = parc * np;
+  const gParc  = np <= 12 ? totP : parc * 12;
+  const saldo  = np <= 12 ? 0    : Math.max(0, totP - gParc);
+  const baseOp = entr + gParc;
+  const opor   = baseOp * pc(+m.oportunidadePct || 0);
+  const aqAno  = entr + gParc + opor;
+
+  const manut  = vV * pc(+m.manutencaoPct || 0);
+  const seg    = vV * pc(+m.seguroPct || 0);
+  const ipvaR  = parseFloat(m.estado) || 0;
+  const ipva   = vV * pc(ipvaR);
+  const lic    = vV * pc(+m.licenciamentoPct || 0);
+  const parad  = +m.indisponibilidadeAno || 0;
+  const admF   = (+m.admFrotaMensal || 0) * 12;
+  const opAno  = manut + seg + ipva + lic + parad + admF;
+
+  const deprPct = m.modoDepreciacao === "contabil" ? 20 : (+m.depreciacaoPct || 10);
+  const deprA   = vV * pc(deprPct);
+  const revnd   = Math.max(0, vV - deprA - saldo);
+
+  const basePis = perfil === "real" ? Math.max(0, manut + deprA) : 0;
+  const baseIr  = perfil === "real" ? Math.max(0, admF + deprA)  : 0;
+  const pisP    = basePis * pc(+m.pisPropPct || 0);
+  const irjP    = baseIr  * pc(+m.irpjPropPct || 0);
+  const cslP    = baseIr  * pc(+m.csllPropPct || 0);
+  const tribP   = pisP + irjP + cslP;
+
+  const fAnoR   = aqAno + opAno - tribP - revnd;
+  const fAnoPr  = aqAno + opAno - revnd;
+  const fAno    = perfil === "real" ? fAnoR : fAnoPr;
+
+  const alqM   = +m.aluguelMensal || 0;
+  const valP   = 12 * alqM;
+  const admA   = (+m.admAluguel || 0) * 12;
+  const atFim  = m.atividadeFim === "sim";
+  const baseA  = perfil === "real" ? valP : 0;
+  const pisA   = atFim ? baseA * pc(+m.pisPropPct || 0) : 0;
+  const irjA   = baseA * pc(+m.irpjPropPct || 0);
+  const cslA   = baseA * pc(+m.csllPropPct || 0);
+  const tribA  = pisA + irjA + cslA;
+  const totAlq = valP + admA;
+  const cAlq   = totAlq - tribA;
+
+  const econ    = fAno - cAlq;
+  const econAbs = Math.abs(econ);
+  const venc    = econ >  50 ? "aluguel"
+                : econ < -50 ? "propria"
+                :              "empate";
+
+  return { fAno, cAlq, econ, econAbs, venc, aqAno, opAno, tribP, revnd };
+}
+
+/* ── calcFrota ── */
+function calcFrota() {
+  if (!frota.length) { renderFCEmpty(); renderFCEmptyDash(); return; }
+  const c = el("fcModelosList"); if (c) c.innerHTML = "";
+  frota.forEach((m, i) => renderFCCard(m, i));
+
+  let totFAno = 0, totCAlq = 0, totQtd = 0, totOtimo = 0;
+  const resultados = frota.map(m => {
+    const r   = calcModelo(m, fcPerfil);
+    const qtd = +m.qtd || 1;
+    totFAno  += r.fAno  * qtd;
+    totCAlq  += r.cAlq  * qtd;
+    totQtd   += qtd;
+    totOtimo += Math.min(r.fAno, r.cAlq) * qtd;
+    return { ...r, qtd, descricao: m.descricao || "Veículo" };
+  });
+
+  const econTotal = totFAno - totCAlq;
+  renderFCDashboard({ resultados, totFAno, totCAlq, totQtd, totOtimo, econTotal });
+}
+
+/* ── Render card ── */
+function renderFCEmpty() {
+  const c = el("fcModelosList");
+  if (c) c.innerHTML = `<div class="fc-empty"><div class="fc-empty-icon">🚗</div>
+    <p>Nenhum modelo adicionado.<br/>Clique em <strong>+ Adicionar</strong> para começar.</p></div>`;
+}
+
+function renderFCEmptyDash() {
+  const d = el("fcDashboard");
+  if (d) d.innerHTML = `<div class="fc-dash-empty"><div style="font-size:2.5rem">📊</div>
+    <p>O painel aparecerá aqui após adicionar modelos à frota.</p></div>`;
+}
+
+function renderFCCard(m, idx) {
+  const c = el("fcModelosList"); if (!c) return;
+  const r   = calcModelo(m, fcPerfil);
+  const qtd = +m.qtd || 1;
+  const vc  = r.venc;
+  const badgeIcon  = vc === "aluguel" ? "🏆" : vc === "propria" ? "🚗" : "⚖";
+  const badgeLabel = vc === "aluguel" ? "Locação vence" : vc === "propria" ? "Frota Própria vence" : "Empate técnico";
+  const ecoLabel   = qtd > 1
+    ? `${R(r.econAbs)}/un. · ${R(r.econAbs * qtd)} total`
+    : `${R(r.econAbs)}/ano de economia`;
+  c.innerHTML += `
+  <div class="fc-card venc-${vc}" id="fcCard_${idx}">
+    <div class="fc-card-head">
+      <div>
+        <div class="fc-card-title">${m.descricao || "Veículo " + (idx + 1)}</div>
+        <div class="fc-card-qty">${qtd} veículo${qtd > 1 ? "s" : ""} · ${fcPerfil === "real" ? "Lucro Real" : "Lucro Presumido"}</div>
+      </div>
+      <div class="fc-card-actions">
+        <button class="fc-card-btn edit" onclick="openModalModelo(${idx})">✏ Editar</button>
+        <button class="fc-card-btn remove" onclick="removeModelo(${idx})">✕</button>
+      </div>
+    </div>
+    <div class="fc-card-body">
+      <div class="fc-card-cmp">
+        <div class="fc-card-val-block">
+          <div class="fc-card-val-label">Frota Própria</div>
+          <div class="fc-card-val-num">${R(r.fAno)}</div>
+          <div class="fc-card-val-sub">por veículo / ano</div>
+        </div>
+        <div class="fc-card-val-block">
+          <div class="fc-card-val-label">Locação</div>
+          <div class="fc-card-val-num">${R(r.cAlq)}</div>
+          <div class="fc-card-val-sub">por veículo / ano</div>
+        </div>
+      </div>
+      <div class="fc-card-badge ${vc}">
+        <div class="fc-badge-left">
+          <span class="fc-badge-icon">${badgeIcon}</span>
+          <span class="fc-badge-label">${badgeLabel}</span>
+        </div>
+        <span class="fc-badge-eco">${ecoLabel}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ── Render dashboard ── */
+function renderFCDashboard(data) {
+  const d = el("fcDashboard"); if (!d) return;
+  const { resultados, totFAno, totCAlq, totQtd, totOtimo, econTotal } = data;
+  const vencGlobal  = econTotal >  50 ? "aluguel" : econTotal < -50 ? "propria" : "empate";
+  const vencLabel   = vencGlobal === "aluguel" ? "🏆 Locação é a estratégia mais econômica"
+                    : vencGlobal === "propria"  ? "🏆 Frota Própria é mais econômica"
+                    :                             "⚖ Empate técnico entre as estratégias";
+  const poupanca    = Math.abs(econTotal);
+  const bestUnif    = Math.min(totFAno, totCAlq);
+  const economiaOtima = Math.max(0, bestUnif - totOtimo);
+
+  const maxVal = Math.max(...resultados.map(r => Math.max(r.fAno, r.cAlq)), 1);
+
+  const chartRows = resultados.map(r => {
+    const wF = (r.fAno / maxVal * 100).toFixed(1);
+    const wA = (r.cAlq / maxVal * 100).toFixed(1);
+    return `<div class="fc-ch-row">
+      <div><div class="fc-ch-name">${r.descricao}</div><div class="fc-ch-qty">×${r.qtd}</div></div>
+      <div class="fc-ch-bars">
+        <div class="fc-ch-bar-row">
+          <span class="fc-ch-bar-label">Própria</span>
+          <div class="fc-ch-track"><div class="fc-ch-bar orange" style="width:${wF}%"></div></div>
+          <span class="fc-ch-val">${R(r.fAno)}</span>
+        </div>
+        <div class="fc-ch-bar-row">
+          <span class="fc-ch-bar-label">Locação</span>
+          <div class="fc-ch-track"><div class="fc-ch-bar green" style="width:${wA}%"></div></div>
+          <span class="fc-ch-val">${R(r.cAlq)}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+
+  const rows = resultados.map(r => {
+    const vOtimo    = Math.min(r.fAno, r.cAlq);
+    const estrategia = r.venc === "aluguel"
+      ? "<span style='color:var(--green)'>Locar</span>"
+      : r.venc === "propria"
+        ? "<span style='color:#FF6600'>Comprar</span>"
+        : "<span style='color:var(--muted)'>Qualquer</span>";
+    return `<tr>
+      <td>${r.descricao}</td>
+      <td style="text-align:center">${r.qtd}</td>
+      <td>${R(r.fAno)}</td>
+      <td>${R(r.cAlq)}</td>
+      <td>${estrategia}</td>
+      <td>${R(vOtimo * r.qtd)}</td>
+    </tr>`;
+  }).join("");
+
+  d.innerHTML = `
+  <div class="fc-dash">
+    <div class="fc-dash-hero ${vencGlobal}">
+      <div class="fc-dash-hero-title">${vencLabel}</div>
+      <div class="fc-dash-hero-sub">${totQtd} veículos · Economia estimada ${R(poupanca)}/ano vs. alternativa</div>
+    </div>
+    <div class="fc-kpi-grid">
+      <div class="fc-dash-kpi"><div class="fc-dash-kpi-label">Total Frota Própria</div><div class="fc-dash-kpi-val">${R(totFAno)}</div><div class="fc-dash-kpi-sub">/ano consolidado</div></div>
+      <div class="fc-dash-kpi"><div class="fc-dash-kpi-label">Total Locação</div><div class="fc-dash-kpi-val">${R(totCAlq)}</div><div class="fc-dash-kpi-sub">/ano consolidado</div></div>
+      <div class="fc-dash-kpi accent"><div class="fc-dash-kpi-label">Estratégia Ótima</div><div class="fc-dash-kpi-val">${R(totOtimo)}</div><div class="fc-dash-kpi-sub">mix ótimo por categoria</div></div>
+      <div class="fc-dash-kpi"><div class="fc-dash-kpi-label">Ganho com Mix Ótimo</div><div class="fc-dash-kpi-val">${R(economiaOtima)}</div><div class="fc-dash-kpi-sub">vs. estratégia única</div></div>
+    </div>
+    <div class="fc-dash-section-title">Comparativo Visual por Categoria</div>
+    <div class="fc-chart">${chartRows}</div>
+    <div class="fc-dash-section-title">Detalhamento por Categoria</div>
+    <div class="fc-table-wrap">
+      <table class="fc-table">
+        <thead><tr><th>Categoria</th><th>Qtd</th><th>Própria/un.</th><th>Locação/un.</th><th>Recomendação</th><th>Custo Ótimo Total</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div class="fc-dash-note">
+      Custo Ótimo = menor custo unitário por categoria × quantidade. A estratégia ótima pode combinar locação e compra conforme o perfil de cada modelo.
+    </div>
+  </div>`;
+}
+
+/* ── Modal CRUD ── */
+function openModalModelo(idx) {
+  fcEditId = idx;
+  const o = el("fcModalOverlay"); if (!o) return;
+  el("fcModalTitle").textContent = idx === null ? "Adicionar Modelo de Veículo" : "Editar Modelo de Veículo";
+  if (idx === null) fcFillModalDefaults(); else fcFillModal(frota[idx]);
+  o.style.display = "flex";
+}
+
+function closeModalModelo() {
+  const o = el("fcModalOverlay"); if (o) o.style.display = "none";
+  fcEditId = null;
+}
+
+function fcFillModalDefaults() {
+  fcFillModal({
+    descricao: "", qtd: 1,
+    valorVeiculoBruto: 0, descontoPct: 0, entradaPct: 0, parcelas: 1,
+    jurosMensalPct: 0, oportunidadePct: 0,
+    manutencaoPct: 0, seguroPct: 0, licenciamentoPct: 0,
+    indisponibilidadeAno: 0, admFrotaMensal: 0,
+    modoDepreciacao: "contabil", depreciacaoPct: 0,
+    aluguelMensal: 0, admAluguel: 0, atividadeFim: "sim",
+    pisPropPct: 9.25, irpjPropPct: 25, csllPropPct: 9, estado: 0
+  });
+}
+
+function fcFillModal(m) {
+  ["descricao","qtd","valorVeiculoBruto","descontoPct","entradaPct","parcelas",
+   "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct","licenciamentoPct",
+   "indisponibilidadeAno","admFrotaMensal","modoDepreciacao","depreciacaoPct",
+   "aluguelMensal","admAluguel","atividadeFim","pisPropPct","irpjPropPct","csllPropPct"
+  ].forEach(id => { const e = el("fc_" + id); if (e && m[id] !== undefined) e.value = m[id]; });
+  const eEl = el("fc_estado");
+  if (eEl && m.estado !== undefined)
+    [...eEl.options].forEach(o => { o.selected = (parseFloat(o.value) === parseFloat(m.estado)); });
+  fcToggleDepr();
+}
+
+function saveModelo() {
+  const m = {};
+  ["descricao","qtd","valorVeiculoBruto","descontoPct","entradaPct","parcelas",
+   "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct","licenciamentoPct",
+   "indisponibilidadeAno","admFrotaMensal","modoDepreciacao","depreciacaoPct",
+   "aluguelMensal","admAluguel","atividadeFim","pisPropPct","irpjPropPct","csllPropPct"
+  ].forEach(id => { const e = el("fc_" + id); if (e) m[id] = e.value; });
+  const eEl = el("fc_estado");
+  m.estado = eEl ? parseFloat(eEl.options[eEl.selectedIndex].value) : 0;
+  if (fcEditId === null) frota.push(m); else frota[fcEditId] = m;
+  closeModalModelo();
+  saveLSFC();
+  calcFrota();
+}
+
+function removeModelo(idx) {
+  frota.splice(idx, 1);
+  saveLSFC();
+  calcFrota();
+}
+
+function fcToggleDepr() {
+  const sel = el("fc_modoDepreciacao"), box = el("fc_boxDeprReal");
+  if (sel && box) box.style.display = sel.value === "real" ? "block" : "none";
+}
+
+function selectRegimeFC(r) {
+  fcPerfil = r;
+  const sel = el("fc_perfil"); if (sel) sel.value = r;
+  if (frota.length) calcFrota();
+}
+
+function importarDoSimulador() {
+  const FIELDS = ["valorVeiculoBruto","descontoPct","entradaPct","parcelas",
+    "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct",
+    "licenciamentoPct","indisponibilidadeAno","admFrotaMensal","modoDepreciacao",
+    "depreciacaoPct","aluguelMensal","admAluguel","atividadeFim",
+    "pisPropPct","irpjPropPct","csllPropPct"];
+  const m = {
+    descricao: (el("clientNameTopbar")?.textContent?.trim() || "Importado") + " — Simulador",
+    qtd: qtdVeiculos || 1
+  };
+  FIELDS.forEach(f => { const e = el(f); if (e) m[f] = e.value; });
+  const eEl = el("estado");
+  m.estado = eEl ? parseFloat(eEl.options[eEl.selectedIndex].value) : 0;
+  frota.push(m);
+  saveLSFC();
+  switchTab("fc");
+  calcFrota();
+}
+
+/* ── localStorage ── */
+function saveLSFC() {
+  try { localStorage.setItem("sim-fc", JSON.stringify({ frota, perfil: fcPerfil })); } catch(e) {}
+}
+
+function restoreLSFC() {
+  try {
+    const d = JSON.parse(localStorage.getItem("sim-fc") || "{}");
+    if (Array.isArray(d.frota)) frota = d.frota;
+    if (d.perfil) { fcPerfil = d.perfil; const s = el("fc_perfil"); if (s) s.value = fcPerfil; }
+    if (frota.length) calcFrota(); else { renderFCEmpty(); renderFCEmptyDash(); }
+  } catch(e) { renderFCEmpty(); renderFCEmptyDash(); }
+}
+
+/* ── PDF Frota Composta ── */
+function exportPDFFrota() {
+  if (!frota.length) { alert("Adicione ao menos um modelo de veículo antes de exportar."); return; }
+  const resultados = frota.map(m => ({ ...calcModelo(m, fcPerfil), qtd: +m.qtd || 1, descricao: m.descricao || "Veículo" }));
+  let totFAno = 0, totCAlq = 0, totQtd = 0, totOtimo = 0;
+  resultados.forEach(r => {
+    totFAno  += r.fAno  * r.qtd;
+    totCAlq  += r.cAlq  * r.qtd;
+    totQtd   += r.qtd;
+    totOtimo += Math.min(r.fAno, r.cAlq) * r.qtd;
+  });
+  const econTotal     = totFAno - totCAlq;
+  const vencGlobal    = econTotal >  50 ? "Locação" : econTotal < -50 ? "Frota Própria" : "Empate Técnico";
+  const poupanca      = Math.abs(econTotal);
+  const economiaOtima = Math.max(0, Math.min(totFAno, totCAlq) - totOtimo);
+  const now = new Date().toLocaleDateString("pt-BR");
+
+  const rows = resultados.map(r => {
+    const vOtimo = Math.min(r.fAno, r.cAlq);
+    const rec    = r.venc === "aluguel" ? "Locar" : r.venc === "propria" ? "Comprar" : "Qualquer";
+    return `<tr><td>${r.descricao}</td><td style="text-align:center">${r.qtd}</td><td>${R(r.fAno)}</td><td>${R(r.cAlq)}</td><td><b>${rec}</b></td><td>${R(vOtimo * r.qtd)}</td></tr>`;
+  }).join("");
+
+  const w = window.open("", "_blank");
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Frota Composta — Localiza&amp;Co</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;font-size:11pt;color:#1a1a2e;padding:28px}
+h1{font-size:18pt;color:#00843D;border-bottom:3px solid #00843D;padding-bottom:8px;margin-bottom:16px}
+h2{font-size:12pt;color:#00843D;margin:20px 0 8px}.meta{color:#666;font-size:9pt;margin-bottom:16px}
+.hero{background:#00843D;color:#fff;border-radius:8px;padding:14px 18px;margin-bottom:18px}
+.hero-title{font-size:14pt;font-weight:700;margin-bottom:4px}.hero-sub{font-size:9.5pt;opacity:.85}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.kpi{border:1px solid #e0e0e0;border-radius:8px;padding:10px;text-align:center}
+.kpi-label{font-size:7.5pt;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.kpi-val{font-size:13pt;font-weight:700;color:#00843D}.kpi-sub{font-size:7.5pt;color:#999}
+.kpi.accent{background:#00843D;border-color:#00843D}
+.kpi.accent .kpi-label,.kpi.accent .kpi-sub{color:#b2dfdb}.kpi.accent .kpi-val{color:#fff}
+table{width:100%;border-collapse:collapse;font-size:10pt}
+th{background:#00843D;color:#fff;padding:7px 9px;text-align:left}
+td{padding:6px 9px;border-bottom:1px solid #eee}tr:nth-child(even)td{background:#f9f9f9}
+.note{margin-top:12px;font-size:8pt;color:#888;font-style:italic}
+.footer{margin-top:28px;font-size:8pt;color:#bbb;text-align:center;border-top:1px solid #eee;padding-top:8px}
+@media print{body{padding:8px}}</style></head><body>
+<h1>⚡ Frota Composta — Análise Estratégica</h1>
+<div class="meta">Gerado em ${now} · Regime: ${fcPerfil === "real" ? "Lucro Real" : "Lucro Presumido"} · ${totQtd} veículos em ${resultados.length} categorias</div>
+<div class="hero">
+  <div class="hero-title">Recomendação Global: ${vencGlobal}</div>
+  <div class="hero-sub">Economia estimada vs. alternativa: ${R(poupanca)}/ano · Estratégia ótima (mix): ${R(totOtimo)}/ano</div>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-label">Total Frota Própria</div><div class="kpi-val">${R(totFAno)}</div><div class="kpi-sub">/ano</div></div>
+  <div class="kpi"><div class="kpi-label">Total Locação</div><div class="kpi-val">${R(totCAlq)}</div><div class="kpi-sub">/ano</div></div>
+  <div class="kpi accent"><div class="kpi-label">Estratégia Ótima</div><div class="kpi-val">${R(totOtimo)}</div><div class="kpi-sub">mix ótimo por categoria</div></div>
+  <div class="kpi"><div class="kpi-label">Ganho com Mix Ótimo</div><div class="kpi-val">${R(economiaOtima)}</div><div class="kpi-sub">vs. estratégia única</div></div>
+</div>
+<h2>Detalhamento por Categoria</h2>
+<table><thead><tr><th>Categoria</th><th>Qtd</th><th>Própria/un.</th><th>Locação/un.</th><th>Recomendação</th><th>Custo Ótimo Total</th></tr></thead>
+<tbody>${rows}</tbody></table>
+<p class="note">Custo Ótimo = menor custo unitário por categoria × quantidade. A estratégia ótima pode combinar locação e compra conforme o perfil de cada modelo.</p>
+<div class="footer">Simulador Estratégico de Frota · Localiza&amp;Co · Documento de uso interno. Não substitui consultoria financeira ou tributária.</div>
+<script>window.onload=()=>window.print()<\/script>
+</body></html>`);
+  w.document.close();
 }
 </script>
 </body>
