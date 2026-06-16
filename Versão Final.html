@@ -847,6 +847,114 @@ body.pres-mode .wizard-wrap{grid-template-columns:1fr!important}
 body.pres-mode .ev-col-left{display:none!important}
 body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 .tb-btn.pres-active{background:rgba(255,102,0,.12)!important;border-color:rgba(255,102,0,.4)!important;color:#FF6600!important}
+
+/* ══════════════════════════════════════════
+   DASHBOARD — TOTAIS POR FROTA
+══════════════════════════════════════════ */
+.ce-total-row{
+  margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--bd);
+}
+.ce-total-label{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.8px;color:var(--muted);margin-bottom:3px;
+}
+.ce-total-val{
+  font-size:22px;font-weight:900;letter-spacing:-1.2px;
+  color:var(--orange);font-family:'Playfair Display',serif;
+}
+
+.v-total{
+  margin-top:7px;padding-top:7px;
+  border-top:1px solid var(--bd);
+}
+.v-card.winner .v-total{border-top-color:rgba(255,255,255,.25)}
+.v-total-label{
+  font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--muted);margin-bottom:2px;
+}
+.v-total-val{font-size:12px;font-weight:800;color:var(--orange)}
+.v-card.winner .v-total-label{color:rgba(255,255,255,.7)}
+.v-card.winner .v-total-val{color:#fff}
+
+.ep-total-row{
+  margin-top:9px;padding-top:9px;
+  border-top:1px solid var(--green-bd);
+}
+.econ-pill.red .ep-total-row{border-top-color:var(--red-bd)}
+.ep-total-label{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.ep-total-val{
+  font-size:18px;font-weight:900;letter-spacing:-1px;
+  color:var(--green-l);font-family:'Playfair Display',serif;
+}
+.econ-pill.red .ep-total-val{color:var(--red)}
+
+/* ══════════════════════════════════════════
+   TOUR GUIADO
+══════════════════════════════════════════ */
+#tourOverlay{
+  position:fixed;inset:0;z-index:9000;
+  pointer-events:all;display:none;
+}
+#tourSpotlight{
+  position:fixed;z-index:9001;
+  border:2px solid #FF6600;
+  border-radius:10px;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.65);
+  transition:all .35s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+  opacity:0;
+}
+#tourTooltip{
+  position:fixed;z-index:9002;
+  background:var(--s1);
+  border:1px solid var(--bd);
+  border-radius:16px;
+  padding:22px 22px 18px;
+  width:320px;
+  box-shadow:0 12px 50px rgba(0,0,0,.28);
+  transition:left .35s cubic-bezier(.22,1,.36,1),top .35s cubic-bezier(.22,1,.36,1);
+}
+.tour-step-badge{
+  display:inline-block;font-size:10px;font-weight:700;
+  background:var(--orange-bg);color:var(--orange);
+  border:1px solid var(--orange-bd);
+  border-radius:20px;padding:2px 10px;
+  margin-bottom:9px;letter-spacing:.5px;
+}
+.tour-title{
+  font-size:15px;font-weight:800;color:var(--text);
+  margin-bottom:7px;letter-spacing:-.3px;line-height:1.25;
+}
+.tour-desc{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:14px}
+.tour-dots{display:flex;gap:4px;align-items:center;margin-bottom:14px}
+.tour-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--bd2);transition:all .2s;flex-shrink:0;
+}
+.tour-dot.active{background:var(--orange);width:16px;border-radius:3px}
+.tour-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tour-btn-skip{
+  font-size:11px;color:var(--muted);background:none;
+  border:none;cursor:pointer;padding:0;
+  font-family:'Outfit',sans-serif;transition:color .15s;
+}
+.tour-btn-skip:hover{color:var(--text);text-decoration:underline}
+.tour-nav-btns{display:flex;gap:7px}
+.tour-btn-back{
+  padding:7px 14px;border:1px solid var(--bd2);border-radius:8px;
+  background:transparent;color:var(--muted);
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;transition:.2s;
+}
+.tour-btn-back:hover{border-color:var(--muted);color:var(--text)}
+.tour-btn-next{
+  padding:7px 16px;border:none;border-radius:8px;
+  background:var(--orange);color:#fff;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
+  cursor:pointer;transition:.2s;
+}
+.tour-btn-next:hover{opacity:.88}
 </style>
 </head>
 <body>
@@ -938,6 +1046,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
       <button class="tb-btn" id="presBtn" onclick="togglePresentation()" title="Ocultar campos de entrada para apresentação"><span class="btn-txt">Apresentação</span></button>
       <button class="tb-btn" onclick="switchTab('gloss')"><span class="btn-txt">Glossário</span></button>
       <button class="tb-btn green" onclick="exportPDF()"><span class="btn-txt">Exportar PDF</span></button>
+      <button class="tb-btn" onclick="startTour()" title="Tour guiado — conheça a ferramenta"><span class="btn-txt">Tour</span></button>
       <div class="theme-btn" id="themeBtn" title="Alternar tema"><div class="tt-k" id="ttK">🌙</div></div>
     </div>
   </header>
@@ -1341,10 +1450,14 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="thermo-hint">Abatimento fiscal sobre aluguel (Lucro Real)</div>
       </div>
 
-      <div class="ce-card">
+      <div class="ce-card" id="ceCard">
         <div class="ce-label">Custo Efetivo — Frota Própria</div>
         <div class="ce-value neutral" id="bigFrota">R$ 0</div>
-        <div class="ce-sub">por ano · mensal: <strong id="bigFrotaMes">R$ 0</strong></div>
+        <div class="ce-sub">por veículo / ano · mensal: <strong id="bigFrotaMes">R$ 0</strong></div>
+        <div class="ce-total-row" id="ceTotalRow" style="display:none">
+          <div class="ce-total-label">Custo total da frota</div>
+          <div class="ce-total-val" id="bigFrotaTotal">R$ 0</div>
+        </div>
       </div>
 
       <!-- COMPARATIVO: visível desde o início -->
@@ -1355,19 +1468,31 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
           <div class="v-card" id="vFrota">
             <div class="v-name">Frota Própria</div>
             <div class="v-val" id="vFrotaVal">R$ 0</div>
-            <div class="v-period">/ ano</div>
+            <div class="v-period">/ veículo · ano</div>
+            <div class="v-total" id="vFrotaTotal" style="display:none">
+              <div class="v-total-label">Frota total</div>
+              <div class="v-total-val" id="vFrotaTotalVal">R$ 0</div>
+            </div>
           </div>
           <div class="vs-badge">VS</div>
           <div class="v-card" id="vAluguel">
             <div class="v-name">Aluguel</div>
             <div class="v-val" id="vAluguelVal">R$ 0</div>
-            <div class="v-period">/ ano</div>
+            <div class="v-period">/ veículo · ano</div>
+            <div class="v-total" id="vAluguelTotal" style="display:none">
+              <div class="v-total-label">Frota total</div>
+              <div class="v-total-val" id="vAluguelTotalVal">R$ 0</div>
+            </div>
           </div>
         </div>
         <div class="econ-pill" id="econPill">
           <div class="ep-label" id="epLabel">Economia estimada com locação</div>
           <div class="ep-val" id="epVal">R$ 0</div>
           <div class="ep-sub" id="epSub">por veículo / ano</div>
+          <div class="ep-total-row" id="epTotalRow" style="display:none">
+            <div class="ep-total-label" id="epTotalLabel">—</div>
+            <div class="ep-total-val" id="epTotalVal">R$ 0</div>
+          </div>
         </div>
 
         <!-- RESUMO DA FROTA -->
@@ -1661,6 +1786,26 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 
 </div><!-- /mainApp -->
 
+<!-- ═══════════════════════════════════════
+     TOUR GUIADO
+════════════════════════════════════════ -->
+<div id="tourOverlay">
+  <div id="tourSpotlight"></div>
+  <div id="tourTooltip">
+    <div class="tour-step-badge" id="tourBadge">Passo 1 de 8</div>
+    <div class="tour-title" id="tourTitle">Bem-vindo</div>
+    <div class="tour-desc" id="tourDesc">Descrição do passo.</div>
+    <div class="tour-dots" id="tourDots"></div>
+    <div class="tour-nav">
+      <button class="tour-btn-skip" onclick="closeTour()">Pular tour</button>
+      <div class="tour-nav-btns">
+        <button class="tour-btn-back" id="tourBtnBack" onclick="tourPrev()" style="display:none">← Anterior</button>
+        <button class="tour-btn-next" id="tourBtnNext" onclick="tourNext()">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ══════════════════════════════════════════
    ESTADO GLOBAL
@@ -1758,6 +1903,7 @@ function doStart() {
     app.style.display = "block";
     restoreState();
     calc();
+    initTour();
   }, 420);
 }
 
@@ -2061,7 +2207,7 @@ function calc() {
   el("vAluguel").className = "v-card" + (venc === "aluguel" ? " winner" : "");
 
   const ep = el("econPill");
-  const perVeic = qtdVeiculos > 1 ? "por veículo / ano" : "por ano";
+  const perVeic = "por veículo / ano";
   if (venc === "aluguel") {
     ep.className = "econ-pill";
     set("epLabel", "Economia estimada com locação");
@@ -2079,28 +2225,39 @@ function calc() {
     set("epSub",   "equivalência econômica");
   }
 
-  /* ── Resumo da Frota ── */
+  /* ── Resumo da Frota (legado) ── */
   const fs = el("fleetSummary");
-  if (fs) {
-    if (qtdVeiculos > 1) {
-      fs.style.display = "block";
-      set("fleetQtyBadge", qtdVeiculos + " veículo" + (qtdVeiculos !== 1 ? "s" : ""));
-      if (venc === "aluguel") {
-        set("fleetEconLabel", "Economia total com locação");
-        set("fleetEconVal",   R(econAbs * qtdVeiculos));
-        set("fleetEconSub",   "por ano · toda a frota");
-      } else if (venc === "propria") {
-        set("fleetEconLabel", "Vantagem total frota própria");
-        set("fleetEconVal",   R(econAbs * qtdVeiculos));
-        set("fleetEconSub",   "por ano · toda a frota");
-      } else {
-        set("fleetEconLabel", "Equivalência econômica");
-        set("fleetEconVal",   "—");
-        set("fleetEconSub",   "resultado neutro");
-      }
-    } else {
-      fs.style.display = "none";
-    }
+  if (fs) fs.style.display = "none";
+
+  /* ── Totais consolidados da frota ── */
+  const hasFleet = qtdVeiculos > 1;
+  const qtdLabel = qtdVeiculos + " veículo" + (qtdVeiculos !== 1 ? "s" : "");
+
+  // ce-card total
+  const ceTR = el("ceTotalRow");
+  if (ceTR) {
+    ceTR.style.display = hasFleet ? "block" : "none";
+    if (hasFleet) set("bigFrotaTotal", R(fAno * qtdVeiculos));
+  }
+
+  // versus totals
+  const vFT = el("vFrotaTotal"), vAT = el("vAluguelTotal");
+  if (vFT) vFT.style.display = hasFleet ? "block" : "none";
+  if (vAT) vAT.style.display = hasFleet ? "block" : "none";
+  if (hasFleet) {
+    set("vFrotaTotalVal",   R(fAno  * qtdVeiculos));
+    set("vAluguelTotalVal", R(cAlq  * qtdVeiculos));
+  }
+
+  // econ-pill total
+  const epTR = el("epTotalRow");
+  if (epTR) epTR.style.display = hasFleet ? "block" : "none";
+  if (hasFleet) {
+    const totalLabel = venc === "aluguel" ? "Economia total · " + qtdLabel
+                     : venc === "propria" ? "Vantagem total · " + qtdLabel
+                     : "Diferença total · " + qtdLabel;
+    set("epTotalLabel", totalLabel);
+    set("epTotalVal",   R(econAbs * qtdVeiculos));
   }
 
   saveLS();
@@ -2292,6 +2449,52 @@ body{
 <div class="disc">
   <span style="font-size:15px;flex-shrink:0">⚠️</span>
   <div><strong>DOCUMENTO DE SIMULAÇÃO</strong> — Estimativa comparativa para fins analíticos. Não constitui proposta comercial, consultoria financeira ou parecer tributário. Valores baseados nos parâmetros inseridos e podem divergir da realidade. Consulte seu contador antes de qualquer decisão.</div>
+</div>
+
+<!-- RESUMO EXECUTIVO -->
+<div class="stitle">Resumo Executivo</div>
+<div style="background:#F3F8F4;border:1px solid #C8DCC8;border-radius:10px;padding:16px 18px;margin-bottom:22px">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+    <div>
+      <div style="font-size:10px;color:#4A7057;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Qtd. de Veículos</div>
+      <div style="font-size:28px;font-weight:900;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-1px">${qtdVeiculos}</div>
+      <div style="font-size:10px;color:#7A9E88;margin-top:2px">frota analisada</div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:#4A7057;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Custo Unitário — Frota Própria</div>
+      <div style="font-size:20px;font-weight:800;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(c.fAno)}</div>
+      <div style="font-size:10px;color:#7A9E88;margin-top:2px">por veículo / ano · ${R(c.fAno/12)}/mês</div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:#4A7057;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Custo Unitário — Locação</div>
+      <div style="font-size:20px;font-weight:800;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(c.cAlq)}</div>
+      <div style="font-size:10px;color:#7A9E88;margin-top:2px">por veículo / ano · ${R(c.cAlq/12)}/mês</div>
+    </div>
+  </div>
+  ${qtdVeiculos > 1 ? `
+  <div style="height:1px;background:#C8DCC8;margin:14px 0"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+    <div style="background:${winnerColor};border-radius:9px;padding:13px;text-align:center">
+      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">${c.venc === "aluguel" ? "Economia Total c/ Locação" : c.venc === "propria" ? "Vantagem Total Frota Própria" : "Diferença Total"}</div>
+      <div style="font-size:22px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-1px">${R(c.econAbs * qtdVeiculos)}</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.72);margin-top:3px">${qtdVeiculos} veículos / ano</div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:#4A7057;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Custo Consolidado — Frota Própria</div>
+      <div style="font-size:20px;font-weight:800;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(c.fAno * qtdVeiculos)}</div>
+      <div style="font-size:10px;color:#7A9E88;margin-top:2px">${qtdVeiculos} veículos / ano</div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:#4A7057;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Custo Consolidado — Locação</div>
+      <div style="font-size:20px;font-weight:800;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(c.cAlq * qtdVeiculos)}</div>
+      <div style="font-size:10px;color:#7A9E88;margin-top:2px">${qtdVeiculos} veículos / ano</div>
+    </div>
+  </div>` : `
+  <div style="height:1px;background:#C8DCC8;margin:14px 0"></div>
+  <div style="background:${winnerColor};border-radius:9px;padding:13px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:11px;color:rgba(255,255,255,.85);font-weight:700;text-transform:uppercase;letter-spacing:.5px">${c.venc === "aluguel" ? "Economia por Veículo / Ano" : c.venc === "propria" ? "Vantagem Frota Própria / Ano" : "Equivalência Econômica"}</div>
+    <div style="font-size:24px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-1px">${R(c.econAbs)}</div>
+  </div>`}
 </div>
 
 <!-- KPIs -->
@@ -2772,6 +2975,50 @@ body{font-family:'Outfit',sans-serif;background:#fff;color:#091A0C;-webkit-print
   <div style="text-align:right">${logoClientHTML}${nomeClientHTML}<div class="meta" style="margin-top:6px"><div>Data: <strong>${agora}</strong></div><div>Executivo de Vendas: <strong>${loginMatricula||"—"}</strong></div><div>Cliente: <strong>${clientName||loginCodigo||"—"}</strong></div><div>Qtd. Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div><div>Regime: <strong>${perfLabel}</strong></div></div></div>
 </div>
 <div class="disc"><span style="font-size:14px;flex-shrink:0">⚠️</span><div><strong>SIMULAÇÃO INTERNA</strong> — Estimativa comparativa para uso do EV. Não constitui proposta comercial nem consultoria tributária.</div></div>
+<div class="st">Resumo Executivo</div>
+<div style="background:#F3F8F4;border:1px solid #C8DCC8;border-radius:9px;padding:14px 16px;margin-bottom:16px">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div>
+      <div style="font-size:10px;color:#4A7057;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Qtd. Veículos</div>
+      <div style="font-size:24px;font-weight:900;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-1px">${qtdVeiculos}</div>
+      <div style="font-size:10px;color:#7A9E88">frota analisada</div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:#4A7057;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Custo Unit. — Frota</div>
+      <div style="font-size:18px;font-weight:800;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(cc.fAno)}</div>
+      <div style="font-size:10px;color:#7A9E88">por veículo / ano</div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:#4A7057;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Custo Unit. — Locação</div>
+      <div style="font-size:18px;font-weight:800;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(cc.cAlq)}</div>
+      <div style="font-size:10px;color:#7A9E88">por veículo / ano</div>
+    </div>
+  </div>
+  ${qtdVeiculos > 1 ? `
+  <div style="height:1px;background:#C8DCC8;margin:10px 0"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+    <div style="background:${winnerColor};border-radius:8px;padding:10px;text-align:center">
+      <div style="font-size:9px;color:rgba(255,255,255,.8);font-weight:700;text-transform:uppercase;margin-bottom:3px">${cc.venc==="aluguel"?"Economia Total":"Vantagem Total"}</div>
+      <div style="font-size:18px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(cc.econAbs*qtdVeiculos)}</div>
+      <div style="font-size:9px;color:rgba(255,255,255,.7);margin-top:2px">${qtdVeiculos} veículos / ano</div>
+    </div>
+    <div>
+      <div style="font-size:9px;color:#4A7057;font-weight:700;text-transform:uppercase;margin-bottom:3px">Total — Frota Própria</div>
+      <div style="font-size:16px;font-weight:800;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-.6px">${R(cc.fAno*qtdVeiculos)}</div>
+      <div style="font-size:9px;color:#7A9E88">${qtdVeiculos} veículos / ano</div>
+    </div>
+    <div>
+      <div style="font-size:9px;color:#4A7057;font-weight:700;text-transform:uppercase;margin-bottom:3px">Total — Locação</div>
+      <div style="font-size:16px;font-weight:800;color:#091A0C;font-family:'Playfair Display',serif;letter-spacing:-.6px">${R(cc.cAlq*qtdVeiculos)}</div>
+      <div style="font-size:9px;color:#7A9E88">${qtdVeiculos} veículos / ano</div>
+    </div>
+  </div>` : `
+  <div style="height:1px;background:#C8DCC8;margin:10px 0"></div>
+  <div style="background:${winnerColor};border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:10px;color:rgba(255,255,255,.85);font-weight:700;text-transform:uppercase;">${cc.venc==="aluguel"?"Economia Anual":cc.venc==="propria"?"Vantagem Frota":"Equivalência"}</div>
+    <div style="font-size:20px;font-weight:900;color:#fff;font-family:'Playfair Display',serif">${R(cc.econAbs)}</div>
+  </div>`}
+</div>
 <div class="kr">
   <div class="kc${cc.venc==="propria"?" w":""}"><div class="kl">🚗 Frota Própria</div><div class="kv">${R(cc.fAno)}</div><div class="ks">custo efetivo / ano</div></div>
   <div class="kc${cc.venc==="aluguel"?" w":""}"><div class="kl">🔑 Locação</div><div class="kv">${R(cc.cAlq)}</div><div class="ks">custo efetivo / ano</div></div>
@@ -2804,6 +3051,176 @@ body{font-family:'Outfit',sans-serif;background:#fff;color:#091A0C;-webkit-print
 <script>window.onload=()=>window.print()<\/script>
 </body></html>`);
   w.document.close();
+}
+
+/* ══════════════════════════════════════════
+   TOUR GUIADO DE PRIMEIRO ACESSO
+══════════════════════════════════════════ */
+const TOUR_STEPS = [
+  {
+    title: "Bem-vindo ao Simulador Estratégico de Frota",
+    desc: "Esta ferramenta compara o custo real de frota própria versus locação corporativa Localiza&Co, considerando todos os fatores financeiros, operacionais e tributários. Siga os passos para conhecer cada seção.",
+    target: null
+  },
+  {
+    title: "Passo 1 — Dados do Veículo",
+    desc: "Informe o preço de tabela, o desconto negociado e o percentual de entrada. Esses dados formam a base de cálculo de aquisição e a saída imediata de caixa no Dia 1.",
+    target: "#step0",
+    wizardStep: 0
+  },
+  {
+    title: "Passo 2 — Custo de Capital",
+    desc: "Defina o financiamento (método Price) e o custo de oportunidade — o rendimento perdido ao imobilizar capital no veículo. Este é o 'custo invisível' frequentemente ignorado.",
+    target: "#step1",
+    wizardStep: 1
+  },
+  {
+    title: "Passo 3 — Custos Operacionais",
+    desc: "Configure manutenção, seguro, IPVA, licenciamento, indisponibilidade e administração de frota. Esses custos recorrentes representam o peso diário de possuir o veículo.",
+    target: "#step2",
+    wizardStep: 2
+  },
+  {
+    title: "Passo 4 — Impacto Tributário",
+    desc: "Selecione o regime fiscal (Lucro Real ou Presumido) e as alíquotas. No Lucro Real, as despesas com aluguel geram créditos de PIS/COFINS, IRPJ e CSLL que reduzem significativamente o custo.",
+    target: "#step3",
+    wizardStep: 3
+  },
+  {
+    title: "Dashboard Executivo",
+    desc: "O painel à direita atualiza em tempo real. Você vê o custo efetivo de cada alternativa, a economia unitária por veículo e — quando há mais de 1 veículo — o impacto financeiro consolidado de toda a frota.",
+    target: ".right-pane"
+  },
+  {
+    title: "Exportar Relatório PDF",
+    desc: "Gera um relatório executivo completo com resumo financeiro, comparativo visual e conclusão analítica — pronto para apresentação à diretoria. Cada módulo tem seu próprio PDF.",
+    target: ".pdf-btn"
+  },
+  {
+    title: "Tudo pronto!",
+    desc: "Ajuste os parâmetros e veja o comparativo atualizar ao vivo. Use a aba 'Análise Detalhada' para o painel técnico completo e o 'Glossário' para entender cada variável. Para reiniciar este tour, clique em 'Tour' na barra superior.",
+    target: null
+  }
+];
+
+let tourStep = 0;
+let tourActive = false;
+let tourTimer = null;
+
+function initTour() {
+  try {
+    if (!localStorage.getItem("sim-tour-done")) {
+      tourTimer = setTimeout(startTour, 900);
+    }
+  } catch(e) {}
+}
+
+function startTour() {
+  if (tourTimer) { clearTimeout(tourTimer); tourTimer = null; }
+  tourStep = 0;
+  tourActive = true;
+  /* Garante que estamos na aba Simulador */
+  if (!el("panelSim").classList.contains("active")) switchTab("sim");
+  el("tourOverlay").style.display = "block";
+  renderTourStep();
+}
+
+function closeTour() {
+  el("tourOverlay").style.display = "none";
+  const sp = el("tourSpotlight");
+  if (sp) sp.style.opacity = "0";
+  tourActive = false;
+  try { localStorage.setItem("sim-tour-done", "1"); } catch(e) {}
+}
+
+function tourNext() {
+  if (tourStep < TOUR_STEPS.length - 1) {
+    tourStep++;
+    renderTourStep();
+  } else {
+    closeTour();
+  }
+}
+
+function tourPrev() {
+  if (tourStep > 0) { tourStep--; renderTourStep(); }
+}
+
+function renderTourStep() {
+  const step  = TOUR_STEPS[tourStep];
+  const total = TOUR_STEPS.length;
+
+  /* Navega wizard se necessário */
+  if (step.wizardStep !== undefined) goStep(step.wizardStep);
+
+  /* Conteúdo */
+  set("tourBadge", "Passo " + (tourStep + 1) + " de " + total);
+  set("tourTitle", step.title);
+  set("tourDesc",  step.desc);
+
+  /* Dots */
+  const dotsEl = el("tourDots");
+  if (dotsEl) {
+    dotsEl.innerHTML = TOUR_STEPS.map((_, i) =>
+      '<div class="tour-dot' + (i === tourStep ? " active" : "") + '"></div>'
+    ).join("");
+  }
+
+  /* Botões */
+  const btnBack = el("tourBtnBack");
+  const btnNext = el("tourBtnNext");
+  if (btnBack) btnBack.style.display = tourStep === 0 ? "none" : "";
+  if (btnNext) btnNext.textContent = tourStep === total - 1 ? "Concluir ✓" : "Próximo →";
+
+  /* Posicionamento */
+  const spotlight = el("tourSpotlight");
+  const tooltip   = el("tourTooltip");
+
+  if (step.target) {
+    setTimeout(() => {
+      const tgt = document.querySelector(step.target);
+      if (!tgt) { posTooltipCenter(tooltip); if (spotlight) spotlight.style.opacity = "0"; return; }
+
+      const r = tgt.getBoundingClientRect();
+      const p = 7;
+      if (spotlight) {
+        spotlight.style.opacity = "1";
+        spotlight.style.left   = (r.left - p) + "px";
+        spotlight.style.top    = (r.top  - p) + "px";
+        spotlight.style.width  = (r.width  + p * 2) + "px";
+        spotlight.style.height = (r.height + p * 2) + "px";
+      }
+
+      /* Posiciona tooltip adjacente ao elemento */
+      const tW = 320, tH = 270;
+      let tx, ty;
+      if (r.left > tW + 50) {
+        tx = r.left - tW - 14;
+        ty = Math.max(10, r.top + (r.height - tH) / 2);
+      } else if (r.right + tW + 50 < window.innerWidth) {
+        tx = r.right + 14;
+        ty = Math.max(10, r.top + (r.height - tH) / 2);
+      } else if (r.top > tH + 50) {
+        tx = Math.max(10, r.left + (r.width - tW) / 2);
+        ty = r.top - tH - 14;
+      } else {
+        tx = Math.max(10, r.left + (r.width - tW) / 2);
+        ty = Math.min(r.bottom + 14, window.innerHeight - tH - 10);
+      }
+      tx = Math.max(10, Math.min(tx, window.innerWidth  - tW - 10));
+      ty = Math.max(10, Math.min(ty, window.innerHeight - tH - 10));
+      if (tooltip) { tooltip.style.left = tx + "px"; tooltip.style.top = ty + "px"; }
+    }, 360);
+  } else {
+    if (spotlight) spotlight.style.opacity = "0";
+    posTooltipCenter(tooltip);
+  }
+}
+
+function posTooltipCenter(tooltip) {
+  if (!tooltip) return;
+  tooltip.style.left = Math.max(10, (window.innerWidth  - 320) / 2) + "px";
+  tooltip.style.top  = Math.max(10, (window.innerHeight - 290) / 2) + "px";
 }
 
 /* ── EV localStorage ── */
