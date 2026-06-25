@@ -3520,9 +3520,14 @@ const TOUR_STEPS = [
     target: "#step2", wizardStep: 2, tab: "sim"
   },
   {
-    title: "Simulador — Impacto Tributário",
-    desc: "Configure o regime fiscal (Lucro Real ou Presumido) e as alíquotas diretamente em cada simulação. No Lucro Real, as despesas com aluguel geram créditos de PIS/COFINS, IRPJ e CSLL.",
+    title: "Simulador — Regime Tributário",
+    desc: "Selecione Lucro Real ou Lucro Presumido e configure as alíquotas de PIS/COFINS, IRPJ e CSLL. No Lucro Real, as despesas da frota própria geram créditos tributários que reduzem o custo efetivo.",
     target: "#step3", wizardStep: 3, tab: "sim"
+  },
+  {
+    title: "Simulador — Valor do Aluguel",
+    desc: "Informe aqui a mensalidade da locação corporativa Localiza&Co. Este é o número central da comparação: o simulador calcula o custo efetivo do aluguel após créditos tributários e taxa de administração.",
+    target: "#aluguelMensal", wizardStep: 3, tab: "sim"
   },
   {
     title: "Simulador — Dashboard Executivo",
@@ -3535,9 +3540,19 @@ const TOUR_STEPS = [
     target: "#tabEv", tab: "ev"
   },
   {
-    title: "Aba: Frota Composta",
-    desc: "Analise frotas heterogêneas com múltiplos modelos de veículos. Cada categoria tem parâmetros independentes. O sistema calcula automaticamente a estratégia ótima (locar ou comprar) por categoria.",
+    title: "Frota Composta — Visão Geral",
+    desc: "Analise frotas heterogêneas com múltiplos modelos de veículos. Cada categoria tem parâmetros independentes — veículo, financiamento, operacional, depreciação e locação configurados separadamente.",
     target: "#tabFc", tab: "fc"
+  },
+  {
+    title: "Frota Composta — Adicionar Categoria",
+    desc: "Clique aqui para cadastrar cada modelo de veículo da frota. Você pode importar os dados do Simulador principal ou preencher manualmente. Cada categoria gera seu próprio comparativo locar × comprar.",
+    target: ".fc-add-btn", tab: "fc"
+  },
+  {
+    title: "Frota Composta — Dashboard e Estratégia Ótima",
+    desc: "O painel direito consolida todas as categorias: custo total da frota, economia agregada e estratégia ótima automática — o sistema indica para cada modelo se é melhor locar ou comprar, com o impacto financeiro de cada decisão.",
+    target: "#fcDashboard", tab: "fc"
   },
   {
     title: "Aba: Glossário",
