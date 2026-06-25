@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
 <head>
 <meta charset="UTF-8"/>
@@ -118,11 +118,11 @@ button{font-family:Inter,sans-serif;cursor:pointer}
 .login-btn{
   width:100%;margin-top:4px;
   padding:15px;
-  background:#FF6600;border:none;border-radius:10px;
+  background:#00843D;border:none;border-radius:10px;
   color:#fff;font-size:15px;font-weight:700;letter-spacing:.2px;
   transition:all .2s;
 }
-.login-btn:hover{background:#E55A00;transform:translateY(-1px);box-shadow:0 6px 22px rgba(255,102,0,.35)}
+.login-btn:hover{background:#006B30;transform:translateY(-1px);box-shadow:0 6px 22px rgba(0,132,61,.35)}
 .login-btn:active{transform:translateY(0)}
 .login-btn-tour{
   width:100%;margin-top:8px;padding:11px;
@@ -139,7 +139,7 @@ button{font-family:Inter,sans-serif;cursor:pointer}
   margin-bottom:26px;padding-bottom:22px;
   border-bottom:1px solid #E8F2EA;
 }
-.lb-accent{width:5px;height:44px;background:#FF6600;border-radius:3px;flex-shrink:0}
+.lb-accent{width:5px;height:44px;background:#00843D;border-radius:3px;flex-shrink:0}
 .localiza-logo-img{height:38px;object-fit:contain;display:block}
 
 /* ── LABEL DE SEÇÃO NA INTRO ── */
@@ -165,7 +165,7 @@ button{font-family:Inter,sans-serif;cursor:pointer}
   display:flex;align-items:center;gap:9px;
 }
 .lvb-check{
-  color:#FF6600;font-weight:900;font-size:13px;flex-shrink:0;width:14px;text-align:center;
+  color:#00843D;font-weight:900;font-size:13px;flex-shrink:0;width:14px;text-align:center;
 }
 
 /* ── RESUMO DA FROTA (PAINEL DIREITO) ── */
@@ -207,7 +207,7 @@ button{font-family:Inter,sans-serif;cursor:pointer}
   position:sticky;top:0;z-index:200;
 }
 .tb-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.tb-logo-accent{width:4px;height:30px;background:#FF6600;border-radius:2px;flex-shrink:0}
+.tb-logo-accent{width:4px;height:30px;background:#00843D;border-radius:2px;flex-shrink:0}
 .tb-logo-name{font-size:16px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1.1}
 .tb-logo-name em{color:rgba(255,255,255,.7);font-style:normal;font-weight:400}
 .tb-logo-sub{font-size:10px;color:rgba(255,255,255,.4);font-weight:500}
@@ -1086,7 +1086,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 .fc-estr-cmp-item strong{font-size:13px;font-weight:700;color:var(--green-l)}
 .fc-estr-cmp-item strong.neg{color:var(--red)}
 /* Modal */
-#fcModalOverlay{
+#fcModalOverlay,#checklistModalOverlay{
   position:fixed;inset:0;z-index:8000;
   background:rgba(0,0,0,.55);backdrop-filter:blur(3px);
   display:flex;align-items:center;justify-content:center;
@@ -1303,6 +1303,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
       </button>
       <div class="tb-separator"></div>
       <button class="tb-btn" id="presBtn" onclick="togglePresentation()" title="Ocultar campos de entrada para apresentação"><span class="btn-txt">Apresentação</span></button>
+      <button class="tb-btn" onclick="downloadChecklist()" title="Baixar ficha de levantamento de dados para enviar ao cliente">📋 <span class="btn-txt">Checklist</span></button>
       <button class="tb-btn" onclick="startTour()" title="Tour guiado — conheça a ferramenta">▶ Tour</button>
       <div class="theme-btn" id="themeBtn" title="Alternar tema"><div class="tt-k" id="ttK">🌙</div></div>
     </div>
@@ -1534,6 +1535,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
             <div class="input-wrap">
               <select id="modoDepreciacao" onchange="autoDepr();calc()">
                 <option value="contabil" selected>Contábil / Fiscal (20% a.a.)</option>
+                <option value="utilitario">Utilitário / Fiscal (25% a.a.)</option>
                 <option value="real">Real / Mercado</option>
               </select>
             </div>
@@ -1862,7 +1864,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
             <div><div class="ev-card-title">Depreciação</div><div class="ev-card-sub">Perda de valor anual do ativo</div></div>
           </div>
           <div class="ev-card-body">
-            <div class="ev-frow"><div class="ev-flabel">Tipo <span class="tip" data-tip="Contábil: 20% a.a. (RIR/2018). Real: desvalorização de mercado (FIPE).">?</span></div><div class="input-wrap"><select id="ev_modoDepreciacao" onchange="autoDeprEV();calcEV()"><option value="contabil" selected>Contábil (20%)</option><option value="real">Real / Mercado</option></select></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Tipo <span class="tip" data-tip="Contábil: 20% a.a. (RIR/2018). Real: desvalorização de mercado (FIPE).">?</span></div><div class="input-wrap"><select id="ev_modoDepreciacao" onchange="autoDeprEV();calcEV()"><option value="contabil" selected>Contábil (20%)</option><option value="utilitario">Utilitário (25%)</option><option value="real">Real / Mercado</option></select></div></div>
             <div class="ev-frow" id="ev_boxDeprReal" style="display:none"><div class="ev-flabel">Taxa real</div><div class="input-wrap"><input id="ev_depreciacaoPct" type="number" value="10" step="0.1" oninput="calcEV()"/><div class="input-unit">%a.a.</div></div></div>
             <div class="ev-sub"><label>Depreciação anual</label><strong id="ev_outDepr">R$ 0</strong></div>
           </div>
@@ -2133,7 +2135,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="fc-fsec-title">Depreciação</div>
         <div class="fc-grid fc-g2">
           <div class="fc-fg"><label>Modo</label>
-            <div class="input-wrap"><select id="fc_modoDepreciacao" onchange="fcToggleDepr()"><option value="contabil" selected>Contábil / Fiscal (20% a.a.)</option><option value="real">Real / Mercado</option></select></div></div>
+            <div class="input-wrap"><select id="fc_modoDepreciacao" onchange="fcToggleDepr()"><option value="contabil" selected>Contábil / Fiscal (20% a.a.)</option><option value="utilitario">Utilitário / Fiscal (25% a.a.)</option><option value="real">Real / Mercado</option></select></div></div>
           <div class="fc-fg" id="fc_boxDeprReal" style="display:none"><label>Taxa real</label>
             <div class="input-wrap"><input id="fc_depreciacaoPct" type="number" value="0" step="0.5"/><div class="input-unit">% a.a.</div></div></div>
         </div>
@@ -2167,6 +2169,24 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
     <div class="fc-modal-foot">
       <button class="fc-modal-cancel" onclick="closeModalModelo()">Cancelar</button>
       <button class="fc-modal-save" onclick="saveModelo()">Salvar Modelo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL — CHECKLIST PARA CLIENTE ═══ -->
+<div id="checklistModalOverlay" style="display:none" onclick="if(event.target===this)closeChecklistModal()">
+  <div class="fc-modal" style="max-width:500px">
+    <div class="fc-modal-head">
+      <span class="fc-modal-head-title">📋 Checklist para o Cliente</span>
+      <button class="fc-modal-close" onclick="closeChecklistModal()">×</button>
+    </div>
+    <div class="fc-modal-body">
+      <p style="font-size:11px;color:var(--muted);margin-bottom:12px">Copie e cole no Teams ou WhatsApp antes da reunião com o cliente.</p>
+      <pre id="checklistText" style="font-family:Inter,sans-serif;font-size:12px;color:var(--text);background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;white-space:pre-wrap;line-height:1.75;cursor:text;user-select:text"></pre>
+    </div>
+    <div class="fc-modal-foot">
+      <button class="fc-modal-cancel" onclick="closeChecklistModal()">Fechar</button>
+      <button class="fc-modal-save" id="checklistCopyBtn" onclick="copyChecklistText()">📋 Copiar texto</button>
     </div>
   </div>
 </div>
@@ -2396,6 +2416,52 @@ function goToStart() {
 }
 
 /* ══════════════════════════════════════════
+   CHECKLIST DE DADOS — CÓPIA PARA TEAMS
+══════════════════════════════════════════ */
+const CHECKLIST_TEXTO =
+`Olá! Antes da nossa reunião, preciso de algumas informações para montar a análise de frota. Me passa o que tiver disponível:
+
+🚗 VEÍCULO
+• Modelo / versão desejado
+• Preço de tabela (R$)
+• Desconto que vocês costumam conseguir na compra (%)
+• Percentual de entrada que a empresa colocaria (%)
+• Estado onde os veículos serão emplacados
+• Quantidade de veículos
+
+💰 FINANCIAMENTO
+• Prazo desejado (à vista, 12, 24, 36, 48 ou 60 meses)
+• Taxa de juros do banco de vocês (% a.m.) — se já tiver cotação
+• Rentabilidade do caixa/investimentos da empresa (% a.a.)
+
+🔧 CUSTOS OPERACIONAIS (valores atuais ou estimativas)
+• Manutenção média anual (% do valor do veículo ou R$)
+• Seguro anual (% do valor do veículo ou R$)
+• Gasto com mobilidade alternativa quando o veículo fica parado — Uber, aluguel avulso (R$/ano)
+• Custo de administração de frota por mês — sistemas, RH, multas (R$)
+
+📋 FISCAL
+• Regime tributário: Lucro Real ou Lucro Presumido?
+• O veículo é usado na atividade-fim da empresa?
+
+Com isso monto uma análise completa antes da nossa conversa! 👍`;
+
+function downloadChecklist() {
+  el('checklistText').textContent = CHECKLIST_TEXTO;
+  el('checklistModalOverlay').style.display = 'flex';
+}
+function closeChecklistModal() {
+  el('checklistModalOverlay').style.display = 'none';
+}
+function copyChecklistText() {
+  navigator.clipboard.writeText(CHECKLIST_TEXTO).then(() => {
+    const btn = el('checklistCopyBtn');
+    btn.textContent = '✓ Copiado!';
+    setTimeout(() => { btn.textContent = '📋 Copiar texto'; }, 2000);
+  });
+}
+
+/* ══════════════════════════════════════════
    MODO APRESENTAÇÃO
 ══════════════════════════════════════════ */
 function togglePresentation() {
@@ -2494,14 +2560,14 @@ function calc() {
   const opAno   = manut + seg + ipva + lic + parad + admF;
 
   /* ── Depreciação ── */
-  const deprPct = el("modoDepreciacao").value === "contabil" ? 20 : (n("depreciacaoPct") || 10);
+  const deprPct = el("modoDepreciacao").value === "contabil" ? 20 : el("modoDepreciacao").value === "utilitario" ? 25 : (n("depreciacaoPct") || 10);
   const deprA   = vV * pc(deprPct);
   const revnd   = Math.max(0, vV - deprA - saldo);
 
   /* ── Tributos Frota ── */
   const basePis = perfil === "real" ? Math.max(0, manut + deprA) : 0;
-  const baseIr  = perfil === "real" ? Math.max(0, admF + deprA)  : 0;
   const pisP    = basePis * pc(n("pisPropPct"));
+  const baseIr  = perfil === "real" ? Math.max(0, manut + deprA - pisP) : 0;
   const irjP    = baseIr  * pc(n("irpjPropPct"));
   const cslP    = baseIr  * pc(n("csllPropPct"));
   const tribP   = pisP + irjP + cslP;
@@ -3139,14 +3205,14 @@ function calcEV() {
   const opAno  = manut + seg + ipva + lic + parad + admF;
 
   /* Depreciação */
-  const deprPct = el("ev_modoDepreciacao").value === "contabil" ? 20 : (nEV("depreciacaoPct") || 10);
+  const deprPct = el("ev_modoDepreciacao").value === "contabil" ? 20 : el("ev_modoDepreciacao").value === "utilitario" ? 25 : (nEV("depreciacaoPct") || 10);
   const deprA   = vV * pc(deprPct);
   const revnd   = Math.max(0, vV - deprA - saldo);
 
   /* Tributos Frota */
   const basePis = evPerfil === "real" ? Math.max(0, manut + deprA) : 0;
-  const baseIr  = evPerfil === "real" ? Math.max(0, admF + deprA)  : 0;
   const pisP    = basePis * pc(nEV("pisPropPct"));
+  const baseIr  = evPerfil === "real" ? Math.max(0, manut + deprA - pisP) : 0;
   const irjP    = baseIr  * pc(nEV("irpjPropPct"));
   const cslP    = baseIr  * pc(nEV("csllPropPct"));
   const tribP   = pisP + irjP + cslP;
@@ -3672,13 +3738,13 @@ function calcModelo(m, perfil) {
   const admF   = (+m.admFrotaMensal || 0) * 12;
   const opAno  = manut + seg + ipva + lic + parad + admF;
 
-  const deprPct = m.modoDepreciacao === "contabil" ? 20 : (+m.depreciacaoPct || 10);
+  const deprPct = m.modoDepreciacao === "contabil" ? 20 : m.modoDepreciacao === "utilitario" ? 25 : (+m.depreciacaoPct || 10);
   const deprA   = vV * pc(deprPct);
   const revnd   = Math.max(0, vV - deprA - saldo);
 
   const basePis = perfil === "real" ? Math.max(0, manut + deprA) : 0;
-  const baseIr  = perfil === "real" ? Math.max(0, admF + deprA)  : 0;
   const pisP    = basePis * pc(+m.pisPropPct || 0);
+  const baseIr  = perfil === "real" ? Math.max(0, manut + deprA - pisP) : 0;
   const irjP    = baseIr  * pc(+m.irpjPropPct || 0);
   const cslP    = baseIr  * pc(+m.csllPropPct || 0);
   const tribP   = pisP + irjP + cslP;
