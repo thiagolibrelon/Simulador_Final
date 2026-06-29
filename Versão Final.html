@@ -2229,7 +2229,7 @@ let lastCalc = {};
 const el  = id => document.getElementById(id);
 const n   = id => { const e = el(id); return e ? (Number(e.value) || 0) : 0; };
 const pc  = v => v / 100;
-const R   = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+const R   = v => isNaN(v) ? "—" : v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
 const R2  = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2,maximumFractionDigits:2});
 const Pct = v => Math.abs(v).toFixed(1).replace(".",",") + "%";
 
@@ -2903,7 +2903,7 @@ body{
 <!-- DISCLAIMER -->
 <div class="disc">
   <span style="font-size:15px;flex-shrink:0">⚠️</span>
-  <div><strong>DOCUMENTO DE SIMULAÇÃO</strong> — Estimativa comparativa para fins analíticos. Não constitui proposta comercial, consultoria financeira ou parecer tributário. Valores baseados nos parâmetros inseridos e podem divergir da realidade. Consulte seu contador antes de qualquer decisão.</div>
+  <div><strong>DOCUMENTO DE SIMULAÇÃO – MATERIAL NÃO VINCULANTE.</strong> Este relatório tem finalidade exclusivamente informativa e comparativa, com base nos parâmetros inseridos no simulador. Não constitui proposta comercial, oferta, orçamento, recomendação financeira, consultoria jurídica ou tributária, nem gera obrigação de contratação para a Localiza&amp;Co ou suas afiliadas. Os valores, premissas e economias estimadas são meramente indicativos e podem variar conforme condições comerciais, disponibilidade, perfil do cliente, análise cadastral e regras fiscais aplicáveis. Qualquer contratação dependerá de proposta comercial formal, específica e válida, emitida pelos canais autorizados da Localiza&amp;Co.</div>
 </div>
 
 <!-- RESUMO EXECUTIVO -->
@@ -3050,7 +3050,7 @@ ${qtdVeiculos > 1 ? `
     </div>
   </div>
   <div class="footer-disc">
-    Este documento é uma estimativa comparativa e não substitui consultoria financeira, jurídica ou tributária. Consulte seu contador antes de tomar decisões de gestão de frota.
+    Material não vinculante. Veja o aviso completo no início deste documento.
   </div>
 </div>
 
@@ -3416,7 +3416,7 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
   <div class="hl"><div class="lsq">L&</div><div><div class="ltx">Localiza<em>&Co</em></div><div class="lsb">Simulador de Frota · Análise Detalhada</div><div class="evt">Análise Técnica Completa</div></div></div>
   <div style="text-align:right">${logoClientHTML}${nomeClientHTML}<div class="meta" style="margin-top:6px"><div>Data: <strong>${agora}</strong></div><div>Executivo de Vendas: <strong>${loginMatricula||"—"}</strong></div><div>Cliente: <strong>${clientName||loginCodigo||"—"}</strong></div><div>Qtd. Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div><div>Regime: <strong>${perfLabel}</strong></div></div></div>
 </div>
-<div class="disc"><span style="font-size:14px;flex-shrink:0">⚠️</span><div><strong>SIMULAÇÃO INTERNA</strong> — Estimativa comparativa para uso do EV. Não constitui proposta comercial nem consultoria tributária.</div></div>
+<div class="disc"><span style="font-size:14px;flex-shrink:0">⚠️</span><div><strong>DOCUMENTO DE SIMULAÇÃO – MATERIAL NÃO VINCULANTE.</strong> Este relatório tem finalidade exclusivamente informativa e comparativa, com base nos parâmetros inseridos no simulador. Não constitui proposta comercial, oferta, orçamento, recomendação financeira, consultoria jurídica ou tributária, nem gera obrigação de contratação para a Localiza&amp;Co ou suas afiliadas. Os valores, premissas e economias estimadas são meramente indicativos e podem variar conforme condições comerciais, disponibilidade, perfil do cliente, análise cadastral e regras fiscais aplicáveis. Qualquer contratação dependerá de proposta comercial formal, específica e válida, emitida pelos canais autorizados da Localiza&amp;Co.</div></div>
 <div class="st">Resumo Executivo</div>
 <div style="background:#F2F2F2;border:1px solid #E6E6E6;border-radius:9px;padding:14px 16px;margin-bottom:16px">
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
@@ -3487,7 +3487,7 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
 <div class="concl"><div class="conclt">Análise Comparativa — ${clientName || "Simulação"}</div><div class="conclp">${conclusao}</div></div>
 <div class="ft">
   <div class="ftl"><div class="ftlg">L&</div><div><div class="ftb">Localiza&Co · Análise Detalhada</div><div class="fts">${agora}${clientName?" · "+clientName:""}</div></div></div>
-  <div class="ftd">Documento de uso interno. Não substitui consultoria financeira ou tributária.</div>
+  <div class="ftd">Material não vinculante. Veja o aviso completo no início deste documento.</div>
 </div>
 </div>
 <script>window.onload=()=>window.print()<\/script>
@@ -4109,7 +4109,10 @@ td{padding:6px 9px;border-bottom:1px solid #eee}tr:nth-child(even)td{background:
 <table><thead><tr><th>Categoria</th><th>Qtd</th><th>Própria/un.</th><th>Locação/un.</th><th>Recomendação</th><th>Custo Ótimo Total</th></tr></thead>
 <tbody>${rows}</tbody></table>
 <p class="note">Custo Ótimo = menor custo unitário por categoria × quantidade. A estratégia ótima pode combinar locação e compra conforme o perfil de cada modelo.</p>
-<div class="footer">Simulador Estratégico de Frota · Localiza&amp;Co · Documento de uso interno. Não substitui consultoria financeira ou tributária.</div>
+<div style="background:#FFFBEC;border:1px solid rgba(200,160,0,.3);border-left:4px solid #4A4A4A;border-radius:6px;padding:12px 14px;margin-top:24px;font-size:8pt;color:#4A4A4A;line-height:1.6">
+<strong>DOCUMENTO DE SIMULAÇÃO – MATERIAL NÃO VINCULANTE.</strong> Este relatório tem finalidade exclusivamente informativa e comparativa, com base nos parâmetros inseridos no simulador. Não constitui proposta comercial, oferta, orçamento, recomendação financeira, consultoria jurídica ou tributária, nem gera obrigação de contratação para a Localiza&amp;Co ou suas afiliadas. Os valores, premissas e economias estimadas são meramente indicativos e podem variar conforme condições comerciais, disponibilidade, perfil do cliente, análise cadastral e regras fiscais aplicáveis. Qualquer contratação dependerá de proposta comercial formal, específica e válida, emitida pelos canais autorizados da Localiza&amp;Co.
+</div>
+<div class="footer">Simulador Estratégico de Frota · Localiza&amp;Co · Material não vinculante. Veja o aviso acima.</div>
 <script>window.onload=()=>window.print()<\/script>
 </body></html>`);
   w.document.close();
