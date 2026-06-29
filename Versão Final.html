@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR" data-theme="light">
 <head>
 <meta charset="UTF-8"/>
@@ -1144,7 +1144,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 /* FC card (lista de modelos) */
 .fc-card{background:var(--s1);border:2px solid var(--bd);border-radius:12px;overflow:hidden;transition:border-color .25s}
 .fc-card.venc-aluguel{border-color:var(--green-bd)}
-.fc-card.venc-propria{border-color:var(--orange,#FF6600)}
+.fc-card.venc-propria{border-color:#C0392B}
 .fc-card-head{padding:9px 12px;background:var(--s2);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:8px}
 .fc-card-title{font-size:13px;font-weight:700;color:var(--text)}
 .fc-card-qty{font-size:11px;color:var(--muted);margin-top:1px}
@@ -1163,8 +1163,8 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 .fc-card-badge.aluguel .fc-badge-icon{color:var(--green-l)}
 .fc-card-badge.aluguel .fc-badge-label{color:var(--green-tx)}
 .fc-card-badge.aluguel .fc-badge-eco{color:var(--green-l)}
-.fc-card-badge.propria{background:rgba(255,102,0,.08);border:1px solid rgba(255,102,0,.25)}
-.fc-card-badge.propria .fc-badge-icon,.fc-card-badge.propria .fc-badge-label,.fc-card-badge.propria .fc-badge-eco{color:#FF6600}
+.fc-card-badge.propria{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.25)}
+.fc-card-badge.propria .fc-badge-icon,.fc-card-badge.propria .fc-badge-label,.fc-card-badge.propria .fc-badge-eco{color:#C0392B}
 .fc-card-badge.empate{background:var(--s2);border:1px solid var(--bd2)}
 .fc-card-badge.empate .fc-badge-icon,.fc-card-badge.empate .fc-badge-label,.fc-card-badge.empate .fc-badge-eco{color:var(--muted)}
 .fc-badge-left{display:flex;align-items:center;gap:6px}
@@ -1176,7 +1176,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 .fc-dash-empty{background:var(--s1);border:2px dashed var(--bd2);border-radius:12px;padding:48px 24px;text-align:center;color:var(--muted);font-size:13px;display:flex;flex-direction:column;align-items:center;gap:10px}
 .fc-dash-hero{border-radius:12px;padding:16px 20px;background:linear-gradient(135deg,var(--topbar-a),var(--topbar-b))}
 .fc-dash-hero.aluguel{background:linear-gradient(135deg,#003418,#018444)}
-.fc-dash-hero.propria{background:linear-gradient(135deg,#a63a00,#FF6600)}
+.fc-dash-hero.propria{background:linear-gradient(135deg,#7B1A1A,#C0392B)}
 .fc-dash-hero.empate{background:linear-gradient(135deg,#555,#888)}
 .fc-dash-hero-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px}
 .fc-dash-hero-sub{font-size:11px;color:rgba(255,255,255,.8)}
@@ -1212,7 +1212,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 .fc-ch-bar-label{font-size:10px;color:var(--muted);font-weight:600}
 .fc-ch-track{height:8px;background:var(--s2);border-radius:4px;overflow:hidden;position:relative}
 .fc-ch-bar{height:100%;border-radius:4px;transition:width .5s cubic-bezier(.22,1,.36,1)}
-.fc-ch-bar.orange{background:#FF6600}
+.fc-ch-bar.orange{background:#C0392B}
 .fc-ch-bar.green{background:#78DE1F}
 .fc-ch-val{font-size:10px;font-weight:700;color:var(--text);text-align:right;white-space:nowrap}
 @media(max-width:1100px){.fc-layout{grid-template-columns:1fr}.fc-kpi-grid{grid-template-columns:1fr 1fr}}
@@ -2848,7 +2848,7 @@ body{
 .cl.total strong{font-size:19px;font-weight:800;color:#018444;font-family:'Playfair Display',serif}
 .barmini{height:4px;background:#E6E6E6;border-radius:2px;margin-top:3px;overflow:hidden}
 .bf{height:100%;border-radius:2px;background:#018444}
-.bf.orange{background:#FF8C00}
+.bf.orange{background:#C0392B}
 /* CONCLUSION */
 .concl{
   background:#F2F2F2;border:1px solid #E6E6E6;
@@ -3019,8 +3019,8 @@ body{
 ${qtdVeiculos > 1 ? `
 <!-- IMPACTO DA FROTA -->
 <div class="stitle">Impacto Consolidado da Frota</div>
-<div style="background:#FFF7F2;border:1px solid rgba(255,102,0,.25);border-left:4px solid #FF6600;border-radius:8px;padding:16px 18px;margin-bottom:24px">
-  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#CC5200;margin-bottom:12px">Frota de ${qtdVeiculos} Veículos · Projeção Anual</div>
+<div style="background:#EAF7EE;border:1px solid rgba(0,132,61,.25);border-left:4px solid #00843D;border-radius:8px;padding:16px 18px;margin-bottom:24px">
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#00843D;margin-bottom:12px">Frota de ${qtdVeiculos} Veículos · Projeção Anual</div>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
     <div style="text-align:center">
       <div style="font-size:10px;color:#7A5500;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Custo Total — Frota Própria</div>
@@ -3032,7 +3032,7 @@ ${qtdVeiculos > 1 ? `
       <div style="font-size:20px;font-weight:800;color:#4A4A4A;letter-spacing:-1px;font-family:'Playfair Display',serif">${R(c.cAlq * qtdVeiculos)}</div>
       <div style="font-size:10px;color:#7A5500;margin-top:2px">por ano</div>
     </div>
-    <div style="text-align:center;background:#FF6600;border-radius:8px;padding:10px">
+    <div style="text-align:center;background:${c.venc === 'propria' ? '#C0392B' : '#00843D'};border-radius:8px;padding:10px">
       <div style="font-size:10px;color:rgba(255,255,255,.8);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">${c.venc === "aluguel" ? "Economia c/ Locação" : c.venc === "propria" ? "Vantagem Frota Própria" : "Equivalência"}</div>
       <div style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-1px;font-family:'Playfair Display',serif">${R(c.econAbs * qtdVeiculos)}</div>
       <div style="font-size:10px;color:rgba(255,255,255,.75);margin-top:2px">por ano · toda a frota</div>
@@ -3471,7 +3471,7 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
 <div class="cg">
   <div class="cb"><div class="cbt">Frota Própria</div>
     <div class="cl"><span>(+) Aquisição (Ano 1)</span><strong>${R(cc.aqAno)}</strong></div><div class="bm"><div class="bf" style="width:${Math.min(100,cc.aqAno/((cc.aqAno+cc.opAno+cc.deprA)||1)*100).toFixed(0)}%"></div></div>
-    <div class="cl"><span>(+) Operação + Depreciação</span><strong>${R(cc.opAno+cc.deprA)}</strong></div><div class="bm"><div class="bf" style="width:${Math.min(100,(cc.opAno+cc.deprA)/((cc.aqAno+cc.opAno+cc.deprA)||1)*100).toFixed(0)}%;background:#FF8C00"></div></div>
+    <div class="cl"><span>(+) Operação + Depreciação</span><strong>${R(cc.opAno+cc.deprA)}</strong></div><div class="bm"><div class="bf" style="width:${Math.min(100,(cc.opAno+cc.deprA)/((cc.aqAno+cc.opAno+cc.deprA)||1)*100).toFixed(0)}%;background:#C0392B"></div></div>
     <div class="cl neg"><span>(−) Créditos Tributários</span><strong>${R(cc.tribP)}</strong></div>
     <div class="cl neg"><span>(−) Valor de Revenda</span><strong>${R(cc.revnd)}</strong></div>
     <div class="cl tot"><span>= Custo Efetivo</span><strong>${R(cc.fAno)}</strong></div>
@@ -3908,7 +3908,7 @@ function renderFCDashboard(data) {
     const estrategia = r.venc === "aluguel"
       ? "<span style='color:var(--green-tx)'>Locar</span>"
       : r.venc === "propria"
-        ? "<span style='color:#FF6600'>Comprar</span>"
+        ? "<span style='color:#C0392B'>Comprar</span>"
         : "<span style='color:var(--muted)'>Qualquer</span>";
     return `<tr>
       <td>${r.descricao}</td>
