@@ -2911,14 +2911,14 @@ body{
   <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:rgba(255,255,255,.65);margin-bottom:12px">${winnerLabel}</div>
   <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap">
     <div>
-      <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${c.venc === "aluguel" ? "Economia por Veículo / Ano" : c.venc === "propria" ? "Vantagem por Veículo / Ano" : "Diferença por Veículo / Ano"}</div>
-      <div style="font-size:52px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-2.5px;line-height:1">${R(c.econAbs)}</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:8px;font-weight:500">${R(c.econAbs/12)}/mês &nbsp;·&nbsp; por veículo</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${qtdVeiculos > 1 ? (c.venc === "aluguel" ? "Economia Total da Frota / Ano" : c.venc === "propria" ? "Vantagem Total da Frota / Ano" : "Diferença Total da Frota / Ano") : (c.venc === "aluguel" ? "Economia por Veículo / Ano" : c.venc === "propria" ? "Vantagem por Veículo / Ano" : "Diferença por Veículo / Ano")}</div>
+      <div style="font-size:52px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-2.5px;line-height:1">${qtdVeiculos > 1 ? R(c.econAbs * qtdVeiculos) : R(c.econAbs)}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:8px;font-weight:500">${qtdVeiculos > 1 ? qtdVeiculos + " veículos · " + R(c.econAbs * qtdVeiculos / 12) + "/mês" : R(c.econAbs/12) + "/mês · por veículo"}</div>
     </div>
     ${qtdVeiculos > 1 ? `<div style="text-align:right;border-left:1px solid rgba(255,255,255,.2);padding-left:24px">
-      <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Economia Total da Frota / Ano</div>
-      <div style="font-size:38px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-1.5px;line-height:1">${R(c.econAbs * qtdVeiculos)}</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:8px;font-weight:500">${qtdVeiculos} veículos &nbsp;·&nbsp; ${R(c.econAbs * qtdVeiculos / 12)}/mês</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Por Veículo / Ano</div>
+      <div style="font-size:32px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-1.5px;line-height:1">${R(c.econAbs)}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:8px;font-weight:500">${R(c.econAbs/12)}/mês &nbsp;·&nbsp; por unidade</div>
     </div>` : ""}
   </div>
 </div>
