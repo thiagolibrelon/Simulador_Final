@@ -2722,13 +2722,15 @@ function calc() {
 /* ══════════════════════════════════════════
    TEXTO DE CONCLUSÃO
 ══════════════════════════════════════════ */
-function gerarConclusao(c) {
-  const pctSav = c.fAno > 0 ? ((c.econAbs / c.fAno) * 100).toFixed(1).replace(".",",") : "0";
-  const regime = c.perfil === "real" ? "Lucro Real" : "Lucro Presumido";
+function gerarConclusao(c, qtd) {
+  const pctSav  = c.fAno > 0 ? ((c.econAbs / c.fAno) * 100).toFixed(1).replace(".",",") : "0";
+  const regime  = c.perfil === "real" ? "Lucro Real" : "Lucro Presumido";
+  const perVeic = qtd > 1 ? " por veículo" : "";
+  const frotaTxt = qtd > 1 ? ` Para o total da frota (${qtd} veículos), a diferença projetada é de ${R(c.econAbs * qtd)} ao ano.` : "";
   if (c.venc === "aluguel") {
-    return `Neste cenário de ${regime}, a locação apresenta uma economia anual estimada de ${R(c.econAbs)} (${pctSav}% sobre o custo total da frota própria), reduzindo a exposição à depreciação, custos administrativos e imobilização de capital. A terceirização transforma CAPEX em OPEX previsível, libera capital de giro e elimina riscos operacionais de gestão de frota, permitindo que a empresa concentre recursos em seu negócio principal.`;
+    return `Neste cenário de ${regime}, a locação apresenta uma economia anual estimada de ${R(c.econAbs)}${perVeic} (${pctSav}% sobre o custo total da frota própria), reduzindo a exposição à depreciação, custos administrativos e imobilização de capital.${frotaTxt} A terceirização transforma CAPEX em OPEX previsível, libera capital de giro e elimina riscos operacionais de gestão de frota, permitindo que a empresa concentre recursos em seu negócio principal.`;
   } else if (c.venc === "propria") {
-    return `Neste cenário de ${regime}, a frota própria apresenta melhor desempenho econômico, com uma diferença de ${R(c.econAbs)} ao ano (${pctSav}% abaixo do custo de locação). Recomenda-se, ainda assim, considerar aspectos qualitativos como carga administrativa de gestão de frota, risco de obsolescência do ativo e imobilização de capital antes de uma decisão definitiva.`;
+    return `Neste cenário de ${regime}, a frota própria apresenta melhor desempenho econômico, com uma diferença de ${R(c.econAbs)}${perVeic} ao ano (${pctSav}% abaixo do custo de locação).${frotaTxt} Recomenda-se, ainda assim, considerar aspectos qualitativos como carga administrativa de gestão de frota, risco de obsolescência do ativo e imobilização de capital antes de uma decisão definitiva.`;
   }
   return `Os cenários analisados apresentam resultado economicamente equivalente (diferença inferior a R$ 50). A decisão entre frota própria e locação deve considerar fatores estratégicos: flexibilidade operacional, previsibilidade de custos, foco no negócio principal e gestão de ativos.`;
 }
@@ -2742,7 +2744,7 @@ function exportPDF() {
 
   const agora      = new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   const perfLabel  = perfil === "real" ? "Lucro Real" : "Lucro Presumido";
-  const conclusao  = gerarConclusao(c);
+  const conclusao  = gerarConclusao(c, qtdVeiculos);
   const logoClientHTML = clientLogoData
     ? `<img src="${clientLogoData}" style="max-height:50px;max-width:130px;object-fit:contain;display:block;margin-bottom:4px" alt="Logo Cliente"/>`
     : "";
@@ -3278,7 +3280,9 @@ function exportPDFEV() {
 
   const agora      = new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   const perfLabel  = evPerfil === "real" ? "Lucro Real" : "Lucro Presumido";
-  const conclusao  = gerarConclusao(cc);
+  const conclusao  = gerarConclusao(cc, qtdVeiculos);
+  const fx    = v => qtdVeiculos > 1 ? `<div style="font-size:8.5px;color:#919191;text-align:right;margin-top:-3px">Frota (${qtdVeiculos}×): ${R(v*qtdVeiculos)}</div>` : "";
+  const fxTot = v => qtdVeiculos > 1 ? `<div style="font-size:10px;color:#018444;font-weight:700;text-align:right;margin-top:2px">Frota (${qtdVeiculos}×): ${R(v*qtdVeiculos)}</div>` : "";
   const logoClientHTML = clientLogoData
     ? `<img src="${clientLogoData}" style="max-height:44px;max-width:110px;object-fit:contain;display:block;margin-bottom:4px" alt=""/>`
     : "";
@@ -3311,20 +3315,6 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
 .lsb{font-size:10px;color:#6E6E6E}.evt{display:inline-flex;background:#EAF7EE;border:1px solid rgba(120,222,31,.2);color:#018444;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;margin-top:3px}
 .meta{font-size:11px;color:#6E6E6E;line-height:1.75}.meta strong{color:#4A4A4A;font-weight:600}
 .disc{background:#FFFBEC;border:1px solid rgba(200,160,0,.3);border-radius:7px;padding:8px 12px;margin-bottom:18px;font-size:11px;color:#7A5000;display:flex;align-items:flex-start;gap:7px}
-.kr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
-.kc{background:#F2F2F2;border:1px solid #E6E6E6;border-radius:9px;padding:12px;text-align:center}
-.kc.w{background:#018444;border-color:#018444}
-.kc.w .kl,.kc.w .kv,.kc.w .ks{color:#fff}
-.kl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#6E6E6E;margin-bottom:4px}
-.kv{font-size:21px;font-weight:800;letter-spacing:-1.2px;color:#4A4A4A;font-family:'Playfair Display',serif}
-.ks{font-size:10px;color:#6E6E6E;margin-top:2px}
-.vd{background:${winnerColor};border-radius:10px;padding:16px 20px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
-.vdl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.7);margin-bottom:3px}
-.vdt{font-size:17px;font-weight:800;color:#fff}
-.vdr{text-align:right}
-.vdrl{font-size:9px;color:rgba(255,255,255,.6);margin-bottom:3px}
-.vdrv{font-size:28px;font-weight:900;letter-spacing:-2px;color:#fff;font-family:'Playfair Display',serif}
-.vdrp{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px}
 .st{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#018444;margin-bottom:9px;display:flex;align-items:center;gap:6px}
 .st::after{content:'';flex:1;height:1px;background:#C0D8C6}
 .cg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
@@ -3354,70 +3344,52 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
   <div style="text-align:right">${logoClientHTML}${nomeClientHTML}<div class="meta" style="margin-top:6px"><div>Data: <strong>${agora}</strong></div><div>Executivo de Vendas: <strong>${loginMatricula||"—"}</strong></div><div>Cliente: <strong>${clientName||loginCodigo||"—"}</strong></div><div>Qtd. Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div><div>Regime: <strong>${perfLabel}</strong></div></div></div>
 </div>
 <div class="disc"><span style="font-size:14px;flex-shrink:0">⚠️</span><div><strong>DOCUMENTO DE SIMULAÇÃO – MATERIAL NÃO VINCULANTE.</strong> Este relatório tem finalidade exclusivamente informativa e comparativa, com base nos parâmetros inseridos no simulador. Não constitui proposta comercial, oferta, orçamento, recomendação financeira, consultoria jurídica ou tributária, nem gera obrigação de contratação para a Localiza&amp;Co ou suas afiliadas. Os valores, premissas e economias estimadas são meramente indicativos e podem variar conforme condições comerciais, disponibilidade, perfil do cliente, análise cadastral e regras fiscais aplicáveis. Qualquer contratação dependerá de proposta comercial formal, específica e válida, emitida pelos canais autorizados da Localiza&amp;Co.</div></div>
-<div class="st">Resumo Executivo</div>
-<div style="background:#F2F2F2;border:1px solid #E6E6E6;border-radius:9px;padding:14px 16px;margin-bottom:16px">
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+<div style="background:${winnerColor};border-radius:14px;padding:22px 26px;margin-bottom:16px">
+  <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:rgba(255,255,255,.65);margin-bottom:10px">${winnerLabel}</div>
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap">
     <div>
-      <div style="font-size:10px;color:#6E6E6E;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Qtd. Veículos</div>
-      <div style="font-size:24px;font-weight:900;color:#4A4A4A;font-family:'Playfair Display',serif;letter-spacing:-1px">${qtdVeiculos}</div>
-      <div style="font-size:10px;color:#919191">frota analisada</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">${qtdVeiculos > 1 ? (cc.venc === "aluguel" ? "Economia Total da Frota / Ano" : cc.venc === "propria" ? "Vantagem Total da Frota / Ano" : "Diferença Total da Frota / Ano") : (cc.venc === "aluguel" ? "Economia por Veículo / Ano" : cc.venc === "propria" ? "Vantagem por Veículo / Ano" : "Diferença por Veículo / Ano")}</div>
+      <div style="font-size:46px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-2.2px;line-height:1">${qtdVeiculos > 1 ? R(cc.econAbs * qtdVeiculos) : R(cc.econAbs)}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.75);margin-top:7px;font-weight:500">${qtdVeiculos > 1 ? qtdVeiculos + " veículos · " + R(cc.econAbs * qtdVeiculos / 12) + "/mês" : R(cc.econAbs/12) + "/mês · por veículo"}</div>
     </div>
-    <div>
-      <div style="font-size:10px;color:#6E6E6E;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Custo Unit. — Frota</div>
-      <div style="font-size:18px;font-weight:800;color:#4A4A4A;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(cc.fAno)}</div>
-      <div style="font-size:10px;color:#919191">por veículo / ano</div>
-    </div>
-    <div>
-      <div style="font-size:10px;color:#6E6E6E;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">Custo Unit. — Locação</div>
-      <div style="font-size:18px;font-weight:800;color:#4A4A4A;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(cc.cAlq)}</div>
-      <div style="font-size:10px;color:#919191">por veículo / ano</div>
-    </div>
+    ${qtdVeiculos > 1 ? `<div style="text-align:right;border-left:1px solid rgba(255,255,255,.2);padding-left:20px">
+      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Por Veículo / Ano</div>
+      <div style="font-size:28px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-1.3px;line-height:1">${R(cc.econAbs)}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.75);margin-top:7px;font-weight:500">${R(cc.econAbs/12)}/mês &nbsp;·&nbsp; por unidade</div>
+    </div>` : ""}
   </div>
-  ${qtdVeiculos > 1 ? `
-  <div style="height:1px;background:#E6E6E6;margin:10px 0"></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-    <div style="background:${winnerColor};border-radius:8px;padding:10px;text-align:center">
-      <div style="font-size:9px;color:rgba(255,255,255,.8);font-weight:700;text-transform:uppercase;margin-bottom:3px">${cc.venc==="aluguel"?"Economia Total":"Vantagem Total"}</div>
-      <div style="font-size:18px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-.8px">${R(cc.econAbs*qtdVeiculos)}</div>
-      <div style="font-size:9px;color:rgba(255,255,255,.7);margin-top:2px">${qtdVeiculos} veículos / ano</div>
-    </div>
-    <div>
-      <div style="font-size:9px;color:#6E6E6E;font-weight:700;text-transform:uppercase;margin-bottom:3px">Total — Frota Própria</div>
-      <div style="font-size:16px;font-weight:800;color:#4A4A4A;font-family:'Playfair Display',serif;letter-spacing:-.6px">${R(cc.fAno*qtdVeiculos)}</div>
-      <div style="font-size:9px;color:#919191">${qtdVeiculos} veículos / ano</div>
-    </div>
-    <div>
-      <div style="font-size:9px;color:#6E6E6E;font-weight:700;text-transform:uppercase;margin-bottom:3px">Total — Locação</div>
-      <div style="font-size:16px;font-weight:800;color:#4A4A4A;font-family:'Playfair Display',serif;letter-spacing:-.6px">${R(cc.cAlq*qtdVeiculos)}</div>
-      <div style="font-size:9px;color:#919191">${qtdVeiculos} veículos / ano</div>
-    </div>
-  </div>` : `
-  <div style="height:1px;background:#E6E6E6;margin:10px 0"></div>
-  <div style="background:${winnerColor};border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:space-between">
-    <div style="font-size:10px;color:rgba(255,255,255,.85);font-weight:700;text-transform:uppercase;">${cc.venc==="aluguel"?"Economia Anual":cc.venc==="propria"?"Vantagem Frota":"Equivalência"}</div>
-    <div style="font-size:20px;font-weight:900;color:#fff;font-family:'Playfair Display',serif">${R(cc.econAbs)}</div>
-  </div>`}
 </div>
-<div class="kr">
-  <div class="kc${cc.venc==="propria"?" w":""}"><div class="kl">🚗 Frota Própria</div><div class="kv">${R(cc.fAno)}</div><div class="ks">custo efetivo / ano</div></div>
-  <div class="kc${cc.venc==="aluguel"?" w":""}"><div class="kl">🔑 Locação</div><div class="kv">${R(cc.cAlq)}</div><div class="ks">custo efetivo / ano</div></div>
-  <div class="kc"><div class="kl">💰 Diferença</div><div class="kv" style="color:${winnerColor}">${R(cc.econAbs)}</div><div class="ks">${cc.venc==="aluguel"?"locação mais econômica":cc.venc==="propria"?"frota mais econômica":"equivalência"}</div></div>
+<div style="display:grid;grid-template-columns:${qtdVeiculos > 1 ? "repeat(3,1fr)" : "1fr 1fr"};gap:10px;margin-bottom:18px">
+  ${qtdVeiculos > 1 ? `<div style="background:#F2F2F2;border:1px solid #E6E6E6;border-radius:9px;padding:12px;text-align:center">
+    <div style="font-size:9px;color:#6E6E6E;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Qtd. de Veículos</div>
+    <div style="font-size:22px;font-weight:900;color:#4A4A4A;font-family:'Playfair Display',serif;letter-spacing:-1px">${qtdVeiculos}</div>
+    <div style="font-size:9px;color:#919191;margin-top:2px">frota analisada</div>
+  </div>` : ""}
+  <div style="background:#F2F2F2;border:1px solid #E6E6E6;border-radius:9px;padding:12px;text-align:center">
+    <div style="font-size:9px;color:#6E6E6E;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🚗 Custo Frota Própria</div>
+    <div style="font-size:18px;font-weight:800;color:#4A4A4A;font-family:'Playfair Display',serif;letter-spacing:-.7px">${qtdVeiculos > 1 ? R(cc.fAno * qtdVeiculos) : R(cc.fAno)}</div>
+    <div style="font-size:9px;color:#919191;margin-top:2px">${qtdVeiculos > 1 ? qtdVeiculos + " veículos / ano · " + R(cc.fAno) + "/un." : "por veículo / ano · " + R(cc.fAno/12) + "/mês"}</div>
+  </div>
+  <div style="background:#F2F2F2;border:1px solid #E6E6E6;border-radius:9px;padding:12px;text-align:center">
+    <div style="font-size:9px;color:#6E6E6E;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🔑 Custo Locação</div>
+    <div style="font-size:18px;font-weight:800;color:#4A4A4A;font-family:'Playfair Display',serif;letter-spacing:-.7px">${qtdVeiculos > 1 ? R(cc.cAlq * qtdVeiculos) : R(cc.cAlq)}</div>
+    <div style="font-size:9px;color:#919191;margin-top:2px">${qtdVeiculos > 1 ? qtdVeiculos + " veículos / ano · " + R(cc.cAlq) + "/un." : "por veículo / ano · " + R(cc.cAlq/12) + "/mês"}</div>
+  </div>
 </div>
-<div class="vd"><div><div class="vdl">Resultado da Análise</div><div class="vdt">${winnerLabel}</div></div><div class="vdr"><div class="vdrl">Diferença anual</div><div class="vdrv">${R(cc.econAbs)}</div><div class="vdrp">por ano · ${R(cc.econAbs/12)} / mês</div></div></div>
-<div class="st">Detalhamento dos Custos</div>
+<div class="st">Detalhamento dos Custos${qtdVeiculos > 1 ? ` <span style="font-size:8px;font-weight:600;color:#919191;text-transform:none;letter-spacing:0">(unitário e frota de ${qtdVeiculos})</span>` : ""}</div>
 <div class="cg">
   <div class="cb"><div class="cbt">Frota Própria</div>
-    <div class="cl"><span>(+) Aquisição (Ano 1)</span><strong>${R(cc.aqAno)}</strong></div><div class="bm"><div class="bf" style="width:${Math.min(100,cc.aqAno/((cc.aqAno+cc.opAno+cc.deprA)||1)*100).toFixed(0)}%"></div></div>
-    <div class="cl"><span>(+) Operação + Depreciação</span><strong>${R(cc.opAno+cc.deprA)}</strong></div><div class="bm"><div class="bf" style="width:${Math.min(100,(cc.opAno+cc.deprA)/((cc.aqAno+cc.opAno+cc.deprA)||1)*100).toFixed(0)}%;background:#C0392B"></div></div>
-    <div class="cl neg"><span>(−) Créditos Tributários</span><strong>${R(cc.tribP)}</strong></div>
-    <div class="cl neg"><span>(−) Valor de Revenda</span><strong>${R(cc.revnd)}</strong></div>
-    <div class="cl tot"><span>= Custo Efetivo</span><strong>${R(cc.fAno)}</strong></div>
+    <div class="cl"><span>(+) Aquisição (Ano 1)</span><strong>${R(cc.aqAno)}</strong></div>${fx(cc.aqAno)}<div class="bm"><div class="bf" style="width:${Math.min(100,cc.aqAno/((cc.aqAno+cc.opAno+cc.deprA)||1)*100).toFixed(0)}%"></div></div>
+    <div class="cl"><span>(+) Operação + Depreciação</span><strong>${R(cc.opAno+cc.deprA)}</strong></div>${fx(cc.opAno+cc.deprA)}<div class="bm"><div class="bf" style="width:${Math.min(100,(cc.opAno+cc.deprA)/((cc.aqAno+cc.opAno+cc.deprA)||1)*100).toFixed(0)}%;background:#C0392B"></div></div>
+    <div class="cl neg"><span>(−) Créditos Tributários</span><strong>${R(cc.tribP)}</strong></div>${fx(cc.tribP)}
+    <div class="cl neg"><span>(−) Valor de Revenda</span><strong>${R(cc.revnd)}</strong></div>${fx(cc.revnd)}
+    <div class="cl tot"><span>= Custo Efetivo</span><strong>${R(cc.fAno)}</strong></div>${fxTot(cc.fAno)}
   </div>
   <div class="cb"><div class="cbt">Locação</div>
-    <div class="cl"><span>(+) Aluguel (12×)</span><strong>${R(cc.valP)}</strong></div><div class="bm"><div class="bf" style="width:${Math.min(100,cc.valP/((cc.totAlq)||1)*100).toFixed(0)}%"></div></div>
-    <div class="cl"><span>(+) Administrativo</span><strong>${R(cc.admA)}</strong></div>
-    <div class="cl neg" style="margin-top:6px"><span>(−) Créditos Tributários</span><strong>${R(cc.tribA)}</strong></div>
-    <div class="cl tot"><span>= Custo Efetivo</span><strong>${R(cc.cAlq)}</strong></div>
+    <div class="cl"><span>(+) Aluguel (12×)</span><strong>${R(cc.valP)}</strong></div>${fx(cc.valP)}<div class="bm"><div class="bf" style="width:${Math.min(100,cc.valP/((cc.totAlq)||1)*100).toFixed(0)}%"></div></div>
+    <div class="cl"><span>(+) Administrativo</span><strong>${R(cc.admA)}</strong></div>${fx(cc.admA)}
+    <div class="cl neg" style="margin-top:6px"><span>(−) Créditos Tributários</span><strong>${R(cc.tribA)}</strong></div>${fx(cc.tribA)}
+    <div class="cl tot"><span>= Custo Efetivo</span><strong>${R(cc.cAlq)}</strong></div>${fxTot(cc.cAlq)}
   </div>
 </div>
 <div class="st">Conclusão</div>
