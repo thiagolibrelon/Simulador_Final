@@ -1411,7 +1411,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="step-subtitle">Além do valor investido na compra, é fundamental considerar o custo de oportunidade dos recursos financeiros empregados e o impacto do financiamento sobre o caixa.</div>
 
         <div class="microcopy" id="mc2box">
-          🎯 Se você aplicar <strong id="mc2entrada">R$ 0</strong> no CDI (14,5% a.a.), renderia <strong id="mc2rend">R$ 0</strong> por ano. Comprar o veículo custa exatamente esse rendimento.
+          🎯 Se você aplicar <strong id="mc2entrada">R$ 0</strong> a juros anuais de <strong id="mc2taxa">14,5%</strong>, renderia <strong id="mc2rend">R$ 0</strong> por ano. Comprar o veículo custa exatamente esse rendimento.
         </div>
 
         <div class="field-group">
@@ -1442,7 +1442,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         <div class="field-group">
           <div class="f-label">Custo de oportunidade <span class="tip" data-tip="Rendimento que o capital da entrada teria se aplicado (CDI, Tesouro). É o custo invisível de imobilizar dinheiro no veículo.">?</span></div>
           <div class="input-row">
-            <div class="input-wrap"><input id="oportunidadePct" type="number" value="0" step="0.5" oninput="calc()"/><div class="input-unit">% a.a.</div></div>
+            <div class="input-wrap"><input id="oportunidadePct" type="number" value="14.5" step="0.5" oninput="calc()"/><div class="input-unit">% a.a.</div></div>
             <div class="chip"><div class="chip-l">Custo/ano</div><div class="chip-v r" id="outOportunidade">R$ 0</div></div>
           </div>
         </div>
@@ -1680,7 +1680,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
           <span class="thermo-val" id="th0v">R$ 0</span>
         </div>
         <div class="thermo-track"><div class="thermo-fill tf-acq" id="th0b" style="width:0%"></div></div>
-        <div class="thermo-hint">Entrada + parcelas do ano + custo de oportunidade</div>
+        <div class="thermo-hint">Entrada + parcelas do ano</div>
       </div>
 
       <div class="thermo" id="th1" style="opacity:.3">
@@ -2616,7 +2616,8 @@ function calc() {
   set("mc1entrada",   R(entr));
 
   /* ── Outputs Step 2 ── */
-  set("mc2entrada",       R(entr));
+  set("mc2entrada",       R(baseOp));
+  set("mc2taxa",          Pct(n("oportunidadePct")));
   set("mc2rend",          R(opor));
   set("outParcela",       R2(parc));
   set("outJurosAno",      R(jTot));
@@ -2645,7 +2646,7 @@ function calc() {
   const scale = Math.max(aqAno, jTot + opor, opAno + deprA, tribP, fAno, 1);
   const pct   = v => Math.max(0, Math.min(100, Math.abs(v) / scale * 100)).toFixed(1) + "%";
 
-  set("th0v", R(aqAno));          el("th0b").style.width = pct(aqAno);
+  set("th0v", R(baseOp));         el("th0b").style.width = pct(baseOp);
   set("th1v", R(jTot + opor));    el("th1b").style.width = pct(jTot + opor);
   set("th2v", R(opAno + deprA));  el("th2b").style.width = pct(opAno + deprA);
   set("th3v", R(tribP));          el("th3b").style.width = pct(tribP);
@@ -2846,6 +2847,7 @@ body{
 .cl.total{border-top:2px solid #018444;margin-top:8px;padding-top:10px}
 .cl.total span{font-weight:700;font-size:13px}
 .cl.total strong{font-size:19px;font-weight:800;color:#018444;font-family:'Playfair Display',serif}
+.cl-sub{font-size:10px;color:#919191;padding:2px 0 2px 14px;line-height:1.5}
 .barmini{height:4px;background:#E6E6E6;border-radius:2px;margin-top:3px;overflow:hidden}
 .bf{height:100%;border-radius:2px;background:#018444}
 .bf.orange{background:#C0392B}
@@ -2952,6 +2954,7 @@ body{
     <div class="cl"><span>(+) Operação + Depreciação</span><strong>${R(c.opAno + c.deprA)}</strong></div>
     <div class="barmini"><div class="bf orange" style="width:${barW(c.opAno + c.deprA)}%"></div></div>
     <div class="cl neg"><span>(−) Créditos Tributários</span><strong>${R(c.tribP)}</strong></div>
+    <div class="cl-sub">PIS/COFINS ${R(c.pisP)} · IRPJ ${R(c.irjP)} · CSLL ${R(c.cslP)}</div>
     <div class="cl neg"><span>(−) Valor de Revenda</span><strong>${R(c.revnd)}</strong></div>
     <div class="cl total"><span>= Custo Efetivo</span><strong>${R(c.fAno)}</strong></div>
   </div>
@@ -2960,9 +2963,8 @@ body{
     <div class="cl"><span>(+) Total de Aluguel (12×)</span><strong>${R(c.valP)}</strong></div>
     <div class="barmini"><div class="bf" style="width:${barW(c.valP)}%"></div></div>
     <div class="cl"><span>(+) Custo Administrativo</span><strong>${R(c.admA)}</strong></div>
-    <div class="cl neg" style="margin-top:8px"><span>(−) PIS/COFINS</span><strong>${R(c.pisA)}</strong></div>
-    <div class="cl neg"><span>(−) IRPJ</span><strong>${R(c.irjA)}</strong></div>
-    <div class="cl neg"><span>(−) CSLL</span><strong>${R(c.cslA)}</strong></div>
+    <div class="cl neg" style="margin-top:8px"><span>(−) Créditos Tributários</span><strong>${R(c.tribA)}</strong></div>
+    <div class="cl-sub">PIS/COFINS ${R(c.pisA)} · IRPJ ${R(c.irjA)} · CSLL ${R(c.cslA)}</div>
     <div class="cl total"><span>= Custo Efetivo</span><strong>${R(c.cAlq)}</strong></div>
   </div>
 </div>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"/>
+<title>Glossário — Simulador de Frota</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{max-width:800px;margin:0 auto;padding:36px 42px}
+.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:88px;font-weight:900;color:rgba(120,222,31,.04);pointer-events:none;z-index:0;white-space:nowrap;font-family:'Playfair Display',serif}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;padding-bottom:16px;border-bottom:2px solid rgba(120,222,31,.18)}
+.hl{display:flex;align-items:center;gap:12px}
+.lsq{width:40px;height:40px;background:#018444;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;flex-shrink:0}
+.ltx{font-size:17px;font-weight:800;color:#4A4A4A}.ltx em{color:#018444;font-style:normal}
+.lsb{font-size:10px;color:#6E6E6E}.evt{display:inline-flex;background:#EAF7EE;border:1px solid rgba(120,222,31,.2);color:#018444;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;margin-top:3px}
+.meta{font-size:11px;color:#6E6E6E;line-height:1.75;text-align:right}.meta strong{color:#4A4A4A;font-weight:600}
+.intro{font-size:12px;color:#6E6E6E;line-height:1.7;margin-bottom:20px}
+.st{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#018444;margin:20px 0 9px;display:flex;align-items:center;gap:6px;break-after:avoid}
+.st::after{content:'';flex:1;height:1px;background:#C0D8C6}
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gc{background:#F2F2F2;border:1px solid #E6E6E6;border-radius:9px;padding:11px 13px;break-inside:avoid}
+.gch{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.gci{font-size:13px;flex-shrink:0}
+.gct{font-size:12px;font-weight:700;color:#4A4A4A}
+.gctag{font-size:9px;font-weight:600;color:#018444;background:#EAF7EE;border:1px solid rgba(120,222,31,.2);border-radius:8px;padding:1px 6px;margin-left:auto;white-space:nowrap}
+.gcd{font-size:11px;color:#6E6E6E;line-height:1.55}
+.gcf{margin-top:6px;background:#E9E9E9;border-left:3px solid #018444;padding:4px 8px;font-family:'Fira Code','SF Mono',Consolas,monospace;font-size:10px;color:#016B37;line-height:1.5;border-radius:0 5px 5px 0}
+.ft{padding-top:13px;margin-top:20px;border-top:1px solid #E6E6E6;display:flex;justify-content:space-between;align-items:flex-end}
+.ftl{display:flex;align-items:center;gap:7px}
+.ftlg{width:24px;height:24px;background:#018444;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff}
+.ftb{font-size:11px;font-weight:700;color:#018444}
+.fts{font-size:9px;color:#919191;margin-top:1px}
+.ftd{font-size:9px;color:#B0B0B0;text-align:right;max-width:280px;line-height:1.5}
+.printbar{max-width:800px;margin:12px auto 0;padding:0 42px;text-align:right}
+.printbtn{background:#018444;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif}
+.printbtn:hover{background:#016B37}
+@media print{.page{padding:20px 24px}.wm{position:fixed}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.ggrid{grid-template-columns:1fr 1fr}.printbar{display:none}}
+</style></head><body>
+<div class="wm">GLOSSÁRIO</div>
+<div class="page">
+<div class="hdr">
+  <div class="hl"><div class="lsq">L&</div><div><div class="ltx">Localiza<em>&Co</em></div><div class="lsb">Simulador de Frota · Glossário</div><div class="evt">Referência de Termos</div></div></div>
+  <div class="meta">Documento de referência</div>
+</div>
+<p class="intro">Referência completa de todos os termos, fórmulas e variáveis utilizados no simulador. Use como guia durante a apresentação ao cliente ou para aprofundar a análise financeira.</p>
+
+<div class="st">🚗 Aquisição &amp; Veículo</div>
+<div class="ggrid">
+  <div class="gc">
+    <div class="gch"><span class="gci">🏷️</span><span class="gct">Preço de Tabela</span><span class="gctag">Input</span></div>
+    <div class="gcd">Valor bruto conforme tabela FIPE ou preço de venda antes de qualquer negociação.</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">🤝</span><span class="gct">Desconto Negociado</span><span class="gctag">Input %</span></div>
+    <div class="gcd">Percentual de desconto obtido na compra, aplicado sobre o preço de tabela para chegar ao valor final.</div>
+    <div class="gcf">Valor Final = Preço × (1 − Desconto%)</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">💵</span><span class="gct">Valor da Entrada</span><span class="gctag">Input %</span></div>
+    <div class="gcd">Percentual do valor final pago à vista. Saída imediata de caixa no Dia 1, antes de qualquer utilização.</div>
+    <div class="gcf">Entrada = Valor Final × Entrada%</div>
+  </div>
+</div>
+
+<div class="st">🏦 Financiamento &amp; Oportunidade</div>
+<div class="ggrid">
+  <div class="gc">
+    <div class="gch"><span class="gci">📈</span><span class="gct">Juros Mensais</span><span class="gctag">Input % a.m.</span></div>
+    <div class="gcd">Taxa de juros do financiamento calculada pelo método Price (parcelas fixas). Use 0 para compra sem juros.</div>
+    <div class="gcf">Parcela = PV × [i(1+i)ⁿ / ((1+i)ⁿ−1)]</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">🎯</span><span class="gct">Custo de Oportunidade</span><span class="gctag">Input % a.a.</span></div>
+    <div class="gcd">Rendimento perdido ao imobilizar capital no veículo em vez de aplicá-lo (CDI, Tesouro Direto). Custo invisível da compra.</div>
+    <div class="gcf">Custo = (Entrada + Parcelas_Ano) × Taxa%</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">🧾</span><span class="gct">Custo de Aquisição / Ano</span><span class="gctag">Calculado</span></div>
+    <div class="gcd">Todos os desembolsos de compra no primeiro ano: entrada, parcelas pagas e custo de oportunidade do capital imobilizado.</div>
+    <div class="gcf">Aq.Ano = Entrada + Parcelas_Ano + Oportunidade</div>
+  </div>
+</div>
+
+<div class="st">🔧 Custos Operacionais</div>
+<div class="ggrid">
+  <div class="gc">
+    <div class="gch"><span class="gci">🔩</span><span class="gct">Manutenção</span><span class="gctag">Slider %</span></div>
+    <div class="gcd">Custo anual com revisões, pneus, peças e mão de obra. Referência: 1,5–2,5% a.a. sobre o valor do veículo.</div>
+    <div class="gcf">Manutenção = Valor Veículo × Taxa%</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">🛡️</span><span class="gct">Seguro Anual</span><span class="gctag">Slider %</span></div>
+    <div class="gcd">Prêmio anual contra danos, furto e responsabilidade civil. Varia por perfil, uso e cobertura. Referência: 2–4% a.a.</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">🏛️</span><span class="gct">IPVA</span><span class="gctag">Por estado</span></div>
+    <div class="gcd">Imposto estadual sobre propriedade de veículos. Alíquota preenchida automaticamente conforme o estado selecionado.</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">⏸️</span><span class="gct">Custo de Indisponibilidade</span><span class="gctag">R$/ano</span></div>
+    <div class="gcd">Gasto para manter a operação durante manutenção, sinistro ou pane do veículo próprio (aluguel temporário, Uber, táxi).</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">📉</span><span class="gct">Depreciação</span><span class="gctag">Calculado</span></div>
+    <div class="gcd">Contábil/Fiscal: 20% a.a. (RIR/2018). Real/Mercado: 8–15% conforme FIPE. Impacta o valor de revenda.</div>
+    <div class="gcf">Revenda = Veículo − Depreciação − Saldo Financ.</div>
+  </div>
+</div>
+
+<div class="st">💰 Tributos &amp; Regimes Fiscais</div>
+<div class="ggrid">
+  <div class="gc">
+    <div class="gch"><span class="gci">🏢</span><span class="gct">Lucro Real</span><span class="gctag">Regime</span></div>
+    <div class="gcd">IRPJ/CSLL sobre lucro líquido real. Permite deduzir despesas operacionais e depreciação, gerando créditos tributários relevantes.</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">🏬</span><span class="gct">Lucro Presumido</span><span class="gctag">Regime</span></div>
+    <div class="gcd">Regime simplificado. IRPJ/CSLL sobre margem presumida. Não permite deduzir despesas específicas — benefícios tributários zerados.</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">📌</span><span class="gct">PIS/COFINS / IRPJ / CSLL</span><span class="gctag">Créditos</span></div>
+    <div class="gcd">No Lucro Real, despesas com aluguel e frota própria reduzem a base de cálculo, gerando créditos anuais relevantes.</div>
+    <div class="gcf">Crédito = Base Dedutível × Alíquota%</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">⚠️</span><span class="gct">Limitações</span><span class="gctag">Atenção</span></div>
+    <div class="gcd">Este simulador é uma estimativa comparativa para fins analíticos. Não constitui consultoria financeira ou tributária. Consulte seu contador.</div>
+  </div>
+</div>
+
+<div class="st">⚖️ Resultado Final</div>
+<div class="ggrid">
+  <div class="gc">
+    <div class="gch"><span class="gci">🏁</span><span class="gct">Custo Efetivo — Frota</span><span class="gctag">Resultado</span></div>
+    <div class="gcd">Todos os desembolsos menos benefícios tributários e valor de revenda. O custo real de possuir o veículo por um ano.</div>
+    <div class="gcf">Custo = Aq. + Operacional − Tributos − Revenda</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">🏁</span><span class="gct">Custo Efetivo — Aluguel</span><span class="gctag">Resultado</span></div>
+    <div class="gcd">Custo anual de aluguel descontados os créditos tributários no Lucro Real, mais o custo administrativo do contrato.</div>
+    <div class="gcf">Custo = (Aluguel × 12) − Tributos + Adm.</div>
+  </div>
+  <div class="gc">
+    <div class="gch"><span class="gci">📐</span><span class="gct">Economia</span><span class="gctag">Resultado</span></div>
+    <div class="gcd">Diferença entre os custos efetivos. Positivo = locação vence. Negativo = frota própria vence. Percentual indica a magnitude da vantagem.</div>
+    <div class="gcf">Δ = Custo_Frota_Própria − Custo_Aluguel</div>
+  </div>
+</div>
+
+<div class="ft">
+  <div class="ftl"><div class="ftlg">L&</div><div><div class="ftb">Localiza&Co · Glossário</div><div class="fts">Documento de referência técnica</div></div></div>
+  <div class="ftd">Não constitui consultoria financeira ou tributária.</div>
+</div>
+</div>
+<div class="printbar"><button class="printbtn" onclick="window.print()">🖨️ Salvar como PDF</button></div>
+</body></html>
