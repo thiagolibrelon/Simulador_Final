@@ -1324,7 +1324,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
   <!-- TABS -->
   <div class="tabs-bar">
     <button class="tab active" id="tabSim" onclick="switchTab('sim')">Simulador</button>
-    <button class="tab" id="tabEv" onclick="switchTab('ev')">Análise Detalhada</button>
+    <button class="tab" id="tabEv" onclick="switchTab('ev')">Comparativo Individual</button>
     <button class="tab" id="tabFc" onclick="switchTab('fc')">⚡ Frota Composta</button>
     <button class="tab" id="tabGloss" onclick="switchTab('gloss')">Glossário</button>
   </div>
@@ -1781,7 +1781,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
     <!-- Mini Bar -->
     <div class="ev-bar">
       <div class="ev-bar-left">
-        <span class="ev-badge-tag">Análise Detalhada</span>
+        <span class="ev-badge-tag">Comparativo Individual</span>
         <span class="ev-bar-desc">Painel técnico completo · Todas as variáveis visíveis · Análise avançada</span>
       </div>
       <div class="ev-bar-right">
@@ -3297,7 +3297,7 @@ function exportPDFEV() {
 
   w.document.write(`<!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"/>
-<title>Análise Detalhada — ${clientName || "Localiza&Co"}</title>
+<title>Comparativo Individual — ${clientName || "Localiza&Co"}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -3350,7 +3350,7 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
 <div class="wm">SIMULAÇÃO</div>
 <div class="page">
 <div class="hdr">
-  <div class="hl"><div class="lsq">L&</div><div><div class="ltx">Localiza<em>&Co</em></div><div class="lsb">Simulador de Frota · Análise Detalhada</div><div class="evt">Análise Técnica Completa</div></div></div>
+  <div class="hl"><div class="lsq">L&</div><div><div class="ltx">Localiza<em>&Co</em></div><div class="lsb">Simulador de Frota · Comparativo Individual</div><div class="evt">Análise Técnica Completa</div></div></div>
   <div style="text-align:right">${logoClientHTML}${nomeClientHTML}<div class="meta" style="margin-top:6px"><div>Data: <strong>${agora}</strong></div><div>Executivo de Vendas: <strong>${loginMatricula||"—"}</strong></div><div>Cliente: <strong>${clientName||loginCodigo||"—"}</strong></div><div>Qtd. Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div><div>Regime: <strong>${perfLabel}</strong></div></div></div>
 </div>
 <div class="disc"><span style="font-size:14px;flex-shrink:0">⚠️</span><div><strong>DOCUMENTO DE SIMULAÇÃO – MATERIAL NÃO VINCULANTE.</strong> Este relatório tem finalidade exclusivamente informativa e comparativa, com base nos parâmetros inseridos no simulador. Não constitui proposta comercial, oferta, orçamento, recomendação financeira, consultoria jurídica ou tributária, nem gera obrigação de contratação para a Localiza&amp;Co ou suas afiliadas. Os valores, premissas e economias estimadas são meramente indicativos e podem variar conforme condições comerciais, disponibilidade, perfil do cliente, análise cadastral e regras fiscais aplicáveis. Qualquer contratação dependerá de proposta comercial formal, específica e válida, emitida pelos canais autorizados da Localiza&amp;Co.</div></div>
@@ -3423,7 +3423,7 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
 <div class="st">Conclusão</div>
 <div class="concl"><div class="conclt">Análise Comparativa — ${clientName || "Simulação"}</div><div class="conclp">${conclusao}</div></div>
 <div class="ft">
-  <div class="ftl"><div class="ftlg">L&</div><div><div class="ftb">Localiza&Co · Análise Detalhada</div><div class="fts">${agora}${clientName?" · "+clientName:""}</div></div></div>
+  <div class="ftl"><div class="ftlg">L&</div><div><div class="ftb">Localiza&Co · Comparativo Individual</div><div class="fts">${agora}${clientName?" · "+clientName:""}</div></div></div>
   <div class="ftd">Material não vinculante. Veja o aviso completo no início deste documento.</div>
 </div>
 </div>
@@ -3472,7 +3472,7 @@ const TOUR_STEPS = [
     target: ".right-pane", tab: "sim"
   },
   {
-    title: "Aba: Análise Detalhada",
+    title: "Aba: Comparativo Individual",
     desc: "Painel técnico completo com decomposição linha a linha de cada componente de custo — aquisição, operacional, tributário, depreciação e aluguel. Ideal para apresentações técnicas à controladoria.",
     target: "#tabEv", tab: "ev"
   },
