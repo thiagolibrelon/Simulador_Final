@@ -1552,9 +1552,9 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
         </div>
 
         <div class="field-group">
-          <div class="f-label">Licenciamento <span class="tip" data-tip="Taxa anual de licenciamento e emplacamento.">?</span></div>
+          <div class="f-label">Licenciamento <span class="tip" data-tip="Valor anual de licenciamento e emplacamento.">?</span></div>
           <div class="input-row">
-            <div class="input-wrap"><input id="licenciamentoPct" type="number" value="0" step="0.1" oninput="calc()"/><div class="input-unit">%</div></div>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="licenciamentoAno" type="number" value="0" step="50" oninput="calc()"/></div>
             <div class="chip"><div class="chip-l">Lic./ano</div><div class="chip-v r" id="outLic">R$ 0</div></div>
           </div>
         </div>
@@ -1880,7 +1880,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
             <div class="ev-frow"><div class="ev-flabel">Manutenção <span class="tip" data-tip="% anual sobre valor do veículo. Ref: 1,5–2,5%">?</span></div><div class="input-wrap"><input id="ev_manutencaoPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
             <div class="ev-frow"><div class="ev-flabel">Seguro anual</div><div class="input-wrap"><input id="ev_seguroPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
             <div class="ev-frow"><div class="ev-flabel">Estado (IPVA)</div><div class="input-wrap"><select id="ev_estado" onchange="calcEV()"><option value="0">Isento – 0,0%</option><option value="2">Acre – 2,0%</option><option value="3.25">Alagoas – 3,25%</option><option value="3">Amapá – 3,0%</option><option value="3">Amazonas – 3,0%</option><option value="2.5">Bahia – 2,5%</option><option value="3.5">Ceará – 3,5%</option><option value="3.5">Distrito Federal – 3,5%</option><option value="2">Espírito Santo – 2,0%</option><option value="3.75">Goiás – 3,75%</option><option value="2.5">Maranhão – 2,5%</option><option value="3">Mato Grosso – 3,0%</option><option value="3">Mato Grosso do Sul – 3,0%</option><option value="4">Minas Gerais – 4,0%</option><option value="2.5">Pará – 2,5%</option><option value="2.5">Paraíba – 2,5%</option><option value="3.5">Paraná – 3,5%</option><option value="2">Pernambuco – 2,0%</option><option value="3">Piauí – 3,0%</option><option value="4">Rio de Janeiro – 4,0%</option><option value="3">Rio Grande do Norte – 3,0%</option><option value="3">Rio Grande do Sul – 3,0%</option><option value="3">Rondônia – 3,0%</option><option value="3">Roraima – 3,0%</option><option value="2">Santa Catarina – 2,0%</option><option value="4">São Paulo – 4,0%</option><option value="3">Sergipe – 3,0%</option><option value="4">Tocantins – 4,0%</option></select></div></div>
-            <div class="ev-frow"><div class="ev-flabel">Licenciamento <span class="tip" data-tip="Taxa anual de licenciamento e emplacamento.">?</span></div><div class="input-wrap"><input id="ev_licenciamentoPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
+            <div class="ev-frow"><div class="ev-flabel">Licenciamento <span class="tip" data-tip="Valor anual de licenciamento e emplacamento.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_licenciamentoAno" type="number" value="0" step="50" oninput="calcEV()"/></div></div>
             <div class="ev-frow"><div class="ev-flabel">Indisponibilidade/ano <span class="tip" data-tip="Aluguel temporário ou transporte substituto durante manutenção/sinistro.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_indisponibilidadeAno" type="number" value="0" step="500" oninput="calcEV()"/></div></div>
             <div class="ev-frow"><div class="ev-flabel">Adm. frota / mês <span class="tip" data-tip="Gestão interna: sistemas, RH, controles.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_admFrotaMensal" type="number" value="0" step="50" oninput="calcEV()"/></div></div>
             <div class="ev-chips c3">
@@ -2123,7 +2123,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
           <div class="fc-fg" style="grid-column:span 2"><label>Estado (IPVA)</label>
             <div class="input-wrap"><select id="fc_estado"><option value="0">Isento – 0,0%</option><option value="2">Acre – 2,0%</option><option value="3.25">Alagoas – 3,25%</option><option value="3">Amapá – 3,0%</option><option value="3">Amazonas – 3,0%</option><option value="2.5">Bahia – 2,5%</option><option value="3.5">Ceará – 3,5%</option><option value="3.5">Distrito Federal – 3,5%</option><option value="2">Espírito Santo – 2,0%</option><option value="3.75">Goiás – 3,75%</option><option value="2.5">Maranhão – 2,5%</option><option value="3">Mato Grosso – 3,0%</option><option value="3">Mato Grosso do Sul – 3,0%</option><option value="4">Minas Gerais – 4,0%</option><option value="2.5">Pará – 2,5%</option><option value="2.5">Paraíba – 2,5%</option><option value="3.5">Paraná – 3,5%</option><option value="2">Pernambuco – 2,0%</option><option value="3">Piauí – 3,0%</option><option value="4">Rio de Janeiro – 4,0%</option><option value="3">Rio Grande do Norte – 3,0%</option><option value="3">Rio Grande do Sul – 3,0%</option><option value="3">Rondônia – 3,0%</option><option value="3">Roraima – 3,0%</option><option value="2">Santa Catarina – 2,0%</option><option value="4">São Paulo – 4,0%</option><option value="3">Sergipe – 3,0%</option><option value="4">Tocantins – 4,0%</option></select></div></div>
           <div class="fc-fg"><label>Licenciamento</label>
-            <div class="input-wrap"><input id="fc_licenciamentoPct" type="number" value="0" step="0.1"/><div class="input-unit">%</div></div></div>
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_licenciamentoAno" type="number" value="0" step="50"/></div></div>
           <div class="fc-fg"><label>Indisponibilidade / ano</label>
             <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_indisponibilidadeAno" type="number" value="3000" step="500"/></div></div>
           <div class="fc-fg"><label>Adm. de frota / mês</label>
@@ -2358,7 +2358,7 @@ function switchTab(t) {
   const SYNC_FIELDS = [
     "valorVeiculoBruto","descontoPct","entradaPct","parcelas","jurosMensalPct",
     "oportunidadePct","manutencaoPct","seguroPct","estado","indisponibilidadeAno",
-    "modoDepreciacao","depreciacaoPct","licenciamentoPct","admFrotaMensal",
+    "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal",
     "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim"
   ];
   const fromSim = el("tabSim")?.classList.contains("active");
@@ -2554,7 +2554,7 @@ function calc() {
   const ipvaEl  = el("estado");
   const ipvaRate = parseFloat(ipvaEl.options[ipvaEl.selectedIndex].value) || 0;
   const ipva    = vV * pc(ipvaRate);
-  const lic     = vV * pc(n("licenciamentoPct"));
+  const lic     = n("licenciamentoAno");
   const parad   = n("indisponibilidadeAno");
   const admF    = n("admFrotaMensal") * 12;
   const opAno   = manut + seg + ipva + lic + parad + admF;
@@ -2725,12 +2725,12 @@ function calc() {
 function gerarConclusao(c, qtd) {
   const pctSav  = c.fAno > 0 ? ((c.econAbs / c.fAno) * 100).toFixed(1).replace(".",",") : "0";
   const regime  = c.perfil === "real" ? "Lucro Real" : "Lucro Presumido";
-  const perVeic = qtd > 1 ? " por veículo" : "";
-  const frotaTxt = qtd > 1 ? ` Para o total da frota (${qtd} veículos), a diferença projetada é de ${R(c.econAbs * qtd)} ao ano.` : "";
+  const valorPrincipal = qtd > 1 ? R(c.econAbs * qtd) : R(c.econAbs);
+  const unitTxt = qtd > 1 ? ` (${R(c.econAbs)} por veículo, considerando uma frota de ${qtd} veículos)` : "";
   if (c.venc === "aluguel") {
-    return `Neste cenário de ${regime}, a locação apresenta uma economia anual estimada de ${R(c.econAbs)}${perVeic} (${pctSav}% sobre o custo total da frota própria), reduzindo a exposição à depreciação, custos administrativos e imobilização de capital.${frotaTxt} A terceirização transforma CAPEX em OPEX previsível, libera capital de giro e elimina riscos operacionais de gestão de frota, permitindo que a empresa concentre recursos em seu negócio principal.`;
+    return `Neste cenário de ${regime}, a locação apresenta uma economia anual estimada de ${valorPrincipal}${unitTxt} (${pctSav}% sobre o custo total da frota própria), reduzindo a exposição à depreciação, custos administrativos e imobilização de capital. A terceirização transforma CAPEX em OPEX previsível, libera capital de giro e elimina riscos operacionais de gestão de frota, permitindo que a empresa concentre recursos em seu negócio principal.`;
   } else if (c.venc === "propria") {
-    return `Neste cenário de ${regime}, a frota própria apresenta melhor desempenho econômico, com uma diferença de ${R(c.econAbs)}${perVeic} ao ano (${pctSav}% abaixo do custo de locação).${frotaTxt} Recomenda-se, ainda assim, considerar aspectos qualitativos como carga administrativa de gestão de frota, risco de obsolescência do ativo e imobilização de capital antes de uma decisão definitiva.`;
+    return `Neste cenário de ${regime}, a frota própria apresenta melhor desempenho econômico, com uma diferença de ${valorPrincipal}${unitTxt} ao ano (${pctSav}% abaixo do custo de locação). Recomenda-se, ainda assim, considerar aspectos qualitativos como carga administrativa de gestão de frota, risco de obsolescência do ativo e imobilização de capital antes de uma decisão definitiva.`;
   }
   return `Os cenários analisados apresentam resultado economicamente equivalente (diferença inferior a R$ 50). A decisão entre frota própria e locação deve considerar fatores estratégicos: flexibilidade operacional, previsibilidade de custos, foco no negócio principal e gestão de ativos.`;
 }
@@ -3006,7 +3006,7 @@ body{
 const LS_IDS = [
   "valorVeiculoBruto","descontoPct","entradaPct","parcelas","jurosMensalPct",
   "oportunidadePct","manutencaoPct","seguroPct","estado","indisponibilidadeAno",
-  "modoDepreciacao","depreciacaoPct","licenciamentoPct","admFrotaMensal",
+  "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal",
   "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim"
 ];
 
@@ -3138,7 +3138,7 @@ function calcEV() {
   const eEl    = el("ev_estado");
   const ipvaR  = parseFloat(eEl.options[eEl.selectedIndex].value) || 0;
   const ipva   = vV * pc(ipvaR);
-  const lic    = vV * pc(nEV("licenciamentoPct"));
+  const lic    = nEV("licenciamentoAno");
   const parad  = nEV("indisponibilidadeAno");
   const admF   = nEV("admFrotaMensal") * 12;
   const opAno  = manut + seg + ipva + lic + parad + admF;
@@ -3601,7 +3601,7 @@ function posTooltipCenter(tooltip) {
 /* ── EV localStorage ── */
 const EV_LS_IDS = [
   "valorVeiculoBruto","descontoPct","entradaPct","parcelas","jurosMensalPct",
-  "oportunidadePct","manutencaoPct","seguroPct","estado","licenciamentoPct",
+  "oportunidadePct","manutencaoPct","seguroPct","estado","licenciamentoAno",
   "indisponibilidadeAno","admFrotaMensal","modoDepreciacao","depreciacaoPct",
   "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim"
 ];
@@ -3657,7 +3657,7 @@ function calcModelo(m, perfil) {
   const seg    = vV * pc(+m.seguroPct || 0);
   const ipvaR  = parseFloat(m.estado) || 0;
   const ipva   = vV * pc(ipvaR);
-  const lic    = vV * pc(+m.licenciamentoPct || 0);
+  const lic    = +m.licenciamentoAno || 0;
   const parad  = +m.indisponibilidadeAno || 0;
   const admF   = (+m.admFrotaMensal || 0) * 12;
   const opAno  = manut + seg + ipva + lic + parad + admF;
@@ -3875,7 +3875,7 @@ function fcFillModalDefaults() {
     descricao: "", qtd: 1,
     valorVeiculoBruto: 0, descontoPct: 0, entradaPct: 0, parcelas: 1,
     jurosMensalPct: 0, oportunidadePct: 0,
-    manutencaoPct: 0, seguroPct: 0, licenciamentoPct: 0,
+    manutencaoPct: 0, seguroPct: 0, licenciamentoAno: 0,
     indisponibilidadeAno: 0, admFrotaMensal: 0,
     modoDepreciacao: "contabil", depreciacaoPct: 0,
     aluguelMensal: 0, admAluguel: 0, atividadeFim: "sim",
@@ -3885,7 +3885,7 @@ function fcFillModalDefaults() {
 
 function fcFillModal(m) {
   ["descricao","qtd","valorVeiculoBruto","descontoPct","entradaPct","parcelas",
-   "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct","licenciamentoPct",
+   "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct","licenciamentoAno",
    "indisponibilidadeAno","admFrotaMensal","modoDepreciacao","depreciacaoPct",
    "aluguelMensal","admAluguel","atividadeFim","pisPropPct","irpjPropPct","csllPropPct"
   ].forEach(id => { const e = el("fc_" + id); if (e && m[id] !== undefined) e.value = m[id]; });
@@ -3898,7 +3898,7 @@ function fcFillModal(m) {
 function saveModelo() {
   const m = {};
   ["descricao","qtd","valorVeiculoBruto","descontoPct","entradaPct","parcelas",
-   "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct","licenciamentoPct",
+   "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct","licenciamentoAno",
    "indisponibilidadeAno","admFrotaMensal","modoDepreciacao","depreciacaoPct",
    "aluguelMensal","admAluguel","atividadeFim","pisPropPct","irpjPropPct","csllPropPct"
   ].forEach(id => { const e = el("fc_" + id); if (e) m[id] = e.value; });
@@ -3930,7 +3930,7 @@ function selectRegimeFC(r) {
 function importarDoSimulador() {
   const FIELDS = ["valorVeiculoBruto","descontoPct","entradaPct","parcelas",
     "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct",
-    "licenciamentoPct","indisponibilidadeAno","admFrotaMensal","modoDepreciacao",
+    "licenciamentoAno","indisponibilidadeAno","admFrotaMensal","modoDepreciacao",
     "depreciacaoPct","aluguelMensal","admAluguel","atividadeFim",
     "pisPropPct","irpjPropPct","csllPropPct"];
   const m = {
