@@ -2347,7 +2347,6 @@ function saveClient() {
   if (clientLogoData) { logoEl.src = clientLogoData; logoEl.style.display = "block"; }
   else                  { logoEl.style.display = "none"; }
 
-  try { localStorage.setItem("sim-client", JSON.stringify({n: clientName, l: clientLogoData})); } catch(e) {}
   toggleClientPanel();
 }
 
@@ -3023,24 +3022,6 @@ function saveLS() {
 function restoreState() {
   /* Tema */
   applyTheme(theme);
-
-  /* Cliente */
-  try {
-    const s = JSON.parse(localStorage.getItem("sim-client") || "{}");
-    if (s.n) {
-      clientName = s.n;
-      el("clientNameInput").value = s.n;
-      el("clientNameTopbar").textContent = s.n;
-      el("clientNameTopbar").style.display = "block";
-    }
-    if (s.l) {
-      clientLogoData = s.l;
-      el("clientLogoTopbar").src = s.l;
-      el("clientLogoTopbar").style.display = "block";
-      el("logoPreviewThumb").src = s.l;
-      el("logoPreviewThumb").style.display = "inline-block";
-    }
-  } catch(e) {}
 
   /* Inputs */
   try {
