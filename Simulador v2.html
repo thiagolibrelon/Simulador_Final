@@ -1643,6 +1643,35 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 
         <div class="aluguel-section">
           <div class="step-eyebrow" style="margin-bottom:12px">Configuração do Aluguel</div>
+
+          <div class="field-group">
+            <div class="f-label">Produto de locação <span class="tip" data-tip="RAC PJ: contratos de até 12 meses. GF (Gestão de Frotas): contratos de até 36 meses.">?</span></div>
+            <div class="regime-grid" style="margin-bottom:0">
+              <div class="regime-card selected" id="pcRac" onclick="selectProduto('rac')">
+                <div class="regime-name">RAC PJ</div>
+                <div class="regime-desc">Locação de curto prazo — contratos de até 12 meses.</div>
+              </div>
+              <div class="regime-card" id="pcGf" onclick="selectProduto('gf')">
+                <div class="regime-name">GF — Gestão de Frotas</div>
+                <div class="regime-desc">Locação de longo prazo — contratos de até 36 meses.</div>
+              </div>
+            </div>
+            <select id="produtoLocacao" style="display:none" onchange="calc()">
+              <option value="rac" selected>rac</option>
+              <option value="gf">gf</option>
+            </select>
+            <div class="field-group" id="prazoContratoWrap" style="display:none;margin-top:10px;margin-bottom:0">
+              <div class="f-label">Prazo do contrato</div>
+              <div class="input-wrap">
+                <select id="prazoContratoMeses" onchange="calc()">
+                  <option value="12">12 meses</option>
+                  <option value="24">24 meses</option>
+                  <option value="36" selected>36 meses</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <div class="field-group">
             <div class="f-label">Mensalidade do aluguel</div>
             <div class="input-row">
@@ -1751,8 +1780,13 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
           <div class="vs-badge">VS</div>
           <div class="v-card" id="vAluguel">
             <div class="v-name">Aluguel</div>
+            <div class="v-period" id="vAluguelProdutoBadge" style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">RAC PJ · 12 meses</div>
             <div class="v-val" id="vAluguelVal">R$ 0</div>
             <div class="v-period">/ veículo · ano</div>
+            <div class="v-total" id="vAluguelContratoTotal">
+              <div class="v-total-label">Valor total do contrato</div>
+              <div class="v-total-val" id="vAluguelContratoVal">R$ 0</div>
+            </div>
             <div class="v-total" id="vAluguelTotal" style="display:none">
               <div class="v-total-label">Frota total</div>
               <div class="v-total-val" id="vAluguelTotalVal">R$ 0</div>
@@ -1941,6 +1975,8 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
             <div class="ev-alg-strip">
               <div>
                 <div class="ev-alg-title">Parâmetros</div>
+                <div class="ev-frow wide"><div class="ev-flabel">Produto de locação</div><div class="input-wrap"><select id="ev_produtoLocacao" onchange="evTogglePrazo()"><option value="rac">RAC PJ (até 12m)</option><option value="gf">GF (até 36m)</option></select></div></div>
+                <div class="ev-frow wide" id="ev_prazoWrap" style="display:none"><div class="ev-flabel">Prazo do contrato</div><div class="input-wrap"><select id="ev_prazoContratoMeses" onchange="calcEV()"><option value="12">12 meses</option><option value="24">24 meses</option><option value="36" selected>36 meses</option></select></div></div>
                 <div class="ev-frow wide"><div class="ev-flabel">Atividade fim? <span class="tip" data-tip="Veículo na atividade-fim = 100% dedutível.">?</span></div><div class="input-wrap"><select id="ev_atividadeFim" onchange="calcEV()"><option value="sim">Sim</option><option value="nao">Não</option></select></div></div>
                 <div class="ev-frow wide"><div class="ev-flabel">Mensalidade</div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_aluguelMensal" type="number" value="0" step="100" oninput="calcEV()"/></div></div>
                 <div class="ev-frow wide"><div class="ev-flabel">Adm. / mês</div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_admAluguel" type="number" value="0" step="50" oninput="calcEV()"/></div></div>
@@ -1950,6 +1986,7 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
                 <div class="ev-list-item"><span>Aluguel anual</span><strong id="ev_outAluguelAnual">R$ 0</strong></div>
                 <div class="ev-list-item"><span>Administrativo</span><strong id="ev_outAdmAluguel">R$ 0</strong></div>
                 <div class="ev-sub"><label>Total bruto</label><strong id="ev_outTotalBruto">R$ 0</strong></div>
+                <div class="ev-sub"><label>Valor total do contrato</label><strong id="ev_outValorTotalContrato">R$ 0</strong></div>
               </div>
               <div>
                 <div class="ev-alg-title">Créditos Tributários</div>
@@ -2166,6 +2203,10 @@ body.pres-mode .ev-grid{grid-template-columns:1fr!important}
       <div class="fc-fsec">
         <div class="fc-fsec-title">Configuração do Aluguel</div>
         <div class="fc-grid fc-g2">
+          <div class="fc-fg"><label>Produto de locação</label>
+            <div class="input-wrap"><select id="fc_produtoLocacao" onchange="fcTogglePrazo()"><option value="rac">RAC PJ (até 12m)</option><option value="gf">GF (até 36m)</option></select></div></div>
+          <div class="fc-fg" id="fc_prazoWrap" style="display:none"><label>Prazo do contrato</label>
+            <div class="input-wrap"><select id="fc_prazoContratoMeses"><option value="12">12 meses</option><option value="24">24 meses</option><option value="36" selected>36 meses</option></select></div></div>
           <div class="fc-fg"><label>Mensalidade</label>
             <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_aluguelMensal" type="number" value="2800" step="100"/></div></div>
           <div class="fc-fg"><label>Administração / mês</label>
@@ -2382,7 +2423,8 @@ function switchTab(t) {
     "oportunidadePct","manutencaoPct","seguroPct","estado","indisponibilidadeAno",
     "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal",
     "custoAtivacao","custoDesativacao",
-    "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim"
+    "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim",
+    "produtoLocacao","prazoContratoMeses"
   ];
   const fromSim = el("tabSim")?.classList.contains("active");
   const fromEv  = el("tabEv")?.classList.contains("active");
@@ -2392,6 +2434,7 @@ function switchTab(t) {
       const src = el(f), dst = el("ev_" + f);
       if (src && dst) dst.value = src.value;
     });
+    evTogglePrazo();
   } else if (fromEv && t === "sim") {
     SYNC_FIELDS.forEach(f => {
       const src = el("ev_" + f), dst = el(f);
@@ -2399,6 +2442,7 @@ function switchTab(t) {
     });
     sliderUpdate("manutencaoPct","slManut","slManutR");
     sliderUpdate("seguroPct","slSeg","slSegR");
+    refreshProdutoUI();
   }
 
   ["sim","ev","gloss","fc"].forEach(id => {
@@ -2553,6 +2597,23 @@ document.querySelectorAll(".p-btn").forEach(b => {
 });
 
 /* ══════════════════════════════════════════
+   PRODUTO DE LOCAÇÃO (RAC PJ / GF)
+══════════════════════════════════════════ */
+function refreshProdutoUI() {
+  const p = el("produtoLocacao")?.value || "rac";
+  el("pcRac")?.classList.toggle("selected", p === "rac");
+  el("pcGf")?.classList.toggle("selected", p === "gf");
+  const wrap = el("prazoContratoWrap");
+  if (wrap) wrap.style.display = p === "gf" ? "block" : "none";
+}
+function selectProduto(p) {
+  el("produtoLocacao").value = p;
+  if (p === "rac") el("prazoContratoMeses").value = "12";
+  refreshProdutoUI();
+  calc();
+}
+
+/* ══════════════════════════════════════════
    CÁLCULO PRINCIPAL
 ══════════════════════════════════════════ */
 function calc() {
@@ -2616,6 +2677,11 @@ function calc() {
   const tribA   = pisA + irjA + cslA;
   const cAlq    = valP + admA - tribA;
 
+  /* ── Produto de locação (classificação/reporting — não altera cAlq) ── */
+  const produtoLoc = el("produtoLocacao")?.value || "rac";
+  const prazoMeses = produtoLoc === "gf" ? (n("prazoContratoMeses") || 36) : 12;
+  const valorTotalContrato = alqM * prazoMeses;
+
   /* ── Resultado ── */
   const econ    = fAno - cAlq;
   const econAbs = Math.abs(econ);
@@ -2631,7 +2697,8 @@ function calc() {
     fAno, fAnoR, fAnoPr,
     valP, admA, pisA, irjA, cslA, tribA, cAlq,
     econ, econAbs, venc, perfil,
-    np, saldo
+    np, saldo,
+    produtoLoc, prazoMeses, valorTotalContrato
   };
 
   /* ── Outputs Step 1 ── */
@@ -2688,6 +2755,8 @@ function calc() {
   /* ── Finalist ── */
   set("vFrotaVal",   R(fAno));
   set("vAluguelVal", R(cAlq));
+  set("vAluguelContratoVal", R(valorTotalContrato));
+  set("vAluguelProdutoBadge", (produtoLoc === "gf" ? "GF" : "RAC PJ") + " · " + prazoMeses + " meses");
   el("vFrota").className   = "v-card" + (venc === "propria" ? " winner" : "");
   el("vAluguel").className = "v-card" + (venc === "aluguel" ? " winner" : "");
 
@@ -2773,6 +2842,8 @@ function exportPDF() {
 
   const agora      = new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   const perfLabel  = perfil === "real" ? "Lucro Real" : "Lucro Presumido";
+  const produtoLabel = c.produtoLoc === "gf" ? "GF — Gestão de Frotas" : "RAC PJ";
+  const prazoLabel   = (c.prazoMeses || 12) + " meses";
   const conclusao  = gerarConclusao(c, qtdVeiculos);
   const logoClientHTML = clientLogoData
     ? `<img src="${clientLogoData}" style="max-height:50px;max-width:130px;object-fit:contain;display:block;margin-bottom:4px" alt="Logo Cliente"/>`
@@ -2925,6 +2996,7 @@ body{
       <div>Executivo de Vendas: <strong>${loginMatricula || "—"}</strong></div>
       <div>Qtd. de Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div>
       <div>Regime Fiscal: <strong>${perfLabel}</strong></div>
+      <div>Produto de Locação: <strong>${produtoLabel} (${prazoLabel})</strong></div>
     </div>
   </div>
 </div>
@@ -2986,13 +3058,14 @@ body{
     <div class="cl total"><span>= Custo Efetivo</span><strong>${R(c.fAno)}</strong></div>
   </div>
   <div class="cb">
-    <div class="cb-title">Locação (Aluguel)</div>
+    <div class="cb-title">Locação (Aluguel) — ${produtoLabel}</div>
     <div class="cl"><span>(+) Total de Aluguel (12×)</span><strong>${R(c.valP)}</strong></div>
     <div class="barmini"><div class="bf" style="width:${barW(c.valP)}%"></div></div>
     <div class="cl"><span>(+) Custo Administrativo</span><strong>${R(c.admA)}</strong></div>
     <div class="cl neg" style="margin-top:8px"><span>(−) Créditos Tributários</span><strong>${R(c.tribA)}</strong></div>
     <div class="cl-sub">PIS/COFINS ${R(c.pisA)} · IRPJ ${R(c.irjA)} · CSLL ${R(c.cslA)}</div>
     <div class="cl total"><span>= Custo Efetivo</span><strong>${R(c.cAlq)}</strong></div>
+    <div class="cl-sub">Valor total do contrato (${prazoLabel}): ${R(c.valorTotalContrato)}</div>
   </div>
 </div>
 
@@ -3033,7 +3106,8 @@ const LS_IDS = [
   "oportunidadePct","manutencaoPct","seguroPct","estado","indisponibilidadeAno",
   "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal",
   "custoAtivacao","custoDesativacao",
-  "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim"
+  "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim",
+  "produtoLocacao","prazoContratoMeses"
 ];
 
 function saveLS() {
@@ -3057,6 +3131,7 @@ function restoreState() {
       const e = el(id);
       if (e && d[id] !== undefined) e.value = d[id];
     });
+    refreshProdutoUI();
     if (d._perfil) selectRegime(d._perfil);
     if (d._step)   goStep(Number(d._step));
   } catch(e) {}
@@ -3112,6 +3187,14 @@ function selectRegimeEV(r) {
   const w = el("ev_tributosNote");
   if (w) w.style.display = r === "presumido" ? "block" : "none";
   saveLSEV();
+  calcEV();
+}
+
+function evTogglePrazo() {
+  const p = el("ev_produtoLocacao")?.value || "rac";
+  const wrap = el("ev_prazoWrap");
+  if (wrap) wrap.style.display = p === "gf" ? "grid" : "none";
+  if (p === "rac" && el("ev_prazoContratoMeses")) el("ev_prazoContratoMeses").value = "12";
   calcEV();
 }
 
@@ -3184,6 +3267,11 @@ function calcEV() {
   const totAlq = valP + admA;
   const cAlq   = totAlq - tribA;
 
+  /* Produto de locação (classificação/reporting — não altera cAlq) */
+  const produtoLoc = el("ev_produtoLocacao")?.value || "rac";
+  const prazoMeses = produtoLoc === "gf" ? (nEV("prazoContratoMeses") || 36) : 12;
+  const valorTotalContrato = alqM * prazoMeses;
+
   /* Resultado */
   const econ    = fAno - cAlq;
   const econAbs = Math.abs(econ);
@@ -3196,7 +3284,8 @@ function calcEV() {
     manut, seg, ipva, lic, parad, admF, ativ, desativ, opAno,
     deprPct, deprA, revnd, tribP, pisP, irjP, cslP,
     fAno, fAnoR, fAnoPr, cAlq, valP, admA, pisA, irjA, cslA, tribA, totAlq,
-    econ, econAbs, venc, perfil: evPerfil, np, saldo
+    econ, econAbs, venc, perfil: evPerfil, np, saldo,
+    produtoLoc, prazoMeses, valorTotalContrato
   };
 
   /* ── Outputs Coluna Esquerda ── */
@@ -3218,6 +3307,7 @@ function calcEV() {
   setEV("outAluguelAnual",    R(valP));
   setEV("outAdmAluguel",      R(admA));
   setEV("outTotalBruto",      R(totAlq));
+  setEV("outValorTotalContrato", R(valorTotalContrato));
   setEV("outPisAluguel",      R(pisA));
   setEV("outIrpjAluguel",     R(irjA));
   setEV("outCsllAluguel",     R(cslA));
@@ -3290,6 +3380,8 @@ function exportPDFEV() {
 
   const agora      = new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
   const perfLabel  = evPerfil === "real" ? "Lucro Real" : "Lucro Presumido";
+  const produtoLabel = cc.produtoLoc === "gf" ? "GF — Gestão de Frotas" : "RAC PJ";
+  const prazoLabel   = (cc.prazoMeses || 12) + " meses";
   const conclusao  = gerarConclusao(cc, qtdVeiculos);
   const fx    = v => qtdVeiculos > 1 ? `<div style="font-size:8.5px;color:#919191;text-align:right;margin-top:-3px">Frota (${qtdVeiculos}×): ${R(v*qtdVeiculos)}</div>` : "";
   const fxTot = v => qtdVeiculos > 1 ? `<div style="font-size:10px;color:#018444;font-weight:700;text-align:right;margin-top:2px">Frota (${qtdVeiculos}×): ${R(v*qtdVeiculos)}</div>` : "";
@@ -3351,7 +3443,7 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
 <div class="page">
 <div class="hdr">
   <div class="hl"><img src="${LOGO_OFICIAL}" alt="Localiza&Co" style="height:38px;width:auto;object-fit:contain;flex-shrink:0"/><div><div class="lsb">Simulador de Frota · Comparativo Individual</div><div class="evt">Análise Técnica Completa</div></div></div>
-  <div style="text-align:right">${logoClientHTML}${nomeClientHTML}<div class="meta" style="margin-top:6px"><div>Data: <strong>${agora}</strong></div><div>Executivo de Vendas: <strong>${loginMatricula||"—"}</strong></div><div>Qtd. Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div><div>Regime: <strong>${perfLabel}</strong></div></div></div>
+  <div style="text-align:right">${logoClientHTML}${nomeClientHTML}<div class="meta" style="margin-top:6px"><div>Data: <strong>${agora}</strong></div><div>Executivo de Vendas: <strong>${loginMatricula||"—"}</strong></div><div>Qtd. Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div><div>Regime: <strong>${perfLabel}</strong></div><div>Produto: <strong>${produtoLabel} (${prazoLabel})</strong></div></div></div>
 </div>
 <div class="disc"><span style="font-size:14px;flex-shrink:0">⚠️</span><div><strong>DOCUMENTO DE SIMULAÇÃO – MATERIAL NÃO VINCULANTE.</strong> Este relatório tem finalidade exclusivamente informativa e comparativa, com base nos parâmetros inseridos no simulador. Não constitui proposta comercial, oferta, orçamento, recomendação financeira, consultoria jurídica ou tributária, nem gera obrigação de contratação para a Localiza&amp;Co ou suas afiliadas. Os valores, premissas e economias estimadas são meramente indicativos e podem variar conforme condições comerciais, disponibilidade, perfil do cliente, análise cadastral e regras fiscais aplicáveis. Qualquer contratação dependerá de proposta comercial formal, específica e válida, emitida pelos canais autorizados da Localiza&amp;Co.</div></div>
 <div style="background:${winnerColor};border-radius:14px;padding:22px 26px;margin-bottom:16px">
@@ -3395,11 +3487,12 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
     <div class="cl neg"><span>(−) Valor de Revenda</span><strong>${R(cc.revnd)}</strong></div>${fx(cc.revnd)}
     <div class="cl tot"><span>= Custo Efetivo</span><strong>${R(cc.fAno)}</strong></div>${fxTot(cc.fAno)}
   </div>
-  <div class="cb"><div class="cbt">Locação</div>
+  <div class="cb"><div class="cbt">Locação — ${produtoLabel}</div>
     <div class="cl"><span>(+) Aluguel (12×)</span><strong>${R(cc.valP)}</strong></div>${fx(cc.valP)}<div class="bm"><div class="bf" style="width:${Math.min(100,cc.valP/((cc.totAlq)||1)*100).toFixed(0)}%"></div></div>
     <div class="cl"><span>(+) Administrativo</span><strong>${R(cc.admA)}</strong></div>${fx(cc.admA)}
     <div class="cl neg" style="margin-top:6px"><span>(−) Créditos Tributários</span><strong>${R(cc.tribA)}</strong></div>${fx(cc.tribA)}
     <div class="cl tot"><span>= Custo Efetivo</span><strong>${R(cc.cAlq)}</strong></div>${fxTot(cc.cAlq)}
+    <div style="font-size:9px;color:#919191;margin-top:4px">Valor total do contrato (${prazoLabel}): ${R(cc.valorTotalContrato)}</div>
   </div>
 </div>
 <div class="st">Conclusão</div>
@@ -3442,6 +3535,11 @@ const TOUR_STEPS = [
     title: "Simulador — Regime Tributário",
     desc: "Selecione Lucro Real ou Lucro Presumido e configure as alíquotas de PIS/COFINS, IRPJ e CSLL. No Lucro Real, as despesas da frota própria geram créditos tributários que reduzem o custo efetivo.",
     target: "#step3", wizardStep: 3, tab: "sim"
+  },
+  {
+    title: "Simulador — Produto de Locação",
+    desc: "Escolha entre RAC PJ (locação de curto prazo, até 12 meses) e GF — Gestão de Frotas (contratos de até 36 meses). O prazo escolhido define o valor total do contrato exibido no comparativo, sem alterar o cálculo de custo anual.",
+    target: "#pcRac", wizardStep: 3, tab: "sim"
   },
   {
     title: "Simulador — Valor do Aluguel",
@@ -3614,7 +3712,8 @@ const EV_LS_IDS = [
   "oportunidadePct","manutencaoPct","seguroPct","estado","licenciamentoAno",
   "indisponibilidadeAno","admFrotaMensal","modoDepreciacao","depreciacaoPct",
   "custoAtivacao","custoDesativacao",
-  "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim"
+  "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim",
+  "produtoLocacao","prazoContratoMeses"
 ];
 
 function saveLSEV() {
@@ -3633,6 +3732,8 @@ function restoreEVState() {
       const e = el("ev_" + id);
       if (e && d[id] !== undefined) e.value = d[id];
     });
+    const wrap = el("ev_prazoWrap");
+    if (wrap) wrap.style.display = el("ev_produtoLocacao")?.value === "gf" ? "grid" : "none";
     if (d._perfil) selectRegimeEV(d._perfil);
   } catch(e) {}
   autoDeprEV();
@@ -3702,13 +3803,18 @@ function calcModelo(m, perfil) {
   const totAlq = valP + admA;
   const cAlq   = totAlq - tribA;
 
+  const produtoLoc = m.produtoLocacao === "gf" ? "gf" : "rac";
+  const prazoMeses  = produtoLoc === "gf" ? (+m.prazoContratoMeses || 36) : 12;
+  const valorTotalContrato = alqM * prazoMeses;
+
   const econ    = fAno - cAlq;
   const econAbs = Math.abs(econ);
   const venc    = econ >  50 ? "aluguel"
                 : econ < -50 ? "propria"
                 :              "empate";
 
-  return { fAno, cAlq, econ, econAbs, venc, aqAno, opAno, tribP, revnd };
+  return { fAno, cAlq, econ, econAbs, venc, aqAno, opAno, tribP, revnd,
+           produtoLoc, prazoMeses, valorTotalContrato };
 }
 
 /* ── calcFrota ── */
@@ -3761,6 +3867,7 @@ function renderFCCard(m, idx) {
       <div>
         <div class="fc-card-title">${m.descricao || "Veículo " + (idx + 1)}</div>
         <div class="fc-card-qty">${qtd} veículo${qtd > 1 ? "s" : ""} · ${fcPerfil === "real" ? "Lucro Real" : "Lucro Presumido"}</div>
+        <div class="fc-card-qty">${m.produtoLocacao === "gf" ? "GF · " + (m.prazoContratoMeses || 36) + " meses" : "RAC PJ · 12 meses"}</div>
       </div>
       <div class="fc-card-actions">
         <button class="fc-card-btn edit" onclick="openModalModelo(${idx})">✏ Editar</button>
@@ -3832,8 +3939,9 @@ function renderFCDashboard(data) {
       : r.venc === "propria"
         ? "<span style='color:#C0392B'>Comprar</span>"
         : "<span style='color:var(--muted)'>Qualquer</span>";
+    const prod = r.produtoLoc === "gf" ? `GF ${r.prazoMeses}m` : "RAC PJ";
     return `<tr>
-      <td>${r.descricao}</td>
+      <td>${r.descricao}<div style="font-size:10px;color:var(--muted)">${prod}</div></td>
       <td style="text-align:center">${r.qtd}</td>
       <td>${R(r.fAno)}</td>
       <td>${R(r.cAlq)}</td>
@@ -3893,6 +4001,7 @@ function fcFillModalDefaults() {
     custoAtivacao: 0, custoDesativacao: 0,
     modoDepreciacao: "contabil", depreciacaoPct: 0,
     aluguelMensal: 0, admAluguel: 0, atividadeFim: "sim",
+    produtoLocacao: "rac", prazoContratoMeses: 12,
     pisPropPct: 9.25, irpjPropPct: 25, csllPropPct: 9, estado: 0
   });
 }
@@ -3902,12 +4011,14 @@ function fcFillModal(m) {
    "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct","licenciamentoAno",
    "indisponibilidadeAno","admFrotaMensal","custoAtivacao","custoDesativacao",
    "modoDepreciacao","depreciacaoPct",
-   "aluguelMensal","admAluguel","atividadeFim","pisPropPct","irpjPropPct","csllPropPct"
+   "aluguelMensal","admAluguel","atividadeFim","produtoLocacao","prazoContratoMeses",
+   "pisPropPct","irpjPropPct","csllPropPct"
   ].forEach(id => { const e = el("fc_" + id); if (e && m[id] !== undefined) e.value = m[id]; });
   const eEl = el("fc_estado");
   if (eEl && m.estado !== undefined)
     [...eEl.options].forEach(o => { o.selected = (parseFloat(o.value) === parseFloat(m.estado)); });
   fcToggleDepr();
+  fcTogglePrazo();
 }
 
 function saveModelo() {
@@ -3916,7 +4027,8 @@ function saveModelo() {
    "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct","licenciamentoAno",
    "indisponibilidadeAno","admFrotaMensal","custoAtivacao","custoDesativacao",
    "modoDepreciacao","depreciacaoPct",
-   "aluguelMensal","admAluguel","atividadeFim","pisPropPct","irpjPropPct","csllPropPct"
+   "aluguelMensal","admAluguel","atividadeFim","produtoLocacao","prazoContratoMeses",
+   "pisPropPct","irpjPropPct","csllPropPct"
   ].forEach(id => { const e = el("fc_" + id); if (e) m[id] = e.value; });
   const eEl = el("fc_estado");
   m.estado = eEl ? parseFloat(eEl.options[eEl.selectedIndex].value) : 0;
@@ -3937,6 +4049,13 @@ function fcToggleDepr() {
   if (sel && box) box.style.display = sel.value === "real" ? "block" : "none";
 }
 
+function fcTogglePrazo() {
+  const p = el("fc_produtoLocacao")?.value || "rac";
+  const wrap = el("fc_prazoWrap");
+  if (wrap) wrap.style.display = p === "gf" ? "block" : "none";
+  if (p === "rac" && el("fc_prazoContratoMeses")) el("fc_prazoContratoMeses").value = "12";
+}
+
 function selectRegimeFC(r) {
   fcPerfil = r;
   const sel = el("fc_perfil"); if (sel) sel.value = r;
@@ -3949,6 +4068,7 @@ function importarDoSimulador() {
     "licenciamentoAno","indisponibilidadeAno","admFrotaMensal",
     "custoAtivacao","custoDesativacao","modoDepreciacao",
     "depreciacaoPct","aluguelMensal","admAluguel","atividadeFim",
+    "produtoLocacao","prazoContratoMeses",
     "pisPropPct","irpjPropPct","csllPropPct"];
   const m = {
     descricao: (el("clientNameTopbar")?.textContent?.trim() || "Importado") + " — Simulador",
@@ -3997,7 +4117,8 @@ function exportPDFFrota() {
   const rows = resultados.map(r => {
     const vOtimo = Math.min(r.fAno, r.cAlq);
     const rec    = r.venc === "aluguel" ? "Locar" : r.venc === "propria" ? "Comprar" : "Qualquer";
-    return `<tr><td>${r.descricao}</td><td style="text-align:center">${r.qtd}</td><td>${R(r.fAno)}</td><td>${R(r.cAlq)}</td><td><b>${rec}</b></td><td>${R(vOtimo * r.qtd)}</td></tr>`;
+    const prod   = r.produtoLoc === "gf" ? `GF ${r.prazoMeses}m` : "RAC PJ";
+    return `<tr><td>${r.descricao}<br><small style="color:#919191">${prod}</small></td><td style="text-align:center">${r.qtd}</td><td>${R(r.fAno)}</td><td>${R(r.cAlq)}</td><td><b>${rec}</b></td><td>${R(vOtimo * r.qtd)}</td></tr>`;
   }).join("");
 
   const w = window.open("", "_blank");
