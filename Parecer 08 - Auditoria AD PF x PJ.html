@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Auditoria AD — PF × PJ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f2f1ec;
+  --surface:#fffefb;
+  --surface-2:#ece9e1;
+  --ink:#20241f;
+  --muted:#5c6259;
+  --faint:#8a8f83;
+  --line:rgba(32,36,31,.14);
+  --line-strong:rgba(32,36,31,.28);
+  --accent:#2c4a6e;
+  --accent-soft:rgba(44,74,110,.08);
+  --tag-confirmed:#2f6e4f;
+  --tag-confirmed-soft:rgba(47,110,79,.1);
+  --tag-deductive:#9c7218;
+  --tag-deductive-soft:rgba(156,114,24,.12);
+  --tag-unconfirmed:#a63a3a;
+  --tag-unconfirmed-soft:rgba(166,58,58,.1);
+  --shadow:0 1px 2px rgba(32,36,31,.04),0 12px 32px -16px rgba(32,36,31,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171a;
+    --surface:#1a1e1c;
+    --surface-2:#20241f;
+    --ink:#eceae2;
+    --muted:#a7ac9f;
+    --faint:#767c70;
+    --line:rgba(236,234,226,.14);
+    --line-strong:rgba(236,234,226,.26);
+    --accent:#8fb2da;
+    --accent-soft:rgba(143,178,218,.1);
+    --tag-confirmed:#59a67e;
+    --tag-confirmed-soft:rgba(89,166,126,.14);
+    --tag-deductive:#d1a545;
+    --tag-deductive-soft:rgba(209,165,69,.14);
+    --tag-unconfirmed:#dd8078;
+    --tag-unconfirmed-soft:rgba(221,128,120,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171a;
+  --surface:#1a1e1c;
+  --surface-2:#20241f;
+  --ink:#eceae2;
+  --muted:#a7ac9f;
+  --faint:#767c70;
+  --line:rgba(236,234,226,.14);
+  --line-strong:rgba(236,234,226,.26);
+  --accent:#8fb2da;
+  --accent-soft:rgba(143,178,218,.1);
+  --tag-confirmed:#59a67e;
+  --tag-confirmed-soft:rgba(89,166,126,.14);
+  --tag-deductive:#d1a545;
+  --tag-deductive-soft:rgba(209,165,69,.14);
+  --tag-unconfirmed:#dd8078;
+  --tag-unconfirmed-soft:rgba(221,128,120,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Newsreader",Georgia,"Times New Roman",serif;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+}
+.page{max-width:800px;margin:0 auto;padding:56px 20px 96px}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow);padding:52px 56px 48px}
+@media (max-width:640px){.sheet{padding:36px 22px 32px}.page{padding:28px 12px 64px}}
+
+.label{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",Consolas,monospace}
+
+.letterhead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:28px;border-bottom:2px solid var(--ink)}
+.letterhead-ref{margin-bottom:14px}
+.letterhead-ref .label{margin-bottom:3px}
+.letterhead h1{font-size:29px;font-weight:700;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+.letterhead .role{font-family:"IBM Plex Sans",sans-serif;font-size:13px;color:var(--muted);max-width:44ch;line-height:1.5}
+.seal{flex:none;width:92px;height:92px;border-radius:50%;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;position:relative;transform:rotate(-6deg);opacity:.9}
+.seal::before{content:"";position:absolute;inset:6px;border:1px dashed var(--accent);border-radius:50%}
+.seal-inner{font-family:"IBM Plex Mono",monospace;text-align:center;line-height:1.2}
+.seal-inner .initials{font-size:19px;font-weight:600;color:var(--accent);letter-spacing:.02em}
+.seal-inner .crc{font-size:7.5px;color:var(--accent);letter-spacing:.06em;margin-top:2px}
+
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:16px 32px;padding:22px 0 28px;border-bottom:1px solid var(--line)}
+.meta dt{margin:0 0 3px}
+.meta dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink)}
+.meta dd.wrap{font-family:"Newsreader",serif;font-size:14.5px}
+
+.intro{padding:26px 0 4px;font-size:16px;color:var(--ink)}
+.intro p{margin:0 0 14px;max-width:64ch}
+.intro p:last-child{margin-bottom:0}
+
+section.topic{padding:34px 0;border-bottom:1px solid var(--line)}
+section.topic:last-of-type{border-bottom:none}
+.topic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.topic-num{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--faint)}
+.topic h2{font-size:19px;font-weight:600;margin:0;text-wrap:balance;flex:1 1 auto;min-width:200px}
+.tag{font-family:"IBM Plex Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.tag.confirmed{color:var(--tag-confirmed);background:var(--tag-confirmed-soft)}
+.tag.deductive{color:var(--tag-deductive);background:var(--tag-deductive-soft)}
+.tag.unconfirmed{color:var(--tag-unconfirmed);background:var(--tag-unconfirmed-soft)}
+
+.topic p{margin:0 0 13px;max-width:66ch;font-size:15.5px}
+.topic p:last-child{margin-bottom:0}
+.topic ul{margin:0 0 13px;padding-left:20px;max-width:62ch}
+.topic li{margin-bottom:6px;font-size:15.5px}
+
+cite{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);background:var(--surface-2);padding:1px 6px;border-radius:3px;white-space:nowrap}
+
+.callout{margin-top:16px;padding:16px 18px;background:var(--tag-unconfirmed-soft);border-left:3px solid var(--tag-unconfirmed);border-radius:0 4px 4px 0;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;color:var(--ink);max-width:62ch}
+.callout strong{color:var(--tag-unconfirmed)}
+.callout.warn{background:var(--tag-deductive-soft);border-left-color:var(--tag-deductive)}
+.callout.warn strong{color:var(--tag-deductive)}
+.callout.ok{background:var(--tag-confirmed-soft);border-left-color:var(--tag-confirmed)}
+.callout.ok strong{color:var(--tag-confirmed)}
+
+.compare-wrap{overflow-x:auto;margin:18px 0 6px;border:1px solid var(--line);border-radius:6px}
+table.compare{width:100%;border-collapse:collapse;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;min-width:560px}
+table.compare th,table.compare td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+table.compare thead th{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+table.compare tbody th{font-weight:600;color:var(--ink);white-space:nowrap;width:170px}
+table.compare tbody tr:last-child td,table.compare tbody tr:last-child th{border-bottom:none}
+table.compare td.risk{color:var(--tag-unconfirmed);font-weight:600}
+table.compare td.ok{color:var(--tag-confirmed);font-weight:600}
+
+.reco{margin:18px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.reco li{display:flex;gap:12px;padding:13px 16px;background:var(--accent-soft);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;line-height:1.55;max-width:66ch}
+.reco-n{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--accent);flex:none;padding-top:1px}
+
+.verdict{margin:18px 0 0;padding:20px 22px;background:var(--surface-2);border-radius:8px;border:1px solid var(--line-strong)}
+.verdict-label{font-family:"IBM Plex Sans",sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.verdict p{margin:0;font-size:15.5px;max-width:64ch}
+.verdict strong{color:var(--tag-unconfirmed)}
+
+.ressalvas{margin-top:30px;padding:18px 20px;border:1px dashed var(--line-strong);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;color:var(--muted);line-height:1.6}
+.ressalvas p{margin:0 0 8px}
+.ressalvas p:last-child{margin-bottom:0}
+
+.sig{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.sig-name{font-size:17px;font-weight:600;font-style:italic;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:4px}
+.sig-role{font-family:"IBM Plex Sans",sans-serif;font-size:12px;color:var(--muted)}
+.sig-date{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);text-align:right}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="sheet">
+
+    <div class="letterhead">
+      <div>
+        <div class="letterhead-ref"><div class="label">Parecer Técnico Nº 08/2026</div></div>
+        <h1>Aluguel por Diária — Auditoria da Tese "PJ Sai Mais Barato"</h1>
+        <div class="role">Revisão do argumento comercial usado no simulador de diárias (AD): pessoa física × pessoa jurídica.</div>
+      </div>
+      <div class="seal" aria-hidden="true">
+        <div class="seal-inner"><div class="initials">HS</div><div class="crc">CRC · TRIB</div></div>
+      </div>
+    </div>
+
+    <dl class="meta">
+      <div><dt class="label">Destinatário</dt><dd class="wrap">Time AD (Aluguel por Diária) — Localiza&amp;Co</dd></div>
+      <div><dt class="label">Data</dt><dd>20/08/2026</dd></div>
+      <div><dt class="label">Assunto</dt><dd class="wrap">Auditoria fiscal: diária PF × PJ — "só a PJ tem as deduções"</dd></div>
+      <div><dt class="label">Escopo</dt><dd class="wrap">Terceira frente auditada, após RAC PJ (AM) e GF</dd></div>
+    </dl>
+
+    <div class="intro">
+      <p>Fui chamado(a) para auditar uma frente nova e distinta das duas anteriores. Além do RAC PJ mensal (AM) e do GF (locação de longo prazo), a Localiza tem o produto de <strong>diária (AD)</strong> — e ali a lógica comercial é outra: não é "aluguel × frota própria", é "convencer o cliente a alugar como PJ, não como PF". O argumento de venda de hoje é simples: <em>"só a PJ tem as deduções, então PJ sai mais barato"</em>.</p>
+      <p>Essa frase é parcialmente verdadeira e parcialmente perigosa. Verdadeira porque PF, dado o público que a Localiza efetivamente atende (sem autônomos, sem CNPJ recém-aberto — ver seção 01), de fato não deduz nada. Perigosa porque trata "PJ" como uma categoria única — e não é. O que decide se a PJ realmente sai mais barato não é ser PJ, é <strong>qual regime tributário</strong> essa PJ está. Isso muda o argumento de "PF × PJ" para "PF × PJ-Real" — e deixa PJ-Presumido e PJ-Simples, que provavelmente são a maioria dos clientes de diária, de fora do benefício que a simulação promete.</p>
+    </div>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">01</span>
+        <h2>O que a PF realmente pode deduzir</h2>
+        <span class="tag confirmed">Confirmado — e não se aplica ao público da Localiza</span>
+      </div>
+      <p>A regra geral do carnê-leão/livro-caixa (Lei 8.134/1990, art. 6º <cite>Lei 8.134/1990, art. 6º</cite>) permite deduzir despesas de custeio necessárias à percepção da receita e à manutenção da fonte produtora, desde que escrituradas e comprovadas. Mas a leitura consolidada da própria categoria contábil já é restritiva: despesas de <strong>transporte, combustível, manutenção de veículo e locomoção em geral não são dedutíveis</strong> no livro-caixa, mesmo quando ligadas ao trabalho.</p>
+      <p>Existe uma exceção nomeada na legislação: <strong>representante comercial autônomo</strong> pode deduzir despesas de locomoção/transporte custeadas por ele mesmo (art. 75 do RIR <cite>Decreto 9.580/2018, art. 75</cite>). Fui informado pelo time AD, porém, de que <strong>a Localiza não loca para autônomos nem para CNPJ com menos de 2 anos de constituição</strong> — política de crédito/underwriting da própria empresa. Isso remove essa exceção do escopo por completo: o público de representante comercial autônomo simplesmente não é cliente elegível de diária.</p>
+      <p>Com essa política em vigor, a frase "PF nunca deduz" deixa de ser "quase certa" e passa a ser <strong>integralmente correta</strong> para o público real que a Localiza atende em AD: pessoa física não tem, em nenhum cenário elegível, mecanismo de dedução do aluguel do carro.</p>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">02</span>
+        <h2>Diária × mensal: mesma regra federal</h2>
+        <span class="tag confirmed">Confirmado, com controvérsia</span>
+      </div>
+      <p>Não há distinção tributária federal baseada na periodicidade da cobrança — PIS/COFINS, ISS e IRPJ/CSLL tratam o gasto pela <strong>natureza</strong> (aluguel de veículo), não pelo prazo. A vedação de crédito de PIS/COFINS sobre aluguel de veículo (SC COSIT 155/2023 e 18/2020, já detalhada no parecer RAC×GF) vale igualmente para diária.</p>
+      <p>Uma ressalva que não havia aparecido antes: encontrei ao menos uma decisão do CARF em sentido <strong>oposto</strong> ao da Receita, equiparando aluguel de veículo a "máquinas e equipamentos" para fins de crédito <cite>CARF, via Migalhas/FIUS Advogados</cite>. Não é jurisprudência pacífica — a posição majoritária e a linha oficial da RFB seguem contrárias ao crédito —, mas mostra que o tema tem controvérsia real, não é encerrado. Para fins de simulação comercial, a leitura prudente continua sendo: <strong>não prometer crédito de PIS/COFINS</strong> sobre a diária, nem para PJ Real.</p>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">03</span>
+        <h2>O fator que decide de verdade: o regime, não o CNPJ</h2>
+        <span class="tag confirmed">Confirmado — acha achado central</span>
+      </div>
+      <p>Este é o ponto que muda a auditoria. Lucro Presumido apura IRPJ/CSLL sobre uma <strong>margem presumida da receita bruta</strong>, fixada em lei — o contribuinte "abre mão de deduzir despesas operacionais, custos e prejuízos fiscais" <cite>regra geral do Lucro Presumido, Decreto 9.580/2018</cite>. O Simples Nacional segue a mesma lógica: tributação sobre receita bruta, sem dedução de despesa alguma.</p>
+      <p>Ou seja: para uma empresa Simples ou Presumido, alugar o carro via CNPJ em vez de CPF <strong>não reduz um único real de imposto</strong> — não existe mecanismo de dedução para essas despesas nesses regimes. O benefício fiscal real de "alugar como PJ" só existe, de fato, para PJ no <strong>Lucro Real</strong>, e mesmo assim limitado a IRPJ/CSLL (não PIS/COFINS, seção 02).</p>
+      <div class="verdict">
+        <div class="verdict-label">Reformulação do argumento comercial</div>
+        <p>A dicotomia correta não é "PF × PJ". É <strong>"PF/PJ-Simples/PJ-Presumido" (sem benefício fiscal relevante) × "PJ-Lucro Real" (com benefício de IRPJ/CSLL)</strong>. Um simulador que compara só "diária PF" contra "diária PJ" está, na prática, assumindo — sem dizer isso ao usuário — que todo cliente PJ é Lucro Real. Se isso não for verdade para a maioria da base, a simulação promete uma economia que boa parte dos clientes PJ nunca vai sentir.</p>
+      </div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">04</span>
+        <h2>O que não sei — e importa saber</h2>
+        <span class="tag unconfirmed">Não confirmado</span>
+      </div>
+      <p>Não encontrei dado setorial (ABLA ou equivalente) sobre o mix de regime tributário dos clientes PJ de diária. A política já confirmada pelo time AD — sem autônomos, sem CNPJ com menos de 2 anos — elimina a ponta mais frágil do público (recém-abertos, MEI de ocasião) e empurra a base para empresas já estabelecidas. Mas <strong>2 anos de CNPJ não define regime tributário</strong>: uma empresa pode ter 2, 5 ou 15 anos e continuar no Simples Nacional (o teto é de receita bruta anual — R$4,8 milhões —, não de idade) ou no Lucro Presumido, que é o regime mais comum entre pequenas e médias empresas no Brasil justamente por dispensar contabilidade mais complexa. A exigência de 2 anos filtra risco de crédito, não filtra regime tributário — a incerteza central da seção 03 continua de pé.</p>
+      <div class="callout"><strong>Pergunta para o time AD —</strong> vocês têm o mix de regime tributário dos clientes PJ de diária (mesmo que estimado, via CNAE ou porte declarado no cadastro)? Essa é a variável que decide se isso é um ajuste de discurso ou um problema de escala.</div>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-bottom:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Síntese</h2></div>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead><tr><th>Perfil do locatário (elegível na Localiza)</th><th>Benefício fiscal real de alugar via CNPJ</th></tr></thead>
+          <tbody>
+            <tr><th>PF</th><td>Nenhum — sem exceção aplicável, já que autônomos não são público elegível de AD</td></tr>
+            <tr><th>PJ — Simples Nacional</th><td class="risk">Nenhum — tributação sobre receita bruta, sem dedução de despesa</td></tr>
+            <tr><th>PJ — Lucro Presumido</th><td class="risk">Nenhum — IRPJ/CSLL sobre margem presumida, sem dedução de despesa</td></tr>
+            <tr><th>PJ — Lucro Real</th><td class="ok">Real — IRPJ/CSLL dedutíveis sobre a diária (se necessária/usual); PIS/COFINS permanece vedado (majoritário)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-top:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Recomendações práticas</h2></div>
+      <ol class="reco">
+        <li><span class="reco-n">01</span><span>Não comunicar "PJ é mais barato" como regra geral — juridicamente isso se aproxima de promessa de economia que não se realiza para Simples/Presumido, com risco de reclamação/procon se o cliente comparar o boleto e não ver diferença nenhuma.</span></li>
+        <li><span class="reco-n">02</span><span>Adicionar um seletor de regime tributário na simulação de AD (Real / Presumido / Simples), reaproveitando exatamente o padrão já usado no Simulador de Frota (cards de Regime, mesma lógica de <code>perfil==="real"</code> que gate<sub>ia</sub> os créditos em <code>calc()</code>/<code>calcEV()</code>/<code>calcModelo()</code>) — mesma arquitetura, resolve a inconsistência entre as ferramentas.</span></li>
+        <li><span class="reco-n">03</span><span>Para PJ Lucro Real, mostrar só o benefício de IRPJ/CSLL — não incluir crédito de PIS/COFINS na simulação, dado o entendimento majoritário da RFB (SC COSIT 155/2023, 18/2020), mesmo havendo controvérsia pontual no CARF.</span></li>
+        <li><span class="reco-n">04</span><span>Levantar com o time AD o mix real de regime tributário da base PJ de diária antes de decidir a prioridade dessa correção — se a maioria for Simples/Presumido, isso deixa de ser um ajuste de copy e vira prioridade de produto.</span></li>
+      </ol>
+    </section>
+
+    <div class="ressalvas">
+      <p><strong>Ressalvas finais.</strong> Este documento é um levantamento técnico-preliminar, produzido a partir de pesquisa em fontes públicas (legislação, normas da RFB, jurisprudência do CARF e conteúdo jurídico-contábil especializado) para apoiar a discussão interna sobre o simulador de diárias (AD). O ponto 04 depende de dado que a Localiza tem e eu não — a conclusão sobre a materialidade do problema fica condicionada a esse dado.</p>
+      <p>Não substitui parecer formal assinado por contador (CRC) ou advogado tributarista (OAB) habilitado, especialmente antes de qualquer mudança na comunicação comercial do produto AD.</p>
+    </div>
+
+    <div class="sig">
+      <div>
+        <div class="sig-name">Heitor Salgado</div>
+        <div class="sig-role">Contador · Especialista em Tributação de Contratos de Locação e Arrendamento Mercantil</div>
+      </div>
+      <div class="sig-date">Belo Horizonte, 20 de agosto de 2026</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

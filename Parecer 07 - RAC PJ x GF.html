@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Parecer RAC × GF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f2f1ec;
+  --surface:#fffefb;
+  --surface-2:#ece9e1;
+  --ink:#20241f;
+  --muted:#5c6259;
+  --faint:#8a8f83;
+  --line:rgba(32,36,31,.14);
+  --line-strong:rgba(32,36,31,.28);
+  --accent:#2c4a6e;
+  --accent-soft:rgba(44,74,110,.08);
+  --tag-confirmed:#2f6e4f;
+  --tag-confirmed-soft:rgba(47,110,79,.1);
+  --tag-deductive:#9c7218;
+  --tag-deductive-soft:rgba(156,114,24,.12);
+  --tag-unconfirmed:#a63a3a;
+  --tag-unconfirmed-soft:rgba(166,58,58,.1);
+  --shadow:0 1px 2px rgba(32,36,31,.04),0 12px 32px -16px rgba(32,36,31,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171a;
+    --surface:#1a1e1c;
+    --surface-2:#20241f;
+    --ink:#eceae2;
+    --muted:#a7ac9f;
+    --faint:#767c70;
+    --line:rgba(236,234,226,.14);
+    --line-strong:rgba(236,234,226,.26);
+    --accent:#8fb2da;
+    --accent-soft:rgba(143,178,218,.1);
+    --tag-confirmed:#59a67e;
+    --tag-confirmed-soft:rgba(89,166,126,.14);
+    --tag-deductive:#d1a545;
+    --tag-deductive-soft:rgba(209,165,69,.14);
+    --tag-unconfirmed:#dd8078;
+    --tag-unconfirmed-soft:rgba(221,128,120,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171a;
+  --surface:#1a1e1c;
+  --surface-2:#20241f;
+  --ink:#eceae2;
+  --muted:#a7ac9f;
+  --faint:#767c70;
+  --line:rgba(236,234,226,.14);
+  --line-strong:rgba(236,234,226,.26);
+  --accent:#8fb2da;
+  --accent-soft:rgba(143,178,218,.1);
+  --tag-confirmed:#59a67e;
+  --tag-confirmed-soft:rgba(89,166,126,.14);
+  --tag-deductive:#d1a545;
+  --tag-deductive-soft:rgba(209,165,69,.14);
+  --tag-unconfirmed:#dd8078;
+  --tag-unconfirmed-soft:rgba(221,128,120,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Newsreader",Georgia,"Times New Roman",serif;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+}
+.page{
+  max-width:800px;
+  margin:0 auto;
+  padding:56px 20px 96px;
+}
+.sheet{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:4px;
+  box-shadow:var(--shadow);
+  padding:52px 56px 48px;
+}
+@media (max-width:640px){
+  .sheet{padding:36px 22px 32px}
+  .page{padding:28px 12px 64px}
+}
+
+.label{
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-size:10.5px;
+  font-weight:600;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",Consolas,monospace}
+
+/* Letterhead */
+.letterhead{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:24px;
+  padding-bottom:28px;
+  border-bottom:2px solid var(--ink);
+}
+.letterhead-ref{margin-bottom:14px}
+.letterhead-ref .label{margin-bottom:3px}
+.letterhead h1{
+  font-size:29px;
+  font-weight:700;
+  letter-spacing:-.01em;
+  margin:0 0 6px;
+  text-wrap:balance;
+}
+.letterhead .role{
+  font-family:"IBM Plex Sans",sans-serif;
+  font-size:13px;
+  color:var(--muted);
+  max-width:44ch;
+  line-height:1.5;
+}
+.seal{
+  flex:none;
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  border:1.5px solid var(--accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  transform:rotate(-6deg);
+  opacity:.9;
+}
+.seal::before{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:1px dashed var(--accent);
+  border-radius:50%;
+}
+.seal-inner{
+  font-family:"IBM Plex Mono",monospace;
+  text-align:center;
+  line-height:1.2;
+}
+.seal-inner .initials{
+  font-size:19px;
+  font-weight:600;
+  color:var(--accent);
+  letter-spacing:.02em;
+}
+.seal-inner .crc{
+  font-size:7.5px;
+  color:var(--accent);
+  letter-spacing:.06em;
+  margin-top:2px;
+}
+
+/* Metadata grid */
+.meta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px 32px;
+  padding:22px 0 28px;
+  border-bottom:1px solid var(--line);
+}
+.meta dt{margin:0 0 3px}
+.meta dd{
+  margin:0;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:13px;
+  color:var(--ink);
+}
+.meta dd.wrap{font-family:"Newsreader",serif;font-size:14.5px}
+
+/* Body typography */
+.intro{
+  padding:26px 0 4px;
+  font-size:16px;
+  color:var(--ink);
+}
+.intro p{margin:0 0 14px;max-width:64ch}
+.intro p:last-child{margin-bottom:0}
+
+section.topic{
+  padding:34px 0;
+  border-bottom:1px solid var(--line);
+}
+section.topic:last-of-type{border-bottom:none}
+.topic-head{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:4px;
+}
+.topic-num{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:13px;
+  color:var(--faint);
+}
+.topic h2{
+  font-size:19px;
+  font-weight:600;
+  margin:0;
+  text-wrap:balance;
+  flex:1 1 auto;
+  min-width:200px;
+}
+.tag{
+  font-family:"IBM Plex Sans",sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  padding:3px 9px;
+  border-radius:100px;
+  white-space:nowrap;
+}
+.tag.confirmed{color:var(--tag-confirmed);background:var(--tag-confirmed-soft)}
+.tag.deductive{color:var(--tag-deductive);background:var(--tag-deductive-soft)}
+.tag.unconfirmed{color:var(--tag-unconfirmed);background:var(--tag-unconfirmed-soft)}
+
+.topic p{
+  margin:0 0 13px;
+  max-width:66ch;
+  font-size:15.5px;
+}
+.topic p:last-child{margin-bottom:0}
+.topic ul{margin:0 0 13px;padding-left:20px;max-width:62ch}
+.topic li{margin-bottom:6px;font-size:15.5px}
+
+cite{
+  font-style:normal;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:12.5px;
+  color:var(--muted);
+  background:var(--surface-2);
+  padding:1px 6px;
+  border-radius:3px;
+  white-space:nowrap;
+}
+
+.callout{
+  margin-top:16px;
+  padding:16px 18px;
+  background:var(--tag-unconfirmed-soft);
+  border-left:3px solid var(--tag-unconfirmed);
+  border-radius:0 4px 4px 0;
+  font-family:"IBM Plex Sans",sans-serif;
+  font-size:13.5px;
+  color:var(--ink);
+  max-width:62ch;
+}
+.callout strong{color:var(--tag-unconfirmed)}
+
+/* Comparative table */
+.compare-wrap{
+  overflow-x:auto;
+  margin:18px 0 6px;
+  border:1px solid var(--line);
+  border-radius:6px;
+}
+table.compare{
+  width:100%;
+  border-collapse:collapse;
+  font-family:"IBM Plex Sans",sans-serif;
+  font-size:13.5px;
+  min-width:560px;
+}
+table.compare th,table.compare td{
+  text-align:left;
+  padding:11px 14px;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+  line-height:1.45;
+}
+table.compare thead th{
+  font-size:10.5px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  background:var(--surface-2);
+}
+table.compare tbody th{
+  font-weight:600;
+  color:var(--ink);
+  white-space:nowrap;
+  width:150px;
+}
+table.compare tbody tr:last-child td,table.compare tbody tr:last-child th{border-bottom:none}
+table.compare td.risk{color:var(--tag-unconfirmed)}
+
+/* Recommendations */
+.reco{
+  margin:18px 0 0;
+  padding:0;
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.reco li{
+  display:flex;
+  gap:12px;
+  padding:13px 16px;
+  background:var(--accent-soft);
+  border-radius:6px;
+  font-family:"IBM Plex Sans",sans-serif;
+  font-size:13.5px;
+  line-height:1.55;
+  max-width:66ch;
+}
+.reco-n{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:12px;
+  font-weight:600;
+  color:var(--accent);
+  flex:none;
+  padding-top:1px;
+}
+
+/* Ressalvas */
+.ressalvas{
+  margin-top:30px;
+  padding:18px 20px;
+  border:1px dashed var(--line-strong);
+  border-radius:6px;
+  font-family:"IBM Plex Sans",sans-serif;
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.6;
+}
+.ressalvas p{margin:0 0 8px}
+.ressalvas p:last-child{margin-bottom:0}
+
+/* Signature */
+.sig{
+  margin-top:40px;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  flex-wrap:wrap;
+  gap:16px;
+}
+.sig-name{
+  font-size:17px;
+  font-weight:600;
+  font-style:italic;
+  border-bottom:1px solid var(--ink);
+  padding-bottom:6px;
+  margin-bottom:4px;
+}
+.sig-role{
+  font-family:"IBM Plex Sans",sans-serif;
+  font-size:12px;
+  color:var(--muted);
+}
+.sig-date{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:12px;
+  color:var(--muted);
+  text-align:right;
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="sheet">
+
+    <div class="letterhead">
+      <div>
+        <div class="letterhead-ref">
+          <div class="label">Parecer Técnico Nº 07/2026</div>
+        </div>
+        <h1>Locação de Frota Corporativa — RAC PJ × Gestão de Frotas</h1>
+        <div class="role">Impactos fiscais e de dedução tributária na migração de contratos de 12 para 36 meses, na ótica da empresa locatária.</div>
+      </div>
+      <div class="seal" aria-hidden="true">
+        <div class="seal-inner">
+          <div class="initials">HS</div>
+          <div class="crc">CRC · TRIB</div>
+        </div>
+      </div>
+    </div>
+
+    <dl class="meta">
+      <div>
+        <dt class="label">Destinatário</dt>
+        <dd class="wrap">Times Simulador de Frota &amp; Gestão de Frotas (GF) — Localiza&amp;Co</dd>
+      </div>
+      <div>
+        <dt class="label">Data</dt>
+        <dd>20/08/2026</dd>
+      </div>
+      <div>
+        <dt class="label">Assunto</dt>
+        <dd class="wrap">RAC PJ (≤ 12 meses) vs. contrato GF (36 meses) — enquadramento tributário</dd>
+      </div>
+      <div>
+        <dt class="label">Escopo</dt>
+        <dd class="wrap">Perspectiva da empresa locatária (cliente), não da locadora</dd>
+      </div>
+    </dl>
+
+    <div class="intro">
+      <p>Fui consultado(a) sobre um ponto específico: o produto RAC PJ opera hoje com contrato máximo de 12 meses; com a integração do time de Gestão de Frotas (GF) ao projeto, entram em cena contratos de até 36 meses. A pergunta de fundo é se esse salto de prazo <em>muda o tratamento fiscal</em> da despesa para a empresa que aluga a frota — dedutibilidade de IRPJ/CSLL, crédito de PIS/COFINS, e o risco de a Receita Federal enxergar o contrato não como aluguel, mas como um financiamento disfarçado.</p>
+      <p>A resposta curta: o prazo, isoladamente, pesa menos do que se costuma imaginar. O que realmente muda entre 12 e 36 meses é a <strong>exposição a outros fatores</strong> — estrutura da cláusula de compra, composição do contrato GF (aluguel + serviços de gestão) e, sobretudo, a Reforma Tributária em transição neste exato período. Detalho abaixo, ponto a ponto, com as fontes que sustentam cada conclusão e sinalizando onde a pesquisa não encontrou resposta definitiva.</p>
+    </div>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">01</span>
+        <h2>Locação operacional × arrendamento mercantil financeiro</h2>
+        <span class="tag deductive">Interpretação dedutiva</span>
+      </div>
+      <p>A Lei 6.099/1974 <cite>Lei 6.099/1974</cite> distingue arrendamento mercantil de locação comum pela existência de opção de compra ao final do contrato. A Resolução BACEN 2.309/1996 <cite>Res. BACEN 2.309/96</cite> detalha o critério prático: um contrato é <strong>locação operacional</strong> quando as contraprestações somam até 90% do valor do bem <strong>e</strong> o prazo é inferior a 75% da vida útil econômica do bem, sem VRG (valor residual garantido) e com opção de compra a preço de mercado. Fora desses limites, o contrato tende a ser reclassificado como <strong>arrendamento mercantil financeiro</strong> — que o STJ trata juridicamente como financiamento, não locação.</p>
+      <p>Aplicando isso à frota: a Receita fixa a vida útil fiscal de um automóvel em 5 anos / 60 meses, com depreciação de 20% ao ano <cite>IN RFB 1700/2017, Anexo III</cite>. O limite de 75% equivale a 45 meses. Um contrato GF de 36 meses corresponde a 60% da vida útil — <strong>abaixo</strong> desse teto. Ou seja: o prazo de 36 meses, isoladamente, não é suficiente para caracterizar arrendamento financeiro segundo o critério objetivo da Res. BACEN 2.309/96.</p>
+      <p>O que efetivamente desloca um contrato para essa zona de risco não é o prazo em si, mas cláusulas específicas: opção de compra com VRG embutido nas parcelas, ou valor presente das contraprestações muito próximo do valor de mercado do veículo.</p>
+      <div class="callout"><strong>Ressalva de pesquisa —</strong> não localizei Solução de Consulta COSIT nem acórdão do CARF tratando especificamente de locação de frotas (RAC/GF) sob o critério de prazo. Os precedentes de CARF encontrados (glosas de leasing de veículos de luxo, mai/2025) discutem falta de comprovação de necessidade empresarial — não recaracterização por prazo. A leitura acima é uma aplicação dedutiva da norma geral, não uma constatação jurisprudencial direta.</div>
+      <div class="callout" style="background:var(--tag-deductive-soft);border-left-color:var(--tag-deductive)"><strong style="color:var(--tag-deductive)">Atualização —</strong> a cláusula de opção de compra do contrato GF recebida após este parecer (ver <strong>Adendo</strong> ao final) traz exatamente o elemento que esta seção tratava como hipótese. Não é mais uma leitura dedutiva de risco genérico — é o próprio texto contratual apresentando o traço definidor do art. 1º da Lei 6.099/1974.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">02</span>
+        <h2>PIS/COFINS não-cumulativo — crédito sobre o aluguel</h2>
+        <span class="tag confirmed">Confirmado</span>
+      </div>
+      <p>Este é o achado mais relevante do parecer, e é contraintuitivo. O art. 3º, IV das Leis 10.637/2002 e 10.833/2003 <cite>Leis 10.637/02 e 10.833/03, art. 3º</cite> autoriza crédito de PIS/COFINS sobre "aluguéis de <strong>prédios, máquinas e equipamentos</strong>" pagos a pessoa jurídica. A redação legal não menciona veículos — e a Receita Federal tem lido essa omissão de forma literal.</p>
+      <p>Na Solução de Consulta COSIT nº 155/2023 <cite>SC COSIT 155/2023</cite> e na SC COSIT nº 18/2020 <cite>SC COSIT 18/2020</cite>, a RFB glosou créditos de PIS/COFINS sobre aluguel de veículos — ônibus de transporte de funcionários, veículos leves (linha Strada, Saveiro, Onix, S10) e equipamentos pesados enquadrados como veículo —, por entender que a locação de veículo é prestação de serviço (obrigação de fazer), fora do rol taxativo do art. 3º, IV. Em contrapartida, combustível e lubrificante usados nesses veículos <em>podem</em> gerar crédito, quando essenciais à atividade.</p>
+      <p>Não encontrei nenhuma norma que trate o <strong>prazo do contrato</strong> como fator relevante para essa vedação — o entendimento da RFB é sobre a <em>natureza</em> do gasto (aluguel de veículo, não de "prédio, máquina ou equipamento"), não sobre sua duração. Isso significa que, pelo entendimento vigente, <strong>nem o RAC PJ de 12 meses nem o GF de 36 meses geram crédito de PIS/COFINS sobre a locação em si</strong> — os dois ficam na mesma posição.</p>
+      <div class="callout"><strong>Achado acionável para o simulador —</strong> a ferramenta hoje modela o crédito de PIS/COFINS de forma binária, condicionado ao campo "Atividade fim?" (100% dedutível se sim). As SC COSIT 155/2023 e 18/2020 sugerem que a RFB nega esse crédito especificamente por classificar aluguel de veículo como serviço — independentemente de ser atividade-fim do cliente. Vale validar essa lógica com o time tributário/jurídico da Localiza antes de estender o cálculo para contratos GF, onde os valores envolvidos (36 meses × frota maior) tornam o efeito bem mais material.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">03</span>
+        <h2>IRPJ/CSLL — dedutibilidade da despesa</h2>
+        <span class="tag confirmed">Confirmado (regra geral)</span>
+      </div>
+      <p>A regra geral do art. 311/312 do RIR/2018 <cite>Decreto 9.580/2018, art. 311-312</cite> exige que a despesa seja necessária, usual e normal à atividade, e documentalmente comprovada (contrato, nota fiscal, comprovante de pagamento). A fiscalização e o CARF concentram-se na <strong>essencialidade e pertinência ao negócio</strong> — não no prazo do contrato. Não localizei precedente que trate 12 × 36 meses como fator de dedutibilidade da parcela em si.</p>
+      <p>O ponto que muda de fato é condicional: <strong>se</strong> o contrato for reclassificado como arrendamento mercantil financeiro (seção 01), a Lei 9.249/1995, art. 13, VIII (com redação dada pela Lei 12.973/2014) <cite>Lei 9.249/95, art. 13, VIII</cite> veda a dedução plena da despesa financeira quando a arrendatária passa a registrar o bem como ativo próprio — a dedução some a acontecer via depreciação + encargos financeiros, e não mais como aluguel integralmente dedutível no mês. Esse é o real "gatilho" de risco a monitorar, não o prazo de 36 meses isoladamente.</p>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">04</span>
+        <h2>CPC 06 (R2) / IFRS 16 — efeito contábil x base fiscal</h2>
+        <span class="tag confirmed">Confirmado, com ressalva</span>
+      </div>
+      <p>Sob o CPC 06 (R2) / IFRS 16, <strong>todo</strong> contrato de arrendamento — inclusive o que seria "operacional" pela ótica tributária — passa a gerar ativo de direito de uso e passivo de arrendamento no balanço societário da empresa locatária. A distinção contábil operacional/financeiro deixou de existir do lado do locatário <cite>CPC 06 (R2)</cite>. Isso é relevante porque um contrato GF de 36 meses gera um passivo de valor presente bem maior no balanço do cliente do que um RAC de 12 meses — com efeito em covenants e índices de alavancagem, mesmo sem qualquer mudança tributária.</p>
+      <p>Para a apuração fiscal, porém, a Lei 12.973/2014 estabelece a chamada <strong>neutralidade tributária</strong>: mudanças de método ou critério contábil adotadas após a lei não têm efeito na apuração de tributos federais até que uma lei tributária específica regule a matéria <cite>Lei 12.973/2014</cite>. Não encontrei essa regulamentação equivalente para IRPJ/CSLL/PIS-COFINS acompanhando o novo padrão contábil de arrendamentos — na prática, a base fiscal continua tratando a locação operacional como despesa diretamente dedutível, com o ajuste contábil × fiscal feito via LALUR/e-Lalur.</p>
+      <div class="callout"><strong>Ressalva de pesquisa —</strong> não localizei Instrução Normativa da RFB recente (2024–2026) que regulamente de forma definitiva o CPC 06 (R2) para fins de IRPJ/CSLL. A prática de ajuste via LALUR é amplamente reportada por fontes contábeis, mas recomendo confirmação formal antes de tratar isso como ponto encerrado em qualquer material comercial.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">05</span>
+        <h2>ISS em contratos de Gestão de Frotas</h2>
+        <span class="tag deductive">Regra geral confirmada / correlação com prazo não confirmada</span>
+      </div>
+      <p>A Súmula Vinculante 31 do STF <cite>STF, SV 31</cite> afasta a incidência de ISS sobre locação pura de bem móvel. Mas a jurisprudência do próprio STF deixa de aplicar essa súmula quando a locação do bem <strong>não está claramente segregada</strong> — em objeto e em preço — da prestação de serviços empacotada junto.</p>
+      <p>Isso importa diretamente para o GF: contratos de Gestão de Frotas tipicamente reúnem, além do aluguel do veículo, serviços de manutenção, gestão e telemetria. Se o contrato ou a nota fiscal não segregar claramente o valor da locação (fora do campo do ISS) do valor dos serviços (dentro do campo do ISS), existe risco de o município tributar ISS sobre o valor total do contrato — não apenas sobre a fração de serviço.</p>
+      <p>Não encontrei fonte que confirme, com dados, que contratos de 36 meses empacotam proporcionalmente mais serviços que os de 12 meses — é uma inferência de mercado plausível (contratos mais longos favorecem pacotes de gestão mais completos), mas não um achado documentado.</p>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">06</span>
+        <h2>Reforma Tributária (IBS/CBS) — a variável que mais pesa</h2>
+        <span class="tag unconfirmed">Ponto crítico — sem blindagem legal</span>
+      </div>
+      <p>Este é, na minha leitura, o ponto de maior exposição prática — e o motivo pelo qual prazo <em>importa</em>, ainda que não pelas vias tributárias "clássicas" das seções anteriores. A LC 214/2025, no seu art. 487 <cite>LC 214/2025, art. 487</cite>, criou uma regra de transição que trava a alíquota em 3,65% sobre a receita bruta para contratos firmados até 16/01/2025 — mas essa blindagem vale <strong>apenas para bens imóveis</strong> (locação comercial e residencial). Não existe regra de transição equivalente para locação de bens móveis — veículos, máquinas, equipamentos.</p>
+      <p>Na prática: um contrato RAC ou GF assinado hoje, incluindo os de 36 meses, <strong>não tem proteção contratual automática contra a migração para a alíquota cheia do IBS/CBS</strong> conforme a reforma avança. O cronograma confirmado por múltiplas fontes: 2026 é "ano de teste", com cobrança simbólica de CBS 0,9% + IBS 0,1%, dispensada de recolhimento efetivo se cumpridas as obrigações acessórias; a transição plena ocorre entre 2027 e 2033, com convivência gradual com os tributos extintos (PIS, COFINS, ICMS, ISS) <cite>SESCON; Portal da Reforma Tributária</cite>. A alíquota cheia do IVA-dual, frequentemente citada em torno de ~26,5%, é uma <strong>estimativa de mercado</strong> — não um valor definitivo em lei.</p>
+      <p>Sobre o crédito de IBS/CBS para a empresa locatária: o desenho é de crédito financeiro pleno — o cliente credita o que a locadora efetivamente recolheu. Se a locadora operar sob regime que recolhe proporcionalmente menos (ex.: Simples Nacional), o crédito repassado tende a ser menor.</p>
+      <div class="callout"><strong>Ressalva de pesquisa —</strong> a mecânica de crédito de IBS/CBS descrita acima foi localizada em fonte secundária (conteúdo jurídico), não em leitura direta do texto da LC 214/2025 — recomendo confirmar no texto legal antes de comunicar isso como fato consolidado a clientes ou ao time comercial.</div>
+    </section>
+
+    <section class="topic" style="background:var(--accent-soft);margin:0 -56px;padding:34px 56px;border-bottom:none">
+      <div class="topic-head">
+        <span class="topic-num mono" style="color:var(--accent)">ADENDO · 21/08/2026</span>
+        <h2>A cláusula de opção de compra do contrato GF</h2>
+        <span class="tag unconfirmed">Risco concreto — depende de dado ausente</span>
+      </div>
+      <p>Recebi o texto de uma cláusula do contrato-padrão de GF, nestes termos (reproduzo o sentido, corrigindo apenas erros de digitação do original que me foi passado):</p>
+      <div class="callout" style="background:var(--surface-2);border-left-color:var(--faint);font-style:italic">"A fim de fomentar o uso cuidadoso dos bens durante o período de locação, [a Localiza] poderá oferecer ao cliente adimplente com suas obrigações contratuais a opção de compra do carro ao fim do contrato. O cliente que optar será isento da obrigação de devolver o carro, desde que o pagamento seja realizado a tempo e modo pelo usuário antes da devolução, devendo o veículo ser aceito no estado em que se encontra."</div>
+
+      <p>Isso muda o patamar da seção 01 deste parecer. Não é mais "e se houver opção de compra" — <strong>há</strong>. E a Lei 6.099/1974 <cite>Lei 6.099/1974, art. 1º</cite> define arrendamento mercantil justamente como o negócio de locação em que se prevê, desde a origem, a possibilidade de compra pelo arrendatário. A cláusula acima é, na forma, exatamente esse traço.</p>
+
+      <p><strong>Três elementos da cláusula pesam na análise — dois reduzem o risco, um o mantém em aberto:</strong></p>
+      <ul>
+        <li><strong>"Poderá oferecer" (fator atenuante):</strong> a opção não é um direito automático do cliente desde a assinatura — é uma faculdade da Localiza, oferecida a clientes adimplentes. Isso a afasta de ser, tecnicamente, uma opção de compra "inicialmente prevista" como termo obrigatório do negócio, que é o que a Lei 6.099/74 e a Res. BACEN 2.309/96 miram. Um contrato onde a opção é eventual e discricionária é mais defensável como locação operacional do que um onde ela é cláusula padrão e certa.</li>
+        <li><strong>Condicionada à adimplência (fator atenuante):</strong> reforça a natureza de "benefício comercial" ligado ao comportamento do cliente, não de financiamento estruturado desde o início — argumento que ajuda a sustentar a tese de locação operacional perante uma eventual fiscalização.</li>
+        <li><strong>Preço da compra não aparece na cláusula (fator que mantém o risco em aberto):</strong> este é o dado que decide tudo, e a cláusula recebida não o traz. Se o valor pago para "ficar isento de devolver" for <strong>próximo do valor de mercado do veículo</strong> na data, a operação se sustenta como locação com venda posterior autônoma — baixo risco. Se for um <strong>valor pré-fixado, simbólico, ou já embutido/diluído nas parcelas mensais</strong> (o clássico VRG antecipado), a operação se aproxima estruturalmente de uma venda financiada disfarçada de aluguel — e aí a Res. BACEN 2.309/96 deixa de proteger o enquadramento como locação operacional, com a consequência do art. 13, VIII da Lei 9.249/95 (seção 03): perda da dedução plena do aluguel, substituída por depreciação + encargo financeiro.</li>
+      </ul>
+
+      <p>Não tenho, no trecho recebido, como saber em qual dos dois cenários o contrato de fato se encaixa — a expressão "aceito no estado em que se encontra" descreve a condição do bem na entrega, não o valor pago por ele.</p>
+
+      <div class="callout"><strong>Recomendação imediata —</strong> antes de qualquer decisão sobre como o simulador trata contratos GF com essa cláusula, pedir ao jurídico da Localiza a minuta completa da cláusula de opção de compra, com foco específico em: (1) como o valor de compra é calculado — tabela FIPE/mercado na data, ou valor pré-fixado no contrato; (2) se esse valor está de alguma forma diluído ou antecipado nas parcelas mensais de aluguel; (3) se a cláusula consta em 100% dos contratos GF ou é oferta pontual, conforme o texto sugere. A resposta a (1) e (2) determina se este é um não-evento fiscal ou um risco real de recaracterização.</div>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-bottom:8px">
+      <div class="topic-head">
+        <span class="topic-num">—</span>
+        <h2>Síntese comparativa</h2>
+      </div>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead>
+            <tr><th>Dimensão</th><th>RAC PJ (≤ 12 meses)</th><th>GF (36 meses)</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Natureza jurídica</th>
+              <td>Locação operacional; prazo bem abaixo do limite de 75% da vida útil (45 meses)</td>
+              <td class="risk">Contrato-padrão já traz opção de compra ao fim (ver Adendo) — enquadramento depende do mecanismo de preço, ainda não confirmado</td>
+            </tr>
+            <tr>
+              <th>PIS/COFINS</th>
+              <td>Sem crédito sobre a locação em si (SC COSIT 155/2023)</td>
+              <td>Mesma vedação — prazo não altera o entendimento da RFB</td>
+            </tr>
+            <tr>
+              <th>IRPJ/CSLL</th>
+              <td>Parcela dedutível integralmente, se necessária/usual</td>
+              <td>Mesma regra — risco de perda de dedução plena só em caso de recaracterização como leasing financeiro</td>
+            </tr>
+            <tr>
+              <th>CPC 06(R2)/IFRS16</th>
+              <td>Gera passivo de arrendamento menor (12 meses de fluxo)</td>
+              <td>Passivo de valor presente bem maior no balanço — atenção a covenants</td>
+            </tr>
+            <tr>
+              <th>ISS</th>
+              <td>Menor exposição — tende a ser locação "pura"</td>
+              <td>Maior exposição — pacote de gestão/manutenção exige segregação contratual clara</td>
+            </tr>
+            <tr>
+              <th>Reforma (IBS/CBS)</th>
+              <td class="risk">Sem blindagem — mas renovação anual permite reprecificar rápido</td>
+              <td class="risk">Sem blindagem — preço travado por até 36 meses durante toda a transição 2026-2033</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-top:8px">
+      <div class="topic-head">
+        <span class="topic-num">—</span>
+        <h2>Recomendações práticas</h2>
+      </div>
+      <ol class="reco">
+        <li><span class="reco-n">00</span><span><strong>Prioridade máxima:</strong> obter do jurídico o mecanismo de precificação da opção de compra na cláusula GF (valor de mercado na data vs. valor pré-fixado/diluído nas parcelas) — ver Adendo. Isso decide se o contrato GF, como está redigido, sustenta o enquadramento como locação operacional.</span></li>
+        <li><span class="reco-n">01</span><span>Validar formalmente com o jurídico/tributário interno da Localiza o entendimento da SC COSIT 155/2023 sobre crédito de PIS/COFINS em locação de veículo — isso pode mudar a economia percebida pelo cliente em qualquer simulação, RAC ou GF.</span></li>
+        <li><span class="reco-n">02</span><span>Em contratos GF, segregar contratualmente e na nota fiscal o valor da locação (bem móvel) do valor dos serviços de gestão/manutenção, para reduzir o risco de ISS sobre o total do contrato.</span></li>
+        <li><span class="reco-n">03</span><span>Incluir cláusula de revisão/reequilíbrio de preço vinculada à variação da carga tributária federal (IBS/CBS) em contratos GF de 36 meses — não há blindagem legal automática equivalente à de bens imóveis.</span></li>
+        <li><span class="reco-n">04</span><span>Evitar opção de compra com VRG embutido em contratos de locação (RAC ou GF) quando o objetivo comercial for preservar o enquadramento como despesa operacional plenamente dedutível.</span></li>
+        <li><span class="reco-n">05</span><span>Ao integrar o GF ao simulador, revisar com a área tributária se a regra atual da ferramenta ("Atividade fim = crédito total de PIS/COFINS") reflete o entendimento vigente da RFB — o achado da seção 02 sugere que pode não refletir, com efeito mais material em contratos GF de maior valor.</span></li>
+      </ol>
+    </section>
+
+    <div class="ressalvas">
+      <p><strong>Ressalvas finais.</strong> Este documento é um levantamento técnico-preliminar, produzido a partir de pesquisa em fontes públicas (legislação, normas da RFB, jurisprudência do CARF/STF e conteúdo jurídico-contábil especializado) para apoiar a discussão interna sobre a integração RAC × GF no simulador. Pontos sinalizados como "não confirmado" ou "interpretação dedutiva" não têm respaldo em fonte primária direta e não devem ser comunicados a clientes como posição jurídica fechada.</p>
+      <p>Não substitui parecer formal assinado por contador (CRC) ou advogado tributarista (OAB) habilitado, especialmente antes de decisões contratuais, precificação ou comunicação externa que envolvam carga tributária.</p>
+    </div>
+
+    <div class="sig">
+      <div>
+        <div class="sig-name">Heitor Salgado</div>
+        <div class="sig-role">Contador · Especialista em Tributação de Contratos de Locação e Arrendamento Mercantil</div>
+      </div>
+      <div class="sig-date">Belo Horizonte, 20 de agosto de 2026</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

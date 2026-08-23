@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ganho de Capital &amp; Contratos Firmados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f2f1ec;
+  --surface:#fffefb;
+  --surface-2:#ece9e1;
+  --ink:#20241f;
+  --muted:#5c6259;
+  --faint:#8a8f83;
+  --line:rgba(32,36,31,.14);
+  --line-strong:rgba(32,36,31,.28);
+  --accent:#2c4a6e;
+  --accent-soft:rgba(44,74,110,.08);
+  --tag-confirmed:#2f6e4f;
+  --tag-confirmed-soft:rgba(47,110,79,.1);
+  --tag-deductive:#9c7218;
+  --tag-deductive-soft:rgba(156,114,24,.12);
+  --tag-unconfirmed:#a63a3a;
+  --tag-unconfirmed-soft:rgba(166,58,58,.1);
+  --shadow:0 1px 2px rgba(32,36,31,.04),0 12px 32px -16px rgba(32,36,31,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171a;
+    --surface:#1a1e1c;
+    --surface-2:#20241f;
+    --ink:#eceae2;
+    --muted:#a7ac9f;
+    --faint:#767c70;
+    --line:rgba(236,234,226,.14);
+    --line-strong:rgba(236,234,226,.26);
+    --accent:#8fb2da;
+    --accent-soft:rgba(143,178,218,.1);
+    --tag-confirmed:#59a67e;
+    --tag-confirmed-soft:rgba(89,166,126,.14);
+    --tag-deductive:#d1a545;
+    --tag-deductive-soft:rgba(209,165,69,.14);
+    --tag-unconfirmed:#dd8078;
+    --tag-unconfirmed-soft:rgba(221,128,120,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171a;
+  --surface:#1a1e1c;
+  --surface-2:#20241f;
+  --ink:#eceae2;
+  --muted:#a7ac9f;
+  --faint:#767c70;
+  --line:rgba(236,234,226,.14);
+  --line-strong:rgba(236,234,226,.26);
+  --accent:#8fb2da;
+  --accent-soft:rgba(143,178,218,.1);
+  --tag-confirmed:#59a67e;
+  --tag-confirmed-soft:rgba(89,166,126,.14);
+  --tag-deductive:#d1a545;
+  --tag-deductive-soft:rgba(209,165,69,.14);
+  --tag-unconfirmed:#dd8078;
+  --tag-unconfirmed-soft:rgba(221,128,120,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Newsreader",Georgia,"Times New Roman",serif;-webkit-font-smoothing:antialiased;line-height:1.6}
+.page{max-width:800px;margin:0 auto;padding:56px 20px 96px}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow);padding:52px 56px 48px}
+@media (max-width:640px){.sheet{padding:36px 22px 32px}.page{padding:28px 12px 64px}}
+
+.label{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",Consolas,monospace}
+
+.letterhead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:28px;border-bottom:2px solid var(--ink)}
+.letterhead-ref{margin-bottom:14px}
+.letterhead-ref .label{margin-bottom:3px}
+.letterhead h1{font-size:27px;font-weight:700;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+.letterhead .role{font-family:"IBM Plex Sans",sans-serif;font-size:13px;color:var(--muted);max-width:46ch;line-height:1.5}
+.seal{flex:none;width:92px;height:92px;border-radius:50%;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;position:relative;transform:rotate(-6deg);opacity:.9}
+.seal::before{content:"";position:absolute;inset:6px;border:1px dashed var(--accent);border-radius:50%}
+.seal-inner{font-family:"IBM Plex Mono",monospace;text-align:center;line-height:1.2}
+.seal-inner .initials{font-size:19px;font-weight:600;color:var(--accent);letter-spacing:.02em}
+.seal-inner .crc{font-size:7.5px;color:var(--accent);letter-spacing:.06em;margin-top:2px}
+
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:16px 32px;padding:22px 0 28px;border-bottom:1px solid var(--line)}
+.meta dt{margin:0 0 3px}
+.meta dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink)}
+.meta dd.wrap{font-family:"Newsreader",serif;font-size:14.5px}
+
+.intro{padding:26px 0 4px;font-size:16px;color:var(--ink)}
+.intro p{margin:0 0 14px;max-width:64ch}
+.intro p:last-child{margin-bottom:0}
+
+section.topic{padding:34px 0;border-bottom:1px solid var(--line)}
+section.topic:last-of-type{border-bottom:none}
+.topic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.topic-num{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--faint)}
+.topic h2{font-size:19px;font-weight:600;margin:0;text-wrap:balance;flex:1 1 auto;min-width:200px}
+.tag{font-family:"IBM Plex Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.tag.confirmed{color:var(--tag-confirmed);background:var(--tag-confirmed-soft)}
+.tag.deductive{color:var(--tag-deductive);background:var(--tag-deductive-soft)}
+.tag.unconfirmed{color:var(--tag-unconfirmed);background:var(--tag-unconfirmed-soft)}
+
+.topic p{margin:0 0 13px;max-width:66ch;font-size:15.5px}
+.topic p:last-child{margin-bottom:0}
+.topic ul{margin:0 0 13px;padding-left:20px;max-width:62ch}
+.topic li{margin-bottom:6px;font-size:15.5px}
+
+cite{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);background:var(--surface-2);padding:1px 6px;border-radius:3px;white-space:nowrap}
+
+.callout{margin-top:16px;padding:16px 18px;background:var(--tag-unconfirmed-soft);border-left:3px solid var(--tag-unconfirmed);border-radius:0 4px 4px 0;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;color:var(--ink);max-width:62ch}
+.callout strong{color:var(--tag-unconfirmed)}
+.callout.ok{background:var(--tag-confirmed-soft);border-left-color:var(--tag-confirmed)}
+.callout.ok strong{color:var(--tag-confirmed)}
+
+.formula{margin:14px 0;padding:14px 16px;background:var(--surface-2);border-radius:6px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink);line-height:1.7;overflow-x:auto}
+.formula .c{color:var(--muted)}
+
+.compare-wrap{overflow-x:auto;margin:18px 0 6px;border:1px solid var(--line);border-radius:6px}
+table.compare{width:100%;border-collapse:collapse;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;min-width:560px}
+table.compare th,table.compare td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+table.compare thead th{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+table.compare tbody th{font-weight:600;color:var(--ink);white-space:nowrap;width:170px}
+table.compare tbody tr:last-child td,table.compare tbody tr:last-child th{border-bottom:none}
+table.compare td.risk{color:var(--tag-unconfirmed);font-weight:600}
+table.compare td.ok{color:var(--tag-confirmed);font-weight:600}
+
+.reco{margin:18px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.reco li{display:flex;gap:12px;padding:13px 16px;background:var(--accent-soft);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;line-height:1.55;max-width:66ch}
+.reco-n{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--accent);flex:none;padding-top:1px}
+
+.ressalvas{margin-top:30px;padding:18px 20px;border:1px dashed var(--line-strong);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;color:var(--muted);line-height:1.6}
+.ressalvas p{margin:0 0 8px}
+.ressalvas p:last-child{margin-bottom:0}
+
+.sig{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.sig-name{font-size:17px;font-weight:600;font-style:italic;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:4px}
+.sig-role{font-family:"IBM Plex Sans",sans-serif;font-size:12px;color:var(--muted)}
+.sig-date{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);text-align:right}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="sheet">
+
+    <div class="letterhead">
+      <div>
+        <div class="letterhead-ref"><div class="label">Parecer Técnico Nº 09/2026</div></div>
+        <h1>Ganho de Capital na Revenda &amp; Reforma em Contratos Já Firmados</h1>
+        <div class="role">Base tributária para o novo campo "Preço estimado de revenda" do simulador, e aprofundamento sobre contratos RAC/GF assinados antes da Reforma Tributária.</div>
+      </div>
+      <div class="seal" aria-hidden="true">
+        <div class="seal-inner"><div class="initials">HS</div><div class="crc">CRC · TRIB</div></div>
+      </div>
+    </div>
+
+    <dl class="meta">
+      <div><dt class="label">Destinatário</dt><dd class="wrap">Times Simulador de Frota, Juliano &amp; Thiago — Localiza&amp;Co</dd></div>
+      <div><dt class="label">Data</dt><dd>22/08/2026</dd></div>
+      <div><dt class="label">Assunto</dt><dd class="wrap">Ganho de capital na revenda (hoje e 2027) e contratos firmados antes da reforma</dd></div>
+      <div><dt class="label">Escopo</dt><dd class="wrap">Continuação dos Pareceres 07 e 08 (RAC×GF, AD)</dd></div>
+    </dl>
+
+    <div class="intro">
+      <p>Duas frentes nesta rodada. A primeira responde a uma decisão de produto: o simulador vai parar de tratar o valor de revenda do carro como um número puramente contábil (custo menos depreciação) e passa a ter um campo editável — "Preço estimado de revenda" — para refletir o valor de mercado real. Isso reabre uma pergunta que a equipe vinha propositalmente evitando: se o carro vende por mais do que vale no livro, essa diferença é lucro tributável?</p>
+      <p>A segunda é a tarefa que já estava na lista: como a Reforma Tributária trata contratos de locação (RAC 12 meses, GF 36 meses) que já foram assinados antes da mudança de legislação entrar em vigor.</p>
+    </div>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">01</span>
+        <h2>Ganho de capital na revenda — regra de hoje</h2>
+        <span class="tag confirmed">Confirmado</span>
+      </div>
+      <p>Sim, é lucro tributável. Ganho de capital = valor de venda menos valor contábil líquido (custo de aquisição menos depreciação acumulada). O tratamento muda por regime:</p>
+      <ul>
+        <li><strong>Lucro Real:</strong> o ganho entra direto no resultado do período, somado ao lucro tributável normal — compõe a base de IRPJ (15% + adicional de 10% sobre o que exceder R$20 mil/mês) e CSLL (9%) <cite>Decreto 9.580/2018; venda de ativo imobilizado</cite>.</li>
+        <li><strong>Lucro Presumido:</strong> tributado à parte — não passa pela margem presumida da receita. 15% de IRPJ + 9% de CSLL incidem diretamente sobre a diferença (valor de venda − valor contábil) <cite>regra de ganho de capital no Lucro Presumido</cite>.</li>
+        <li><strong>Simples Nacional:</strong> o ativo imobilizado não entra na receita bruta do DAS, mas desde 01/01/2017 o ganho de capital na venda de imobilizado é tributado <strong>fora</strong> do Simples, via DARF, nas alíquotas da Lei 8.981/1995 — mesma lógica de IR sobre ganho de capital, apurada à parte <cite>Lei 8.981/1995; ganho de capital no Simples Nacional</cite>.</li>
+      </ul>
+      <p><strong>Boa notícia, e ela simplifica a implementação:</strong> PIS/COFINS não incide sobre a receita de venda do ativo imobilizado, em nenhum regime — é receita não-operacional, excluída da base tanto no cumulativo quanto no não-cumulativo <cite>Lei 9.718/98, art. 3º §2º</cite>. Não precisei modelar PIS/COFINS na revenda.</p>
+      <div class="formula">valorContábil = custo − depreciação acumulada − saldo devedor<span class="c">  // igual ao que já existia</span><br/>ganhoCapital = max(0, preçoRevenda − valorContábil)<br/>impostoGanho = ganhoCapital × (IRPJ% + CSLL%)<span class="c">  // vale p/ Real E Presumido</span><br/>valorRevendaLíquido = preçoRevenda − impostoGanho<span class="c">  // isso entra na fórmula existente no lugar do antigo "revnd"</span></div>
+      <div class="callout ok"><strong>Por que usei os campos de IRPJ/CSLL que já existem no simulador —</strong> em vez de criar duas alíquotas novas, a ferramenta já pede a % de IRPJ e CSLL da simulação (usadas hoje só nos créditos do aluguel). Reaproveitei os mesmos campos para o imposto sobre ganho de capital, evitando duplicar input e mantendo os dois cálculos consistentes com o mesmo regime tributário configurado.</div>
+      <div class="callout"><strong>Simplificação assumida —</strong> não modelei o adicional de 10% de IRPJ (só incide acima de R$20 mil/mês de lucro, e o simulador não sabe o lucro total da empresa fora dessa simulação) nem tratei Simples Nacional separadamente (a ferramenta hoje só tem Real/Presumido como regime). Se decidirem adicionar Simples como terceiro regime no futuro, a regra de ganho de capital via DARF (item acima) precisa entrar como um cálculo à parte, fora da lógica de "crédito" que hoje é exclusiva de Real.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">02</span>
+        <h2>O que muda em 2027 — regime de bens usados</h2>
+        <span class="tag confirmed">Confirmado — achado novo e relevante</span>
+      </div>
+      <p>Este é o ponto que eu não esperava encontrar tão favorável. Os arts. 406 e 407 da LC 214/2025 <cite>LC 214/2025, arts. 406-407</cite> criam, a partir de 2027, um regime de transição para venda de veículos, máquinas e equipamentos usados que ficaram mais de 12 meses no ativo imobilizado — <strong>e vale para empresa comum, não só para revendedor profissional</strong> (concessionária, loja de seminovos). A partir de 2027, a alíquota de CBS é <strong>reduzida a zero sobre a parcela do valor de venda até o valor líquido de aquisição</strong> — só incide sobre o que exceder esse custo. A regra equivalente do IBS entra a partir de 2029.</p>
+      <p>Traduzindo: é tributação por margem, igual à lógica que já existe hoje no ICMS para revendedores de usados — não incide sobre o valor cheio da venda. Isso significa que, na prática, <strong>a exposição de CBS/IBS sobre a revenda do carro incide sobre a mesma base do ganho de capital</strong> que já é tributado por IRPJ/CSLL (seção 01) — não é uma base nova e maior, é a mesma diferença (preço de venda − valor contábil).</p>
+      <div class="callout ok"><strong>Implicação para o simulador —</strong> a partir de 2027, a mesma variável <code>ganhoCapital</code> que já calculei passa a ser, potencialmente, também base de CBS (e de IBS a partir de 2029) — não just de IRPJ/CSLL. Hoje o simulador não modela isso (a reforma ainda não está em vigor plena e a alíquota de CBS sobre esse excedente especificamente não está claramente definida nas fontes que encontrei). Deixo isso mapeado para quando a equipe decidir simular cenários "2027 em diante".</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">03</span>
+        <h2>Reforma em contratos já firmados (RAC 12m / GF 36m)</h2>
+        <span class="tag unconfirmed">Sem posicionamento oficial — confirmado pela pesquisa adicional</span>
+      </div>
+      <p>Aprofundando a seção 06 do Parecer 07: a trava de preço do art. 487 da LC 214/2025 (3,65% sobre receita bruta) é exclusiva para bens <strong>imóveis</strong>, exigindo inclusive registro em cartório até 31/12/2025 <cite>LC 214/2025, art. 487</cite>. Não existe dispositivo equivalente para bens móveis — RAC e GF ficam de fora dessa blindagem.</p>
+      <p>Fontes jurídicas especializadas em locação de bens móveis confirmam a lacuna: não há regra de transição, blindagem de preço, nem orientação legal específica sobre contratos de locação de veículos em andamento — só recomendação genérica de revisar contratos para ajustar margens e repasses tributários. O ponto prático mais importante: <strong>o repasse do novo tributo ao cliente só é juridicamente possível se houver previsão contratual expressa de reajuste/reequilíbrio</strong>. Sem essa cláusula, quem absorve o aumento de carga tributária é a Localiza, não o cliente.</p>
+      <p><strong>Não há posicionamento oficial do governo, da Receita Federal ou do Ministério da Fazenda</strong> especificamente sobre locação de bens móveis em curso durante a transição — as fontes de 2025-2026 tratam do tema de forma genérica ("revisem seus contratos"), sem uma norma ou solução de consulta dedicada. Essa lacuna já existia no Parecer 07 e a pesquisa adicional a confirma, não a resolve.</p>
+      <div class="callout"><strong>Recomendação prática —</strong> se ainda não existir, incluir cláusula de reequilíbrio tributário em todo contrato GF de 36 meses assinado a partir de agora — é a única via legal para repassar eventual aumento de carga do IBS/CBS ao cliente. Contratos RAC (12 meses) têm exposição menor por renovarem mais rápido, mas a mesma lógica vale.</div>
+    </section>
+
+    <section class="topic" style="background:var(--accent-soft);margin:0 -56px;padding:34px 56px;border-bottom:none">
+      <div class="topic-head">
+        <span class="topic-num mono" style="color:var(--accent)">ADENDO · 22/08/2026</span>
+        <h2>"Já tenho o carro — vale vender e alugar?"</h2>
+        <span class="tag confirmed">Validado — mesma regra, aplicação mais concreta</span>
+      </div>
+      <p>Fui chamado(a) para validar se esse cenário — o time comercial já foi questionado sobre isso, e o simulador ganhou um toggle "Já possuo este veículo" — muda algo do que já levantei. Resposta curta: <strong>não surge nenhuma regra tributária nova</strong>. O que muda é que duas coisas que antes eram hipotéticas (seções 01 e 02 deste parecer) passam a ser <strong>imediatas</strong>.</p>
+
+      <p><strong>1. A venda é o próprio fato gerador do ganho de capital que já mapeei.</strong> No cenário "compra nova", o ganho de capital só aparecia daqui a um ano, na revenda projetada. No cenário "já possuo", a venda acontece agora — é a mesma fórmula (venda − valor contábil líquido) e a mesma tributação por regime da seção 01: IRPJ+CSLL no Real e no Presumido, DARF fora do DAS no Simples. Não há tratamento diferente por ser uma venda "de saída" em vez de uma revenda projetada — a Receita não distingue isso.</p>
+
+      <p><strong>2. Se o carro está no ativo imobilizado há mais de 12 meses — o que é quase garantido em "já possuo" — a venda já nasce qualificada para o regime de bens usados de 2027</strong> (LC 214/2025, arts. 406-407, seção 02): a partir daquele ano, CBS zerada até o valor contábil, incidindo só sobre o excedente. É a mesma regra da seção 02, só que aqui o requisito de tempo de posse (que na revenda projetada dependia do que acontecesse daqui a um ano) já está cumprido hoje.</p>
+
+      <p><strong>3. O que não muda:</strong> a origem do carro é irrelevante para o tratamento fiscal do <em>aluguel</em>. Vedação de crédito de PIS/COFINS (Parecer 07, seção 02), crédito de IRPJ/CSLL só no Lucro Real, não-incidência de ISS por SV 31 — tudo isso é sobre a natureza do contrato de locação, não sobre se o cliente comprou um carro novo ou vendeu o que já tinha para migrar.</p>
+
+      <div class="callout"><strong>Cuidado ao vender esse argumento —</strong> no toggle novo, o "custo de aquisição" vira custo de oportunidade (capital parado no carro × taxa). Isso é um conceito <strong>gerencial, não fiscal</strong> — custo de oportunidade nunca foi, e continua não sendo, despesa dedutível de IRPJ/CSLL. Não é correto argumentar para o cliente que "não ter mais despesa de aquisição" aumenta a dedutibilidade do aluguel — a base de crédito do aluguel (seção 03 do Parecer 07) não tem relação nenhuma com o que a empresa fazia antes com o carro.</div>
+
+      <div class="callout ok"><strong>Nota prática —</strong> se o cliente decidir vender de fato, a data real da venda importa para saber em qual período de apuração o ganho de capital entra — isso é uma decisão de escrituração contábil do cliente, não algo que o simulador precisa resolver (ele já trabalha com uma referência anual, não uma data de venda específica). Vale incluir essa orientação no material de apoio ao time comercial: "consulte seu contador sobre o momento exato da venda".</div>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-bottom:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Síntese</h2></div>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead><tr><th>Cenário</th><th>Tributação sobre o ganho (venda − valor contábil)</th></tr></thead>
+          <tbody>
+            <tr><th>Hoje — Lucro Real</th><td class="risk">IRPJ 15%+adicional + CSLL 9% sobre o ganho; PIS/COFINS não incide</td></tr>
+            <tr><th>Hoje — Lucro Presumido</th><td class="risk">IRPJ 15% + CSLL 9% sobre o ganho, apurado à parte; PIS/COFINS não incide</td></tr>
+            <tr><th>Hoje — Simples Nacional</th><td class="risk">Tributado fora do DAS, via DARF (Lei 8.981/95) — não modelado no simulador ainda</td></tr>
+            <tr><th>A partir de 2027</th><td class="ok">CBS zerada até o valor contábil; incide só sobre o excedente (mesma base do ganho de capital) — IBS equivalente a partir de 2029</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-top:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Recomendações práticas</h2></div>
+      <ol class="reco">
+        <li><span class="reco-n">01</span><span>Validar com o jurídico/tributário interno se a simplificação do adicional de 10% de IRPJ (ignorado no cálculo, seção 01) é aceitável para o nível de precisão que a ferramenta se propõe a entregar.</span></li>
+        <li><span class="reco-n">02</span><span>Incluir cláusula de reequilíbrio tributário em contratos GF de 36 meses — é a única via legal de repassar aumento de carga do IBS/CBS ao cliente durante a transição.</span></li>
+        <li><span class="reco-n">03</span><span>Revisitar esta análise quando a alíquota efetiva de CBS/IBS sobre a revenda de bens usados (2027/2029) estiver mais clara — hoje o simulador não modela esse componente, só o de IRPJ/CSLL.</span></li>
+        <li><span class="reco-n">04</span><span>Se Simples Nacional entrar como regime no simulador no futuro, tratar ganho de capital como cálculo à parte (via DARF), não reaproveitando a lógica de crédito hoje exclusiva do Lucro Real.</span></li>
+      </ol>
+    </section>
+
+    <div class="ressalvas">
+      <p><strong>Ressalvas finais.</strong> Este documento é um levantamento técnico-preliminar, produzido a partir de pesquisa em fontes públicas (legislação, normas da RFB e conteúdo jurídico-contábil especializado) para apoiar a implementação do campo "Preço estimado de revenda" no simulador. A seção 03 permanece sem resposta fechada por ausência de posicionamento oficial do governo — isso é uma lacuna real do ambiente regulatório, não uma limitação da pesquisa.</p>
+      <p>Não substitui parecer formal assinado por contador (CRC) ou advogado tributarista (OAB) habilitado, especialmente antes de comunicar valores de ganho de capital a clientes ou usar isso como base de precificação contratual.</p>
+    </div>
+
+    <div class="sig">
+      <div>
+        <div class="sig-name">Heitor Salgado</div>
+        <div class="sig-role">Contador · Especialista em Tributação de Contratos de Locação e Arrendamento Mercantil</div>
+      </div>
+      <div class="sig-date">Belo Horizonte, 22 de agosto de 2026</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
