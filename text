@@ -1,0 +1,40 @@
+Gerado por IA. Certifique-se de verificar a precisão.
+Anotações da reunião:
+Adaptação da Ferramenta à Reforma Tributária: 
+Juliano e Thiago discutiram a prontidão da ferramenta para a reforma tributária, destacando que ela já está programada para a mudança, mas que ainda precisam validar impactos em contratos firmados antes da virada da legislação.
+	Prontidão da Ferramenta: Juliano afirmou que a ferramenta já está pronta para operar com o novo modelo tributário, e que a transição será rápida, pois a mudança já está programada, o que pode atrair mais empresas para o lucro real devido ao benefício fiscal.
+	Validação de Contratos Anteriores: Thiago ressaltou a necessidade de validar como a reforma tributária impactará contratos firmados antes da mudança, especialmente em contratos de 12 e 36 meses, pois ainda não há posicionamento oficial do governo sobre o tema.
+Simulações e Parâmetros de Cálculo da Ferramenta: 
+Juliano e Thiago revisaram parâmetros utilizados nas simulações da ferramenta, abordando questões como lucro da empresa, custos de manutenção, depreciação, preço de venda do carro e inclusão de seguros, além de sugerirem melhorias para maior credibilidade e usabilidade.
+	Consideração de Lucro e Créditos Fiscais: Juliano explicou que as simulações assumem que a empresa terá lucro e conseguirá recuperar créditos fiscais, mas reconheceu que, caso a empresa não tenha lucro, não conseguirá aproveitar os benefícios, sendo esse um ponto relevante para análise.
+	Custos de Manutenção e Depreciação: Foi discutido o caso de custos elevados de manutenção em carros mais antigos, sugerindo que as simulações considerem custos de manutenção para carros com um ano de uso, evitando vieses e tornando os resultados mais realistas.
+	Preço de Venda e Ganho de Capital: Juliano explicou que, por orientação contábil, a ferramenta atualmente não considera ganho de capital na venda do carro, pois isso adicionaria complexidade, mas está no radar para futuras versões.
+	Comparação de Períodos e Renovação de Frota: Foi sugerido ampliar as simulações para períodos de 24 e 36 meses, considerando o tempo médio de renovação de frota dos clientes, para aumentar a credibilidade da ferramenta.
+	Inclusão de Seguro e Adicionais: Discutiu-se a estratégia de apresentar inicialmente o valor sem adicionais como seguro e telemetria, para depois mostrar o impacto desses custos, facilitando a venda e a comparação justa entre opções.
+Estratégias de Escala e Monitoramento de Uso: 
+Juliano e Thiago debateram estratégias para escalar o uso da ferramenta, incluindo parcerias com empresas de contabilidade, monitoramento do uso pelos times e a necessidade de segmentar a análise entre vendas internas e externas.
+	Parcerias com Contabilidades: Juliano relatou a sugestão de buscar empresas de contabilidade para ajudar a vender o produto para clientes com frota própria, permitindo que essas empresas também se beneficiem financeiramente.
+	Monitoramento de Uso da Ferramenta: Foi destacada a importância de monitorar quem está utilizando a ferramenta, para evitar esforços dispersos e garantir foco nas equipes que realmente estão engajadas.
+	Segmentação de Usuários: Discutiu-se a necessidade de separar a análise de uso entre vendas externas, internas e accounts, para entender melhor a efetividade e direcionar ações específicas para cada grupo.
+	Descontinuação do HTML Antigo: Juliano e Thiago conversaram sobre a necessidade de desligar a versão HTML antiga da ferramenta, concluindo que o uso já está em desuso e que não é necessário enviar comandos para desativação, pois poucos ainda utilizam.
+Preocupações com Concorrência e Estratégia Comercial: 
+Juliano e Thiago abordaram preocupações sobre a possibilidade da ferramenta ser copiada por concorrentes e discutiram estratégias comerciais, como ajuste de preços e apresentação de resultados para diretoria e conselho.
+	Risco de Cópia pela Concorrência: Juliano mencionou o receio de que a ferramenta seja copiada facilmente por concorrentes, já que um PDF gerado pode ser replicado rapidamente por soluções em nuvem.
+	Ajuste de Preços e Visão da Diretoria: Foi discutido que, ao apresentar resultados positivos, a diretoria pode sugerir aumento do preço do aluguel, pois a economia gerada para o cliente indica que o valor cobrado está baixo.
+Planejamento de Entregas e Férias da Equipe: 
+Juliano e Thiago alinharam o cronograma de entregas da ferramenta, considerando o período de férias da equipe e a necessidade de garantir monitoramento e avanços paralelos durante esse tempo.
+	Cronograma de Entregas: Foi definido que a entrega principal deve ocorrer até o dia 10, antes do início das férias de Thiago, com foco em garantir que cada gestor possa monitorar seu time.
+	Atividades Paralelas Durante Férias: Juliano destacou que, durante as férias, continuarão as ações de incentivo ao uso e estratégias que não dependem do desenvolvimento da ferramenta.
+Tarefas de acompanhamento:
+Validação de Contratos na Reforma Tributária: 
+Levantar como a reforma tributária impacta contratos firmados antes da mudança, especialmente para contratos de 12 e 36 meses. (Juliano, Thiago)
+Simulação de Custos de Manutenção: 
+Adicionar no speed a opção de simulação de custo de manutenção considerando carro novo e carro com um ano de uso. (Juliano)
+Comparação de Períodos na Simulação: 
+Realizar simulações de comparação de custos para períodos de 24 e 36 meses, conforme tempo médio de renovação de frota dos clientes. (Juliano)
+Monitoramento de Uso da Ferramenta: 
+Implementar monitoramento detalhado para identificar quem está utilizando a ferramenta e quem não está, com apoio do time local. (Juliano)
+Análise de Usabilidade por Cluster: 
+Separar e analisar a usabilidade da ferramenta por clusters: venda externa, venda interna e account, para avaliar efetividade. (Juliano)
+Descontinuação do HTML Antigo: 
+Definir e executar um plano para desligar o acesso ao HTML antigo da ferramenta, garantindo que usuários migrem para a nova versão. (Juliano, Thiago)
