@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Auditoria UX/CX — Simulador de Frota</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f2f1ec;
+  --surface:#fffefb;
+  --surface-2:#ece9e1;
+  --ink:#20241f;
+  --muted:#5c6259;
+  --faint:#8a8f83;
+  --line:rgba(32,36,31,.14);
+  --line-strong:rgba(32,36,31,.28);
+  --accent:#2c4a6e;
+  --accent-soft:rgba(44,74,110,.08);
+  --tag-confirmed:#2f6e4f;
+  --tag-confirmed-soft:rgba(47,110,79,.1);
+  --tag-deductive:#9c7218;
+  --tag-deductive-soft:rgba(156,114,24,.12);
+  --tag-unconfirmed:#a63a3a;
+  --tag-unconfirmed-soft:rgba(166,58,58,.1);
+  --shadow:0 1px 2px rgba(32,36,31,.04),0 12px 32px -16px rgba(32,36,31,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171a;
+    --surface:#1a1e1c;
+    --surface-2:#20241f;
+    --ink:#eceae2;
+    --muted:#a7ac9f;
+    --faint:#767c70;
+    --line:rgba(236,234,226,.14);
+    --line-strong:rgba(236,234,226,.26);
+    --accent:#8fb2da;
+    --accent-soft:rgba(143,178,218,.1);
+    --tag-confirmed:#59a67e;
+    --tag-confirmed-soft:rgba(89,166,126,.14);
+    --tag-deductive:#d1a545;
+    --tag-deductive-soft:rgba(209,165,69,.14);
+    --tag-unconfirmed:#dd8078;
+    --tag-unconfirmed-soft:rgba(221,128,120,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171a;
+  --surface:#1a1e1c;
+  --surface-2:#20241f;
+  --ink:#eceae2;
+  --muted:#a7ac9f;
+  --faint:#767c70;
+  --line:rgba(236,234,226,.14);
+  --line-strong:rgba(236,234,226,.26);
+  --accent:#8fb2da;
+  --accent-soft:rgba(143,178,218,.1);
+  --tag-confirmed:#59a67e;
+  --tag-confirmed-soft:rgba(89,166,126,.14);
+  --tag-deductive:#d1a545;
+  --tag-deductive-soft:rgba(209,165,69,.14);
+  --tag-unconfirmed:#dd8078;
+  --tag-unconfirmed-soft:rgba(221,128,120,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Newsreader",Georgia,"Times New Roman",serif;-webkit-font-smoothing:antialiased;line-height:1.6}
+.page{max-width:800px;margin:0 auto;padding:56px 20px 96px}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow);padding:52px 56px 48px}
+@media (max-width:640px){.sheet{padding:36px 22px 32px}.page{padding:28px 12px 64px}}
+
+.label{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",Consolas,monospace}
+
+.letterhead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:28px;border-bottom:2px solid var(--ink)}
+.letterhead-ref{margin-bottom:14px}
+.letterhead-ref .label{margin-bottom:3px}
+.letterhead h1{font-size:27px;font-weight:700;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+.letterhead .role{font-family:"IBM Plex Sans",sans-serif;font-size:13px;color:var(--muted);max-width:46ch;line-height:1.5}
+.seal{flex:none;width:92px;height:92px;border-radius:50%;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;position:relative;transform:rotate(-6deg);opacity:.9}
+.seal::before{content:"";position:absolute;inset:6px;border:1px dashed var(--accent);border-radius:50%}
+.seal-inner{font-family:"IBM Plex Mono",monospace;text-align:center;line-height:1.2}
+.seal-inner .initials{font-size:19px;font-weight:600;color:var(--accent);letter-spacing:.02em}
+.seal-inner .crc{font-size:7.5px;color:var(--accent);letter-spacing:.06em;margin-top:2px}
+
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:16px 32px;padding:22px 0 28px;border-bottom:1px solid var(--line)}
+.meta dt{margin:0 0 3px}
+.meta dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink)}
+.meta dd.wrap{font-family:"Newsreader",serif;font-size:14.5px}
+
+.intro{padding:26px 0 4px;font-size:16px;color:var(--ink)}
+.intro p{margin:0 0 14px;max-width:64ch}
+.intro p:last-child{margin-bottom:0}
+
+section.topic{padding:34px 0;border-bottom:1px solid var(--line)}
+section.topic:last-of-type{border-bottom:none}
+.topic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.topic-num{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--faint)}
+.topic h2{font-size:19px;font-weight:600;margin:0;text-wrap:balance;flex:1 1 auto;min-width:200px}
+.tag{font-family:"IBM Plex Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.tag.confirmed{color:var(--tag-confirmed);background:var(--tag-confirmed-soft)}
+.tag.deductive{color:var(--tag-deductive);background:var(--tag-deductive-soft)}
+.tag.unconfirmed{color:var(--tag-unconfirmed);background:var(--tag-unconfirmed-soft)}
+
+.topic p{margin:0 0 13px;max-width:66ch;font-size:15.5px}
+.topic p:last-child{margin-bottom:0}
+.topic ul{margin:0 0 13px;padding-left:20px;max-width:62ch}
+.topic li{margin-bottom:6px;font-size:15.5px}
+
+cite{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);background:var(--surface-2);padding:1px 6px;border-radius:3px;white-space:nowrap}
+
+.callout{margin-top:16px;padding:16px 18px;background:var(--tag-unconfirmed-soft);border-left:3px solid var(--tag-unconfirmed);border-radius:0 4px 4px 0;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;color:var(--ink);max-width:62ch}
+.callout strong{color:var(--tag-unconfirmed)}
+.callout.ok{background:var(--tag-confirmed-soft);border-left-color:var(--tag-confirmed)}
+.callout.ok strong{color:var(--tag-confirmed)}
+
+.formula{margin:14px 0;padding:14px 16px;background:var(--surface-2);border-radius:6px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink);line-height:1.7;overflow-x:auto}
+.formula .c{color:var(--muted)}
+
+.compare-wrap{overflow-x:auto;margin:18px 0 6px;border:1px solid var(--line);border-radius:6px}
+table.compare{width:100%;border-collapse:collapse;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;min-width:560px}
+table.compare th,table.compare td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+table.compare thead th{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+table.compare tbody th{font-weight:600;color:var(--ink);white-space:nowrap;width:170px}
+table.compare tbody tr:last-child td,table.compare tbody tr:last-child th{border-bottom:none}
+table.compare td.risk{color:var(--tag-unconfirmed);font-weight:600}
+table.compare td.ok{color:var(--tag-confirmed);font-weight:600}
+
+.reco{margin:18px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.reco li{display:flex;gap:12px;padding:13px 16px;background:var(--accent-soft);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;line-height:1.55;max-width:66ch}
+.reco-n{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--accent);flex:none;padding-top:1px}
+
+.ressalvas{margin-top:30px;padding:18px 20px;border:1px dashed var(--line-strong);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;color:var(--muted);line-height:1.6}
+.ressalvas p{margin:0 0 8px}
+.ressalvas p:last-child{margin-bottom:0}
+
+.sig{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.sig-name{font-size:17px;font-weight:600;font-style:italic;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:4px}
+.sig-role{font-family:"IBM Plex Sans",sans-serif;font-size:12px;color:var(--muted)}
+.sig-date{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);text-align:right}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="sheet">
+
+    <div class="letterhead">
+      <div>
+        <div class="letterhead-ref"><div class="label">Parecer Técnico Nº 10/2026</div></div>
+        <h1>Auditoria de UX/CX — Simulador Estratégico de Frota</h1>
+        <div class="role">Levantamento estrutural de fricções de experiência reportadas pelo time comercial, a partir de 2 capturas de tela e leitura do código-fonte (HTML/CSS) do Simulador v2.</div>
+      </div>
+      <div class="seal" aria-hidden="true">
+        <div class="seal-inner"><div class="initials">CA</div><div class="crc">UX · CX</div></div>
+      </div>
+    </div>
+
+    <dl class="meta">
+      <div><dt class="label">Destinatário</dt><dd class="wrap">Time Simulador de Frota, Juliano &amp; Thiago — Localiza&amp;Co</dd></div>
+      <div><dt class="label">Data</dt><dd>24/08/2026</dd></div>
+      <div><dt class="label">Assunto</dt><dd class="wrap">Fricções de layout na jornada do vendedor (wizard e Comparativo Individual)</dd></div>
+      <div><dt class="label">Escopo</dt><dd class="wrap">Auditoria estrutural — nenhuma alteração de código foi feita</dd></div>
+    </dl>
+
+    <div class="intro">
+      <p>O gatilho deste levantamento foi um incômodo relatado por quem usa a ferramenta na ponta: em determinados pontos da jornada, a tela obriga rolagem desnecessária ou sobra espaço vazio sem função, o que quebra o ritmo de uma apresentação a um diretor de cliente. Duas capturas de tela foram fornecidas como evidência — uma do Passo 1 do wizard (aba Simulador), outra de um ponto de rolagem da aba Comparativo Individual.</p>
+      <p>A cada ponto relatado, cruzei a captura com a regra CSS responsável no arquivo-fonte, para que o achado não fique só na percepção visual — a causa está localizada e citada. A paleta de cores do produto não foi questionada em nenhum momento desta análise, conforme orientação recebida: o problema é de estrutura/layout, não de estilo visual.</p>
+    </div>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">01</span>
+        <h2>Painel lateral do wizard força rolagem no Passo 1</h2>
+        <span class="tag confirmed">Confirmado no código</span>
+      </div>
+      <p>A captura do Passo 1 ("Aquisição do Veículo") mostra a coluna esquerda com só 3-4 campos, mas a coluna direita — o resumo executivo — já aparece com sua altura máxima, empurrando o rodapé da tela para fora da área visível.</p>
+      <p>O painel direito (<cite>.right-pane</cite>) é fixado com <code>position:sticky</code> e <code>min-height:calc(100vh - 102px)</code>, e renderiza os <strong>4 blocos de custo (Aquisição, Custo de Capital, Manutenção, Créditos Tributários) mais o card de Custo Efetivo, o Comparativo e o Resumo da Frota — inteiros, desde o Passo 1</strong>. Os blocos que ainda não se aplicam ao passo atual (Custo de Capital, Manutenção, Créditos) já existem no DOM com <code>opacity:.3</code>, não estão ocultos. Como o conteúdo do painel direito não varia por passo, ele é sempre tão alto quanto o wizard inteiro — mesmo quando o passo atual, à esquerda, é curto.</p>
+      <div class="callout"><strong>Efeito prático —</strong> em telas de notebook (a resolução mais comum em apresentação comercial), o usuário precisa rolar a página inteira para ver o rodapé do Passo 1, mesmo tendo só 3 campos para preencher ali. Isso quebra o storytelling do wizard logo na primeira tela — exatamente a parte que, segundo o relato, deveria ser a mais fluida.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">02</span>
+        <h2>Espaço vazio no Comparativo Individual</h2>
+        <span class="tag confirmed">Confirmado no código</span>
+      </div>
+      <p>A segunda captura mostra, na aba Comparativo Individual, uma área cinza vazia ocupando boa parte da tela abaixo dos cards de "Custo Efetivo". A causa é um desalinhamento estrutural entre as duas colunas do grid principal.</p>
+      <p><cite>.ev-grid</cite> usa <code>grid-template-columns:300px 1fr; align-items:start</code>. A coluna esquerda (300px, estreita) empilha 5 cards — Aquisição, Financiamento, Depreciação, Custos Operacionais e Tributos — que, por serem estreitos, ficam altos. A coluna direita (1fr, larga) tem só 2 cards — Configuração do Aluguel e Comparativo Anual —, que por serem largos ficam proporcionalmente mais baixos. Como o grid não estica as colunas para a mesma altura (<code>align-items:start</code>, não <code>stretch</code>), a coluna direita termina bem antes da esquerda, e o espaço abaixo dela fica vazio enquanto a coluna esquerda ainda continua.</p>
+      <div class="callout"><strong>Achado relacionado, mesmo card —</strong> dentro do card "Comparativo Anual", o lado "Locação" usa margens fixas manuais (<code>margin-top:56px</code> e <code>margin-top:90px</code>) para tentar alinhar visualmente suas duas métricas com as quatro métricas do lado "Frota Própria". É um ajuste calibrado no olho, não uma solução estrutural — qualquer mudança futura de texto, fonte ou quantidade de itens em qualquer um dos dois lados desalinha os totais novamente.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">03</span>
+        <h2>Adicionais em coluna — pedido explícito de 3 cards lado a lado</h2>
+        <span class="tag confirmed">Confirmado — mudança direta</span>
+      </div>
+      <p>No wizard (Passo 4, Fiscal), os três Adicionais — Proteção Total Avarias, Proteção Vidros e Pneus, Telemetria — são três blocos <code>.input-row</code> empilhados verticalmente, um abaixo do outro. É a estrutura mais simples de implementar, mas ocupa altura vertical desproporcional para três campos do mesmo tipo.</p>
+      <p>O próprio produto já tem o padrão visual que resolveria isso pronto em outro lugar do código: <code>.ev-chips.c3</code>, usado por exemplo para exibir Manutenção/Seguro/IPVA lado a lado em três colunas. Reaproveitar esse padrão nos Adicionais do wizard resolveria o pedido sem inventar um componente novo.</p>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">04</span>
+        <h2>Tooltips não respondem a toque</h2>
+        <span class="tag unconfirmed">Risco — não fotografado, achado na leitura do CSS</span>
+      </div>
+      <p>Todos os ícones de ajuda ("?") do produto usam <code>.tip:hover::after</code> para exibir a explicação — o conteúdo só aparece com o cursor do mouse parado sobre o ícone. Não há nenhum tratamento para toque (<code>tap</code>/<code>click</code>) nem media query para dispositivos sem hover disponível.</p>
+      <div class="callout"><strong>Por que isso importa para este produto especificamente —</strong> a ferramenta já tem um "Modo Apresentação" pensado para uso diante do cliente, cenário em que notebooks com tela touch e tablets são comuns. Nesses aparelhos, o vendedor simplesmente não consegue abrir nenhuma explicação de campo — o ícone "?" não responde a toque. Se a ferramenta está virando produto com uso mais amplo em campo, este é o achado desta lista com maior potencial de bloquear alguém no meio de uma reunião.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">05</span>
+        <h2>Blocos "fantasma" sem explicação</h2>
+        <span class="tag deductive">Observação de comportamento</span>
+      </div>
+      <p>Os blocos do painel lateral referentes a passos futuros do wizard (Custo de Capital, Manutenção, Créditos Tributários) aparecem com <code>opacity:.3</code> desde o Passo 1, sem nenhum rótulo do tipo "disponível a partir do Passo 2". Um usuário novo pode interpretar isso como um erro de carregamento em vez de um indicador intencional de progresso.</p>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">06</span>
+        <h2>Densidade de informação no Comparativo Individual</h2>
+        <span class="tag deductive">Observação — não é bug, é volume</span>
+      </div>
+      <p>Cinco cards empilhados na coluna estreita, mais uma faixa de três sub-colunas dentro do card "Configuração do Aluguel", tudo visível simultaneamente. Como esta aba já é descrita na própria interface como "painel técnico completo · todas as variáveis visíveis", pode ser intencional manter tudo à vista. Se o volume incomodar na prática, cards colapsáveis (accordion) reduziriam a sensação de excesso sem esconder nenhum dado — mas isso é uma escolha de produto, não uma correção.</p>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-bottom:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Observações de manutenção (menor prioridade)</h2></div>
+      <ul>
+        <li><strong>Três sistemas de card diferentes convivem no produto:</strong> <code>.field-group</code> (Simulador), <code>.ev-card</code> (Comparativo Individual) e <code>.fc-*</code> (Frota Composta) — visualmente parecidos, mas com nomes e estrutura CSS próprios em cada aba. Não é um problema visível para quem usa a ferramenta, mas é o tipo de duplicação que vale unificar num componente único quando o time reestruturar o código (a modularização em CSS/JS separados, feita em paralelo a este parecer, já deixa essa duplicação mais fácil de enxergar).</li>
+        <li><strong>O desalinhamento de colunas do achado 02 tende a se repetir:</strong> nenhum dos grids de duas colunas do produto (<code>.ev-grid</code>, <code>.ev-comp</code>) usa <code>align-items:stretch</code> — vale o time revisar todos os grids de duas colunas com o mesmo olhar, não só o ponto fotografado.</li>
+      </ul>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-top:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Síntese</h2></div>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead><tr><th>Achado</th><th>Prioridade</th></tr></thead>
+          <tbody>
+            <tr><th>01 · Painel lateral força rolagem</th><td class="risk">Alta — afeta a primeira tela do wizard</td></tr>
+            <tr><th>02 · Espaço vazio no Comparativo</th><td class="risk">Alta — visualmente chama atenção em apresentação</td></tr>
+            <tr><th>03 · Adicionais em coluna</th><td class="ok">Média — pedido pontual, componente já existe pronto</td></tr>
+            <tr><th>04 · Tooltip sem suporte a toque</th><td class="risk">Alta se houver uso em tablet/touch</td></tr>
+            <tr><th>05 · Blocos fantasma sem rótulo</th><td class="ok">Baixa — clareza, não bloqueio</td></tr>
+            <tr><th>06 · Densidade do Comparativo</th><td class="ok">Baixa — depende de decisão de produto</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-top:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Recomendações práticas</h2></div>
+      <ol class="reco">
+        <li><span class="reco-n">01</span><span>No painel lateral do wizard, condicionar a exibição dos blocos de custo ao passo já alcançado, em vez de mostrar os quatro blocos inteiros desde o Passo 1 — reduz a altura total da tela exatamente onde hoje sobra rolagem.</span></li>
+        <li><span class="reco-n">02</span><span>Rebalancear as colunas do Comparativo Individual (<code>.ev-grid</code>) para que as duas fiquem com altura mais próxima, ou usar <code>align-items:stretch</code> combinado com um terceiro elemento na coluna direita — elimina o vazio cinza sem remover nenhum dado.</span></li>
+        <li><span class="reco-n">03</span><span>Trocar os três <code>.input-row</code> dos Adicionais no wizard pelo padrão <code>.ev-chips.c3</code> já usado em outra aba do produto — três cards lado a lado, sem criar componente novo.</span></li>
+        <li><span class="reco-n">04</span><span>Adicionar suporte a toque nos tooltips (<code>.tip</code>) antes de expandir o uso da ferramenta em tablets — hoje a explicação de campo é inacessível em qualquer dispositivo sem mouse.</span></li>
+        <li><span class="reco-n">05</span><span>Resolver o alinhamento manual por margem fixa no card "Comparativo Anual" com uma solução estrutural (grid/flex), já que qualquer edição futura de texto quebra o alinhamento atual.</span></li>
+      </ol>
+    </section>
+
+    <div class="ressalvas">
+      <p><strong>Ressalvas finais.</strong> Este é um levantamento estrutural — cruzamento de 2 capturas de tela com a leitura do CSS/HTML do <code>Simulador v2.html</code> — não um teste de usabilidade com usuários reais nem uma auditoria de acessibilidade formal (WCAG). Nenhuma alteração de código foi feita; cada achado aponta a regra CSS responsável para que a implementação, quando decidida, seja rápida de localizar.</p>
+      <p>A recomendação 04 (tooltips e toque) foi incluída por ser um risco de bloqueio observado na leitura do código, mesmo não constando nas capturas fornecidas — vale confirmar com o time se há uso real em tablet/touch antes de priorizá-la.</p>
+    </div>
+
+    <div class="sig">
+      <div>
+        <div class="sig-name">Camila Andrade</div>
+        <div class="sig-role">Consultora de Produto Digital · UX/CX</div>
+      </div>
+      <div class="sig-date">Belo Horizonte, 24 de agosto de 2026</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

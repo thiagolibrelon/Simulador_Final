@@ -1,0 +1,133 @@
+/* login / start screen */
+/* ══════════════════════════════════════════
+   TELA DE INÍCIO — TEMA LIGHT CORPORATIVO
+══════════════════════════════════════════ */
+.login-screen{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  background:#F2F2F2;
+  position:relative;overflow:hidden;
+}
+.login-bg-ring{
+  position:absolute;border-radius:50%;border:1px solid rgba(120,222,31,.07);pointer-events:none;
+}
+.login-bg-ring:nth-child(1){width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.login-bg-ring:nth-child(2){width:800px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.login-bg-ring:nth-child(3){width:1100px;height:1100px;top:50%;left:50%;transform:translate(-50%,-50%)}
+
+.login-card{
+  position:relative;z-index:1;
+  background:#FFFFFF;
+  border:1px solid #E6E6E6;
+  border-radius:20px;
+  padding:44px 44px;
+  width:100%;max-width:460px;
+  box-shadow:0 4px 40px rgba(0,52,24,.08),0 1px 0 rgba(120,222,31,.1);
+  animation:loginIn .55s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes loginIn{
+  from{opacity:0;transform:translateY(28px) scale(.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.login-headline{font-size:20px;font-weight:700;color:#4A4A4A;margin-bottom:6px;letter-spacing:-.4px}
+.login-desc{font-size:13px;color:#6E6E6E;margin-bottom:4px;line-height:1.65}
+.login-field{margin-bottom:13px}
+.login-field label{
+  display:block;font-size:10px;font-weight:700;
+  color:#6E6E6E;
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;
+}
+.login-field input{
+  width:100%;
+  background:#FFFFFF;
+  border:1px solid #E6E6E6;
+  border-radius:10px;
+  padding:12px 14px;
+  color:#4A4A4A;
+  font-family:Inter,sans-serif;font-size:14px;font-weight:500;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.login-field input::placeholder{color:#919191}
+.login-field input:focus{
+  border-color:#78DE1F;
+  box-shadow:0 0 0 3px rgba(120,222,31,.15);
+  background:#fff;
+}
+.login-error{font-size:11px;color:#D92020;margin-bottom:10px;padding:8px 12px;background:rgba(217,32,32,.05);border:1px solid rgba(217,32,32,.15);border-radius:8px}
+.login-btn{
+  width:100%;margin-top:4px;
+  padding:15px;
+  background:#00843D;border:none;border-radius:10px;
+  color:#fff;font-size:15px;font-weight:700;letter-spacing:.2px;
+  transition:all .2s;
+}
+.login-btn:hover{background:#006B30;transform:translateY(-1px);box-shadow:0 6px 22px rgba(0,132,61,.35)}
+.login-btn:active{transform:translateY(0)}
+.login-btn-tour{
+  width:100%;margin-top:8px;padding:11px;
+  background:transparent;border:1.5px solid rgba(120,222,31,.45);border-radius:10px;
+  color:#003418;font-size:13px;font-weight:600;letter-spacing:.1px;cursor:pointer;
+  transition:all .2s;
+}
+.login-btn-tour:hover{background:rgba(120,222,31,.08);border-color:#78DE1F}
+.login-footer{margin-top:20px;text-align:center;font-size:10px;color:#919191}
+
+/* ── LOGO OFICIAL INTRO ── */
+.localiza-brand{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:26px;padding-bottom:22px;
+  border-bottom:1px solid #E8F2EA;
+}
+.lb-accent{width:5px;height:44px;background:#00843D;border-radius:3px;flex-shrink:0}
+.localiza-logo-img{height:38px;object-fit:contain;display:block}
+
+/* ── LABEL DE SEÇÃO NA INTRO ── */
+.login-section-label{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.5px;color:#003418;
+  margin:18px 0 12px;display:flex;align-items:center;gap:8px;
+}
+.login-section-label::after{content:'';flex:1;height:1px;background:rgba(120,222,31,.25)}
+
+/* ── BLOCO DE VALOR ── */
+.login-value-block{
+  background:rgba(120,222,31,.06);
+  border:1px solid rgba(120,222,31,.2);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;margin-top:4px;
+}
+.lvb-title{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:#6E6E6E;margin-bottom:10px;
+}
+.lvb-item{
+  font-size:12px;color:#4A4A4A;padding:3px 0;
+  display:flex;align-items:center;gap:9px;
+}
+.lvb-check{
+  color:#00843D;font-weight:900;font-size:13px;flex-shrink:0;width:14px;text-align:center;
+}
+
+/* ── RESUMO DA FROTA (PAINEL DIREITO) ── */
+.fleet-summary{
+  background:linear-gradient(135deg,rgba(120,222,31,.05),rgba(255,102,0,.05));
+  border:1px solid rgba(255,102,0,.28);
+  border-radius:12px;padding:14px;text-align:center;margin-top:10px;
+}
+.fleet-summary-title{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.2px;color:var(--muted);margin-bottom:8px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.fleet-summary-title::before{content:'';width:3px;height:12px;background:#FF6600;border-radius:2px;flex-shrink:0}
+.fleet-qty-badge{
+  display:inline-block;background:#FF6600;color:#fff;
+  font-size:11px;font-weight:700;padding:3px 12px;
+  border-radius:10px;margin-bottom:10px;
+}
+.fleet-econ-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+.fleet-econ-val{
+  font-size:26px;font-weight:900;letter-spacing:-1.5px;
+  color:#FF6600;font-family:'Playfair Display',serif;
+}
+.fleet-econ-sub{font-size:10px;color:var(--muted);margin-top:3px}
+

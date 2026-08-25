@@ -1,0 +1,157 @@
+/* Comparativo Individual (EV) tab */
+/* ══════════════════════════════════════════
+   SIMULADOR EV — ESTILOS
+══════════════════════════════════════════ */
+.ev-page{max-width:1300px;margin:0 auto;padding:18px 20px 40px}
+
+/* Mini bar */
+.ev-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px;margin-bottom:14px;
+  background:var(--s1);border:1px solid var(--bd);border-radius:12px;
+  gap:12px;flex-wrap:wrap;transition:background .3s;
+}
+.ev-bar-left{display:flex;align-items:center;gap:10px}
+.ev-badge-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--green-bg);border:1px solid var(--green-bd);
+  color:var(--green-tx);font-size:12px;font-weight:700;
+  padding:4px 12px;border-radius:20px;white-space:nowrap;
+}
+.ev-bar-desc{font-size:12px;color:var(--muted)}
+.ev-bar-right{display:flex;align-items:center;gap:8px}
+.ev-sw{
+  display:flex;background:var(--s3);border:1px solid var(--bd2);
+  border-radius:20px;padding:3px;gap:2px;
+}
+.ev-pb{
+  padding:4px 12px;border:none;background:transparent;color:var(--muted);
+  font-family:Inter,sans-serif;font-size:11px;font-weight:600;
+  border-radius:14px;transition:all .2s;white-space:nowrap;cursor:pointer;
+}
+.ev-pb.active{background:var(--green);color:#003418}
+
+/* Hero KPIs */
+.ev-hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.ev-kpi-card{
+  background:var(--s1);border:1px solid var(--bd);border-radius:12px;
+  padding:18px 20px;transition:all .28s;position:relative;overflow:hidden;
+}
+.ev-kpi-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.04),transparent 60%);
+  pointer-events:none;
+}
+.ev-kpi-card.winner{background:var(--green);border-color:var(--green);box-shadow:0 4px 20px rgba(120,222,31,.3)}
+.ev-kpi-card.winner .ev-kpi-badge,
+.ev-kpi-card.winner .ev-kpi-val,
+.ev-kpi-card.winner .ev-kpi-sub{color:#003418!important}
+.ev-kpi-card.winner .ev-kpi-foot{border-top-color:rgba(0,52,24,.2)}
+.ev-kpi-card.winner .ev-kpi-foot span,
+.ev-kpi-card.winner .ev-kpi-foot strong{color:#003418!important}
+.ev-kpi-badge{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
+.ev-kpi-val{font-size:28px;font-weight:800;letter-spacing:-1.5px;color:var(--text);font-family:'Playfair Display',serif;line-height:1;margin-bottom:4px}
+.ev-kpi-sub{font-size:11px;color:var(--muted);margin-bottom:10px}
+.ev-kpi-foot{display:flex;justify-content:space-between;align-items:center;padding-top:9px;border-top:1px solid var(--bd)}
+.ev-kpi-foot span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.ev-kpi-foot strong{font-size:13px;font-weight:700;color:var(--text)}
+
+/* Main Grid */
+.ev-grid{display:grid;grid-template-columns:300px 1fr;gap:12px;align-items:start}
+.ev-col-left,.ev-col-right{display:flex;flex-direction:column;gap:10px}
+
+/* EV Card */
+.ev-card{
+  background:var(--s1);border:1px solid var(--bd);border-radius:12px;
+  overflow:hidden;box-shadow:var(--shadow);transition:background .3s,border-color .3s;
+}
+.ev-card-head{
+  padding:10px 15px;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:8px;background:var(--s2);
+  transition:background .3s,border-color .3s;
+}
+.ev-card-icon{
+  width:26px;height:26px;border-radius:6px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+  background:var(--green-bg);border:1px solid var(--green-bd);
+}
+.ev-card-title{font-size:12px;font-weight:700;color:var(--text);flex:1}
+.ev-card-sub{font-size:10px;color:var(--muted)}
+.ev-card-body{padding:12px 14px}
+
+/* EV Field Rows */
+.ev-frow{display:grid;grid-template-columns:1fr 108px;align-items:center;gap:8px;margin-bottom:9px}
+.ev-frow:last-child{margin-bottom:0}
+.ev-frow.wide{grid-template-columns:1fr 120px}
+.ev-flabel{font-size:12px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:4px}
+
+/* EV Chips */
+.ev-chips{display:grid;gap:6px;margin-top:8px}
+.ev-chips.c2{grid-template-columns:1fr 1fr}
+.ev-chips.c3{grid-template-columns:1fr 1fr 1fr}
+.ev-chip{background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:7px 9px;text-align:center;transition:background .3s}
+.ev-chip-l{font-size:10px;color:var(--muted);margin-bottom:2px}
+.ev-chip-v{font-size:12px;font-weight:700;color:var(--text)}
+.ev-chip-v.r{color:var(--red)}.ev-chip-v.g{color:var(--green-tx)}.ev-chip-v.a{color:var(--amber)}
+
+/* EV Subtotal */
+.ev-sub{
+  background:var(--green-bg);border:1px solid var(--green-bd);border-radius:7px;
+  padding:7px 11px;display:flex;justify-content:space-between;align-items:center;margin-top:8px;
+}
+.ev-sub label{font-size:11px;color:var(--muted);font-weight:500}
+.ev-sub strong{font-size:13px;font-weight:800;color:var(--green-tx)}
+
+/* EV Warn */
+.ev-warn{
+  background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:7px;
+  padding:7px 10px;font-size:11px;color:var(--amber);margin-top:8px;display:none;
+}
+
+/* Metrics */
+.ev-metric{margin-bottom:11px}
+.ev-metric-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;gap:8px}
+.ev-metric-name{font-size:12px;font-weight:500;color:var(--muted);flex:1}
+.ev-metric-name small{display:block;font-size:10px;color:var(--muted2);margin-top:1px}
+.ev-metric-val{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap}
+.ev-metric-val.neg{color:var(--red)}.ev-metric-val.pos{color:var(--green-tx)}
+.ev-track{height:7px;background:var(--s3);border-radius:4px;overflow:hidden}
+.ev-fill{height:100%;border-radius:4px;background:var(--amber);transition:width .45s cubic-bezier(.4,0,.2,1);min-width:3px}
+.ev-fill.neg{background:var(--green)}
+.ev-fill.alg{background:var(--green)}
+
+/* Comparativo */
+.ev-comp{display:grid;grid-template-columns:1fr 40px 1fr}
+.ev-comp-side{padding:16px}
+.ev-comp-vs-col{display:flex;align-items:center;justify-content:center;border-left:1px solid var(--bd);border-right:1px solid var(--bd)}
+.ev-comp-stitle{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:13px;display:flex;align-items:center;gap:7px}
+.ev-comp-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ev-comp-div{height:1px;background:var(--bd);margin:12px 0}
+.ev-ctotal{
+  background:var(--bg);border:1px solid var(--bd2);border-radius:9px;
+  padding:13px;margin-top:13px;transition:all .3s;
+}
+.ev-ctotal.winner{background:var(--green-bg);border-color:var(--green-bd)}
+.ev-ct-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:8px}
+.ev-ct-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.ev-ct-row:last-child{margin-bottom:0}
+.ev-ct-k{font-size:12px;color:var(--muted)}
+.ev-ct-v{font-size:13px;font-weight:700;color:var(--green-tx)}
+.ev-ct-v.big{font-size:22px;font-weight:900;letter-spacing:-1.5px;font-family:'Playfair Display',serif}
+
+/* Aluguel strip */
+.ev-alg-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.ev-alg-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:8px}
+.ev-list-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 10px;background:var(--s2);border-radius:7px;border:1px solid var(--bd);margin-bottom:5px;
+}
+.ev-list-item span{font-size:12px;color:var(--muted)}
+.ev-list-item strong{font-size:12px;font-weight:700;color:var(--text)}
+.ev-list-item strong.g{color:var(--green-tx)}
+
+/* EV Responsive */
+@media(max-width:1100px){.ev-grid{grid-template-columns:1fr}}
+@media(max-width:900px){.ev-comp{grid-template-columns:1fr}.ev-comp-vs-col{display:none}.ev-alg-strip{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.ev-hero{grid-template-columns:1fr}.ev-chips.c3{grid-template-columns:1fr 1fr}.ev-alg-strip{grid-template-columns:1fr}.ev-frow{grid-template-columns:1fr}}
+

@@ -1,0 +1,51 @@
+/* reset, design tokens (light/dark theme vars), base typography */
+/* ══════════════════════════════════════════
+   VARIÁVEIS DE TEMA
+══════════════════════════════════════════ */
+[data-theme="dark"]{
+  --green:#78DE1F; --green-l:#A8F050; --green-d:#CEFDAF; --green-tx:#78DE1F;
+  --green-bg:rgba(120,222,31,.08); --green-bd:rgba(120,222,31,.22);
+  --bg:#070B09; --s1:#0D1410; --s2:#111A12; --s3:#16201A;
+  --bd:#1A2A1C; --bd2:#203020;
+  --text:#E8FFE8; --text2:rgba(232,255,232,.75);
+  --muted:#537A60; --muted2:#2F4A38;
+  --red:#D92020; --red-bg:rgba(217,32,32,.08); --red-bd:rgba(217,32,32,.22);
+  --amber:#FFB300; --amber-bg:rgba(255,179,0,.08); --amber-bd:rgba(255,179,0,.22);
+  --orange:#FF6600; --orange-bg:rgba(255,102,0,.1); --orange-bd:rgba(255,102,0,.3);
+  --topbar-a:#001A0C; --topbar-b:#003418;
+  --input-bg:#09100A; --shadow:0 4px 6px -1px rgb(0 0 0/.4),0 2px 4px -2px rgb(0 0 0/.4);
+  --shadow-lg:0 10px 15px -3px rgb(0 0 0/.5),0 4px 6px -4px rgb(0 0 0/.5);
+  --radius:0.5rem;
+}
+[data-theme="light"]{
+  --green:#78DE1F; --green-l:#018444; --green-d:#003418; --green-tx:#003418;
+  --green-bg:rgba(120,222,31,.06); --green-bd:rgba(120,222,31,.18);
+  --bg:#F2F2F2; --s1:#FFFFFF; --s2:#F2F2F2; --s3:#E8E8E8;
+  --bd:#E6E6E6; --bd2:#D0D0D0;
+  --text:#4A4A4A; --text2:rgba(74,74,74,.7);
+  --muted:#6E6E6E; --muted2:#919191;
+  --red:#D92020; --red-bg:rgba(217,32,32,.06); --red-bd:rgba(217,32,32,.18);
+  --amber:#9A6000; --amber-bg:rgba(154,96,0,.06); --amber-bd:rgba(154,96,0,.18);
+  --orange:#FF6600; --orange-bg:rgba(255,102,0,.06); --orange-bd:rgba(255,102,0,.2);
+  --topbar-a:#003418; --topbar-b:#018444;
+  --input-bg:#FFFFFF; --shadow:0 4px 6px -1px rgb(0 0 0/.1),0 2px 4px -2px rgb(0 0 0/.1);
+  --shadow-lg:0 10px 15px -3px rgb(0 0 0/.1),0 4px 6px -4px rgb(0 0 0/.1);
+  --radius:0.5rem;
+}
+
+/* ══════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,sans-serif;
+  background:var(--bg);color:var(--text);
+  font-size:13px;line-height:1.6;
+  transition:background .3s,color .3s;
+  min-height:100vh;
+}
+button{font-family:Inter,sans-serif;cursor:pointer}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}

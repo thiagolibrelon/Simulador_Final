@@ -1,0 +1,35 @@
+/* shared building blocks: field groups, tooltips, input wrappers */
+/* Fields */
+.field-group{margin-bottom:17px}
+.field-group:last-child{margin-bottom:0}
+.f-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.tip{
+  width:14px;height:14px;border-radius:50%;
+  background:var(--s3);border:1px solid var(--bd2);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;color:var(--muted2);cursor:help;
+  position:relative;flex-shrink:0;
+}
+.tip:hover::after{
+  content:attr(data-tip);
+  position:absolute;left:18px;top:-4px;
+  background:var(--s2);border:1px solid var(--bd2);border-radius:8px;
+  padding:8px 12px;font-size:11px;font-weight:400;color:var(--text);
+  z-index:300;min-width:200px;max-width:260px;white-space:normal;line-height:1.4;
+  box-shadow:var(--shadow-lg);
+}
+.input-row{display:grid;grid-template-columns:1fr 130px;align-items:center;gap:10px}
+.input-wrap{
+  display:flex;align-items:center;
+  background:var(--input-bg);border:1px solid var(--bd2);
+  border-radius:8px;overflow:hidden;transition:border-color .2s;
+}
+.input-wrap:focus-within{border-color:var(--green)}
+.input-wrap input,.input-wrap select{
+  background:transparent;border:none;outline:none;
+  padding:8px 10px;color:var(--text);
+  font-family:Inter,sans-serif;font-size:13px;font-weight:500;
+  width:100%;min-width:0;
+}
+.input-unit{padding:0 10px 0 2px;font-size:11px;font-weight:600;color:var(--muted2);white-space:nowrap;flex-shrink:0}
+select option{background:var(--s2);color:var(--text)}

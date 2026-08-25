@@ -1,0 +1,142 @@
+/* app shell: topbar, client panel, tab nav, presentation mode, back-to-start button */
+/* ══════════════════════════════════════════
+   MAIN APP
+══════════════════════════════════════════ */
+#mainApp{animation:appIn .45s ease-out both}
+@keyframes appIn{from{opacity:0}to{opacity:1}}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:linear-gradient(135deg,var(--topbar-a),var(--topbar-b));
+  border-bottom:1px solid rgba(0,200,83,.14);
+  height:54px;padding:0 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  position:sticky;top:0;z-index:200;
+}
+.tb-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.tb-logo-accent{width:4px;height:30px;background:#00843D;border-radius:2px;flex-shrink:0}
+.tb-logo-name{font-size:16px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1.1}
+.tb-logo-name em{color:rgba(255,255,255,.7);font-style:normal;font-weight:400}
+.tb-logo-sub{font-size:10px;color:rgba(255,255,255,.4);font-weight:500}
+
+.tb-client{
+  display:flex;align-items:center;gap:9px;
+  flex:1;justify-content:center;overflow:hidden;
+}
+#clientLogoTopbar{
+  max-height:26px;max-width:70px;
+  object-fit:contain;border-radius:4px;display:none;
+  filter:brightness(1.1);
+}
+#clientNameTopbar{
+  font-size:13px;font-weight:600;color:rgba(255,255,255,.88);
+  display:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;
+}
+.tb-separator{width:1px;height:18px;background:rgba(255,255,255,.12);flex-shrink:0}
+
+.tb-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.p-sw{
+  display:flex;background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:20px;padding:3px;gap:2px;
+}
+.p-btn{
+  padding:4px 11px;border:none;background:transparent;
+  color:rgba(255,255,255,.55);
+  font-family:Inter,sans-serif;font-size:11px;font-weight:600;
+  border-radius:14px;transition:all .2s;white-space:nowrap;
+}
+.p-btn.active{background:var(--green);color:#003418;font-weight:700}
+.tb-btn{
+  height:29px;padding:0 10px;
+  border:1px solid rgba(255,255,255,.14);border-radius:15px;
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);
+  font-family:Inter,sans-serif;font-size:11px;font-weight:600;
+  display:flex;align-items:center;gap:4px;transition:.2s;white-space:nowrap;
+}
+.tb-btn:hover{background:rgba(255,255,255,.16)}
+.tb-btn.green{background:var(--green);border-color:var(--green);color:#003418}
+.tb-btn.green:hover{background:var(--green-d)}
+.theme-btn{
+  width:44px;height:24px;border-radius:12px;
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.14);
+  cursor:pointer;display:flex;align-items:center;padding:0 3px;flex-shrink:0;
+}
+.tt-k{
+  width:18px;height:18px;border-radius:50%;background:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:10px;
+  transition:transform .25s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+[data-theme="light"] .tt-k{transform:translateX(20px)}
+
+/* ── CLIENT PANEL ── */
+.client-panel{
+  background:var(--s2);border-bottom:1px solid var(--bd);
+  padding:12px 18px;
+  display:none;align-items:center;gap:14px;flex-wrap:wrap;
+  animation:cpSlide .2s ease-out;
+}
+.client-panel.open{display:flex}
+@keyframes cpSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.cp-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;flex-shrink:0}
+.cp-input{
+  background:var(--input-bg);border:1px solid var(--bd2);border-radius:8px;
+  padding:7px 12px;color:var(--text);
+  font-family:Inter,sans-serif;font-size:13px;outline:none;width:200px;
+  transition:border-color .2s;
+}
+.cp-input:focus{border-color:var(--green)}
+.cp-upload-btn{
+  height:33px;padding:0 13px;
+  background:var(--s3);border:1px solid var(--bd2);border-radius:8px;
+  color:var(--muted);font-family:Inter,sans-serif;font-size:11px;font-weight:600;
+  display:flex;align-items:center;gap:5px;cursor:pointer;transition:.2s;
+}
+.cp-upload-btn:hover{border-color:var(--green-bd);color:var(--green-tx)}
+#logoPreviewThumb{
+  width:32px;height:32px;border-radius:6px;
+  object-fit:contain;border:1px solid var(--bd);display:none;
+}
+.cp-save{
+  height:33px;padding:0 16px;background:var(--green);border:none;
+  border-radius:8px;color:#003418;font-family:Inter,sans-serif;
+  font-size:12px;font-weight:700;transition:.2s;
+}
+.cp-save:hover{opacity:.85}
+
+/* ── TABS ── */
+.tabs-bar{
+  display:flex;gap:2px;padding:10px 18px 0;
+  border-bottom:1px solid var(--bd);background:var(--s1);
+  position:sticky;top:54px;z-index:100;
+  transition:background .3s,border-color .3s;
+}
+.tab{
+  padding:7px 15px;border:1px solid transparent;border-bottom:none;
+  border-radius:7px 7px 0 0;
+  font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all .2s;background:transparent;
+  display:flex;align-items:center;gap:5px;
+}
+.tab:hover{color:var(--text);background:var(--s2)}
+.tab.active{color:var(--green-tx);background:var(--green-bg);border-color:var(--green-bd);border-bottom-color:var(--s1)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* ── BOTÃO VOLTAR INÍCIO (TOPBAR) ── */
+.tb-btn-back{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 10px;border-radius:8px;border:1px solid var(--bd);
+  background:transparent;color:var(--muted);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+  font-family:Inter,sans-serif;
+}
+.tb-btn-back:hover{background:var(--s3);color:var(--text);border-color:var(--green-bd)}
+
+/* ── MODO APRESENTAÇÃO ── */
+body.pres-mode .left-pane{display:none!important}
+body.pres-mode .wizard-wrap{grid-template-columns:1fr!important}
+body.pres-mode .ev-col-left{display:none!important}
+body.pres-mode .ev-grid{grid-template-columns:1fr!important}
+.tb-btn.pres-active{background:rgba(255,102,0,.12)!important;border-color:rgba(255,102,0,.4)!important;color:#FF6600!important}
+
