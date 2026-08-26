@@ -1,10 +1,15 @@
 # Simulador Estratégico de Frota — Localiza&Co (V2 Modularizado)
 
 Extração estrutural do arquivo único `Simulador v2.html` (raiz do repositório) em módulos de
-HTML/CSS/JS separados. **Nenhuma lógica, fórmula, id, nome de função ou comportamento foi
-alterado** — este é um corte/reorganização 1:1 do código original, verificado linha a linha
-(ver seção "Verificação" abaixo). O arquivo original permanece intocado na raiz do repositório
-e continua sendo a versão em produção até que este pacote seja adotado.
+HTML/CSS/JS separados — inicialmente um corte 1:1 do código original (ver seção "Verificação"
+abaixo), depois estendida com o motor GF (ver "Motor GF" abaixo).
+
+**⚠️ Desde 26/08/2026 esta pasta deixou de ser um espelho do arquivo monolítico.** O motor GF
+(login RAC×GF, `calcCusto.js`, franquia de km, pneus, IPCA, projeção de manutenção) foi
+construído **só aqui** — o `Simulador v2.html` da raiz não recebeu essas mudanças e ficou
+para trás. Recomendação registrada na aba Decisões do app: adotar esta pasta como versão em
+produção (e apontar o empacotamento Nativefier/Electron pra cá) em vez de manter as duas em
+paralelo, já que replicar cada mudança nova em dois lugares dobra o risco de bug.
 
 ## Como rodar
 
@@ -55,8 +60,10 @@ antes dos módulos `ui/*` que os chamam (ex.: `ui/frota-composta.js` chama `calc
 | Decisões | nenhuma — conteúdo estático, só usa `switchTab()` | — | `css/tabs/decisoes.css` |
 
 Transversais: `js/utils.js` (formatadores `R`, `R2`, `Pct`, `pc`, `n`, `el`, `set`, `pmt`),
-`js/state.js` (todo estado global mutável e config compartilhada entre abas, incluindo
-`MANUT_REF` que é usado pelas 3 abas de cálculo), `js/ui/theme.js` (tema claro/escuro),
+`js/calc/calcCusto.js` (motor único de cálculo — RAC e GF ramificam aqui; `calc()`, `calcEV()`
+e `calcModelo()` só montam o objeto de entrada e chamam essa função), `js/state.js` (estado
+global mutável e config compartilhada entre abas, incluindo `loginProduto`/
+`loginPrazoContratoMeses`, decididos na tela de login), `js/ui/theme.js` (tema claro/escuro),
 `js/ui/login.js` (tela inicial), `js/ui/client-panel.js` (painel de cliente na topbar),
 `js/ui/tabs.js` (`switchTab()`), `js/ui/checklist.js` (modal de checklist para o Teams),
 `js/ui/presentation.js` (modo apresentação), `js/ui/tour.js` (tour guiado),
@@ -95,13 +102,12 @@ funcional, não uma auditoria visual completa de todas as 5 abas em ambos os tem
 Estas são observações sobre o código **como ele já era** no arquivo original — nada foi
 alterado aqui, é só o que ficou mais visível depois de separar por arquivo:
 
-- **Três blocos de cálculo quase paralelos.** `calc()` (Simulador), `calcEV()` (Comparativo
-  Individual) e `calcModelo()`/`calcFrota()` (Frota Composta) implementam a mesma lógica de
-  aquisição/depreciação/tributos/comparativo três vezes, com convenções de nome levemente
-  diferentes (`ev_` / `fc_` prefixados nos ids de input). Foram mantidos como três arquivos
-  deliberadamente — unificar isso é uma mudança de lógica, fora do escopo desta extração — mas
-  é o principal candidato a refatoração futura (ex.: um único `calcCusto(params)` parametrizado
-  por prefixo, com cada aba só montando o objeto de entrada).
+- **Três blocos de cálculo quase paralelos — resolvido em 26/08/2026.** `calc()` (Simulador),
+  `calcEV()` (Comparativo Individual) e `calcModelo()` (Frota Composta) implementavam a mesma
+  lógica de aquisição/depreciação/tributos/comparativo três vezes. Extraído `calcCusto(params)`
+  em `js/calc/calcCusto.js` — os três agora só montam o objeto de entrada (lendo de `ev_`/`fc_`
+  ou do estado global `loginProduto`, conforme o caso) e chamam essa função única. Pré-requisito
+  para o motor GF não precisar ser replicado em 3 lugares.
 - **Estado global mutável extenso.** Praticamente toda a lógica de negócio depende de
   variáveis `let` de módulo (`perfil`, `lastCalc`, `evPerfil`, `lastCalcEV`, `frota`,
   `fcPerfil`, `fcEditId`, etc.) em vez de passar estado explicitamente entre funções. Isso
@@ -126,3 +132,26 @@ alterado aqui, é só o que ficou mais visível depois de separar por arquivo:
   não há JS dedicado a eles no original além do `switchTab()` compartilhado.
 - `LOGO_OFICIAL` (constante base64 do logo, ~30KB) foi colocada em `js/ui/pdf.js` porque é o
   único consumidor identificado no código original (usada nos cabeçalhos/rodapés dos 3 PDFs).
+
+## Motor GF (26/08/2026)
+
+Reverte a decisão anterior de tratar GF como um simples parâmetro do fluxo RAC (registrada na
+aba Decisões em 20-21/08). RAC e GF agora são escolhidos uma vez na tela de login
+(`selectStartProduto()` em `js/ui/login.js`), gravados em `loginProduto`/
+`loginPrazoContratoMeses` (`js/state.js`), e `js/calc/calcCusto.js` ramifica o cálculo a partir
+desse estado — sem tocar em `cAlq`/`fAno` para RAC (mesmo comportamento de sempre).
+
+Campos novos, só em GF, dentro de "Configuração do Aluguel" (Simulador e Comparativo
+Individual): Franquia de Km (`franquiaKm`, texto livre, só referência pro PDF), Pneus
+(`pneusAnual`, valor anual fixo, soma em `adicA`/`cAlq`), IPCA de referência (`ipcaRef`, só
+informativo). Projeção de manutenção plurianual (`projecaoManutencao`/`manutTotalContrato` no
+retorno de `calcCusto()`) usa uma curva placeholder (`MANUT_CURVA_GF_INCREMENTO_ANUAL_PCT` em
+`calcCusto.js`, +15% a.a.) **pendente de validação contábil** — não é número oficial, está
+marcado como tal na UI e no PDF. Risco de reclassificação para arrendamento mercantil
+financeiro (prazo ≥45 meses) é só uma nota informativa no PDF, baseada no Parecer 07 do Heitor
+— não muda nenhuma fórmula.
+
+Frota Composta **não** migrou para o produto global — cada modelo em `frota[]` mantém seu
+próprio `produtoLocacao`/`prazoContratoMeses` (`fc_produtoLocacao` no modal), já que uma frota
+heterogênea pode legitimamente misturar categorias RAC e GF. O modal da Frota Composta não
+ganhou campos de Franquia/Pneus/IPCA nesta rodada — só o Simulador e o Comparativo Individual.

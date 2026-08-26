@@ -14,7 +14,11 @@ let clientPanelOpen = false;
 let presMode = false;
 let lastCalc = {};
 
-const MANUT_REF = { novo: 1.5, usado: 2.8 };
+/* Produto de locação — decidido uma vez no login, motor RAC × motor GF.
+   Não é mais um campo do wizard: todas as abas leem este estado global. */
+let loginProduto = "rac"; // 'rac' | 'gf'
+let loginPrazoContratoMeses = 36;
+
 /* ══════════════════════════════════════════
    SIMULADOR EV — ESTADO
 ══════════════════════════════════════════ */

@@ -30,8 +30,8 @@ const TOUR_STEPS = [
   },
   {
     title: "Simulador — Produto de Locação",
-    desc: "Escolha entre RAC PJ (locação de curto prazo, até 12 meses) e GF — Gestão de Frotas (contratos de até 36 meses). O prazo escolhido define o valor total do contrato exibido no comparativo, sem alterar o cálculo de custo anual.",
-    target: "#pcRac", wizardStep: 3, tab: "sim"
+    desc: "RAC e GF são motores diferentes, escolhidos na tela de login — não dá mais para trocar aqui dentro. Em contratos GF, o prazo (12 a 48 meses) aparece sempre visível aqui no painel direito, logo acima da Frota. Você também ganha campos próprios no wizard: pneus separados da manutenção (Passo 3), franquia de km, projeção de manutenção crescente e um campo de IPCA de referência (Passo 4).",
+    target: ".fleet-qty-row", tab: "sim"
   },
   {
     title: "Simulador — Valor do Aluguel",

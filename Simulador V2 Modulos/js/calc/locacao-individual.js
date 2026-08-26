@@ -1,19 +1,4 @@
-// Simulador tab: calc(), regime/manutencao/produto handlers, localStorage persistence
-/* ── Cenário de manutenção (carro novo × com 1 ano de uso) ──
-   Atalho que preenche a referência de mercado no campo já existente
-   (manutencaoPct) — não cria formula nova nem campo persistido novo. */
-function setManutCenario(tipo) {
-  el("manutencaoPct").value = MANUT_REF[tipo];
-  sliderUpdate("manutencaoPct", "slManut", "slManutR");
-  el("mscNovo").classList.toggle("active", tipo === "novo");
-  el("mscUsado").classList.toggle("active", tipo === "usado");
-  calc();
-}
-function clearManutCenario() {
-  el("mscNovo")?.classList.remove("active");
-  el("mscUsado")?.classList.remove("active");
-}
-
+// Simulador tab: calc(), regime/produto handlers, localStorage persistence
 /* ══════════════════════════════════════════
    DEPRECIAÇÃO
 ══════════════════════════════════════════ */
@@ -62,200 +47,168 @@ document.querySelectorAll(".p-btn").forEach(b => {
 });
 
 /* ══════════════════════════════════════════
-   PRODUTO DE LOCAÇÃO (RAC PJ / GF)
+   PRODUTO DE LOCAÇÃO (RAC × GF) — global, decidido no login
 ══════════════════════════════════════════ */
-function refreshProdutoUI() {
-  const p = el("produtoLocacao")?.value || "rac";
-  el("pcRac")?.classList.toggle("selected", p === "rac");
-  el("pcGf")?.classList.toggle("selected", p === "gf");
+function syncProdutoUI() {
+  const p = loginProduto;
+  const isGf = p === "gf";
   const wrap = el("prazoContratoWrap");
-  if (wrap) wrap.style.display = p === "gf" ? "block" : "none";
+  if (wrap) wrap.style.display = isGf ? "block" : "none";
+  if (el("prazoContratoMeses")) el("prazoContratoMeses").value = isGf ? loginPrazoContratoMeses : 12;
   const hintTel = el("hintTelemetria");
-  if (hintTel) hintTel.style.display = p === "gf" ? "block" : "none";
+  if (hintTel) hintTel.style.display = isGf ? "block" : "none";
+  const gfWrap = el("gfCamposWrap");
+  if (gfWrap) gfWrap.style.display = isGf ? "block" : "none";
+  const pneusWrap = el("gfPneusWrap");
+  if (pneusWrap) pneusWrap.style.display = isGf ? "block" : "none";
+  const ipcaWrap = el("ipcaWrap");
+  if (ipcaWrap) ipcaWrap.style.display = isGf ? "block" : "none";
 }
-function selectProduto(p) {
-  el("produtoLocacao").value = p;
-  if (p === "rac") el("prazoContratoMeses").value = "12";
-  refreshProdutoUI();
-  calc();
+
+function renderProjecaoGF(c) {
+  const box = el("gfProjecaoManut");
+  const risco = el("gfRiscoDepreciacao");
+  if (!box) return;
+  if (c.produtoLoc !== "gf" || !c.projecaoManutencao) {
+    box.textContent = "";
+    if (risco) risco.style.display = "none";
+    return;
+  }
+  const linhas = c.projecaoManutencao
+    .map(a => `Ano ${a.ano}: ${a.pct.toFixed(1)}% (${R(a.valor)})`)
+    .join(" · ");
+  box.innerHTML = `Projeção de manutenção ao longo do contrato (estimativa, pendente validação contábil com o Heitor): ${linhas} — total no contrato: <strong>${R(c.manutTotalContrato)}</strong>`;
+  if (risco) {
+    risco.style.display = c.riscoReclassificacaoArrendamento ? "block" : "none";
+    risco.textContent = "⚠ Prazo ≥ 45 meses se aproxima de 75% da vida útil fiscal (60 meses) — risco de reclassificação para arrendamento mercantil financeiro (Res. BACEN 2.309/96), o que mudaria a dedutibilidade do aluguel. Confirmar com o Heitor antes de fechar contrato.";
+  }
 }
 
 /* ══════════════════════════════════════════
    CÁLCULO PRINCIPAL
 ══════════════════════════════════════════ */
 function calc() {
-  /* ── Aquisição ── */
   const jaPossui = el("jaPossuiVeiculo")?.checked || false;
-  const vBruto  = n("valorVeiculoBruto");
-  const desc    = jaPossui ? 0 : vBruto * pc(n("descontoPct"));
-  const vV      = vBruto - desc;
-  const entr    = jaPossui ? 0 : vV * pc(n("entradaPct"));
-  const fin     = jaPossui ? 0 : Math.max(0, vV - entr);
-  const np      = jaPossui ? 1 : n("parcelas");
-  const jm      = jaPossui ? 0 : pc(n("jurosMensalPct"));
-  const parc    = pmt(fin, jm, np);
-  const totP    = parc * np;
-  const jTot    = Math.max(0, totP - fin);
-  const gParc   = np <= 12 ? totP : parc * 12;
-  const saldo   = np <= 12 ? 0    : Math.max(0, totP - gParc);
-  const baseOp  = entr + gParc;
-  const opor    = jaPossui ? vV * pc(n("oportunidadePct")) : baseOp * pc(n("oportunidadePct"));
-  /* já possuo: não há desembolso novo, mas o valor do carro ainda precisa "entrar" na conta
-     para netear simetricamente contra revnd lá embaixo (fAnoR = aqAno + opAno - tribP - revnd) —
-     senão a depreciação do ano some do cálculo e o resultado fica artificialmente negativo. */
-  const aqAno   = jaPossui ? (vV + opor) : (entr + gParc + opor);
-
-  /* ── Operacional ── */
-  const manut   = vV * pc(n("manutencaoPct"));
-  const seg     = vV * pc(n("seguroPct"));
   const ipvaEl  = el("estado");
-  const ipvaRate = parseFloat(ipvaEl.options[ipvaEl.selectedIndex].value) || 0;
-  const ipva    = vV * pc(ipvaRate);
-  const lic     = n("licenciamentoAno");
-  const parad   = n("indisponibilidadeAno");
-  const admF    = n("admFrotaMensal") * 12;
-  const ativ    = n("custoAtivacao");
-  const desativ = n("custoDesativacao");
-  const opAno   = manut + seg + ipva + lic + parad + admF + ativ + desativ;
+  const ipvaRatePct = parseFloat(ipvaEl.options[ipvaEl.selectedIndex].value) || 0;
 
-  /* ── Depreciação ── */
-  const deprPct = el("modoDepreciacao").value === "contabil" ? 20 : el("modoDepreciacao").value === "utilitario" ? 25 : (n("depreciacaoPct") || 10);
-  const deprA   = vV * pc(deprPct);
-  const valorContabil = Math.max(0, vV - deprA - saldo);
-
-  /* ── Ganho de capital na revenda (Real e Presumido — não é crédito de aluguel, é regra própria) ── */
-  const precoRevenda = n("precoRevendaEstimado") > 0 ? n("precoRevendaEstimado") : valorContabil;
-  const ganhoCapital = Math.max(0, precoRevenda - valorContabil);
-  const impGanhoCap  = ganhoCapital * (pc(n("irpjPropPct")) + pc(n("csllPropPct")));
-  const revnd        = Math.max(0, precoRevenda - impGanhoCap);
-
-  /* ── Tributos Frota ── */
-  const basePis = perfil === "real" ? Math.max(0, manut + deprA) : 0;
-  const pisP    = basePis * pc(n("pisPropPct"));
-  const baseIr  = perfil === "real" ? Math.max(0, manut + deprA - pisP) : 0;
-  const irjP    = baseIr  * pc(n("irpjPropPct"));
-  const cslP    = baseIr  * pc(n("csllPropPct"));
-  const tribP   = pisP + irjP + cslP;
-
-  /* ── Custo Frota ── */
-  const fAnoR   = aqAno + opAno - tribP - revnd;
-  const fAnoPr  = aqAno + opAno - revnd;
-  const fAno    = perfil === "real" ? fAnoR : fAnoPr;
-
-  /* ── Aluguel ── */
-  const alqM    = n("aluguelMensal");
-  const valP    = 12 * alqM;
-  const admA    = n("admAluguel") * 12;
-  const adicA   = (n("adicSeguroTotal") + n("adicVidros") + n("adicTelemetria")) * 12;
-  const atFim   = el("atividadeFim").value === "sim";
-  const baseA   = perfil === "real" ? valP : 0;
-  const pisA    = atFim ? baseA * pc(n("pisPropPct")) : 0;
-  const irjA    = baseA * pc(n("irpjPropPct"));
-  const cslA    = baseA * pc(n("csllPropPct"));
-  const tribA   = pisA + irjA + cslA;
-  const cAlq    = valP + admA + adicA - tribA;
-
-  /* ── Produto de locação (classificação/reporting — não altera cAlq) ── */
-  const produtoLoc = el("produtoLocacao")?.value || "rac";
-  const prazoMeses = produtoLoc === "gf" ? (n("prazoContratoMeses") || 36) : 12;
-  const valorTotalContrato = alqM * prazoMeses;
-
-  /* ── Resultado ── */
-  const econ    = fAno - cAlq;
-  const econAbs = Math.abs(econ);
-  const venc    = econ >  50  ? "aluguel"
-                : econ < -50  ? "propria"
-                :               "empate";
+  const c = calcCusto({
+    jaPossui,
+    valorVeiculoBruto: n("valorVeiculoBruto"),
+    descontoPct: n("descontoPct"),
+    entradaPct: n("entradaPct"),
+    parcelas: n("parcelas"),
+    jurosMensalPct: n("jurosMensalPct"),
+    oportunidadePct: n("oportunidadePct"),
+    manutencaoPct: n("manutencaoPct"),
+    seguroPct: n("seguroPct"),
+    ipvaRatePct,
+    licenciamentoAno: n("licenciamentoAno"),
+    indisponibilidadeAno: n("indisponibilidadeAno"),
+    admFrotaMensal: n("admFrotaMensal"),
+    custoAtivacao: n("custoAtivacao"),
+    custoDesativacao: n("custoDesativacao"),
+    modoDepreciacao: el("modoDepreciacao").value,
+    depreciacaoPct: n("depreciacaoPct"),
+    precoRevendaEstimado: n("precoRevendaEstimado"),
+    pisPropPct: n("pisPropPct"),
+    irpjPropPct: n("irpjPropPct"),
+    csllPropPct: n("csllPropPct"),
+    aluguelMensal: n("aluguelMensal"),
+    admAluguel: n("admAluguel"),
+    adicSeguroTotal: n("adicSeguroTotal"),
+    adicVidros: n("adicVidros"),
+    adicTelemetria: n("adicTelemetria"),
+    atividadeFim: el("atividadeFim").value,
+    perfil,
+    produtoLocacao: loginProduto,
+    prazoContratoMeses: n("prazoContratoMeses"),
+    pneusAnual: n("pneusAnual"),
+    franquiaKm: el("franquiaKm")?.value || "",
+    ipcaRef: n("ipcaRef")
+  });
 
   /* Guarda para PDF */
-  lastCalc = {
-    vBruto, desc, vV, entr, fin, parc, jTot, gParc, opor, aqAno,
-    manut, seg, ipva, lic, parad, admF, ativ, desativ, opAno,
-    deprPct, deprA, revnd, tribP, pisP, irjP, cslP, basePis, baseIr,
-    valorContabil, precoRevenda, ganhoCapital, impGanhoCap,
-    fAno, fAnoR, fAnoPr,
-    valP, admA, adicA, pisA, irjA, cslA, tribA, cAlq,
-    econ, econAbs, venc, perfil,
-    np, saldo,
-    produtoLoc, prazoMeses, valorTotalContrato
-  };
+  lastCalc = c;
 
   /* ── Outputs Step 1 ── */
-  set("outDesconto",  R(desc));
-  set("outEntrada",   R(entr));
-  set("outValorFinal",R(vV));
-  set("outFinanciado",R(fin));
-  set("outEntradaR",  R(entr));
-  set("mc1entrada",   R(entr));
-  set("mc1valorVenda",R(vV));
+  set("outDesconto",  R(c.desc));
+  set("outEntrada",   R(c.entr));
+  set("outValorFinal",R(c.vV));
+  set("outFinanciado",R(c.fin));
+  set("outEntradaR",  R(c.entr));
+  set("mc1entrada",   R(c.entr));
+  set("mc1valorVenda",R(c.vV));
 
   /* ── Outputs Step 2 ── */
-  set("mc2entrada",       R(jaPossui ? vV : baseOp));
+  set("mc2entrada",       R(jaPossui ? c.vV : (c.entr + c.gParc)));
   set("mc2taxa",          Pct(n("oportunidadePct")));
-  set("mc2rend",          R(opor));
-  set("outParcela",       R2(parc));
-  set("outJurosAno",      R(jTot));
-  set("outOportunidade",  R(opor));
-  set("outAquisicaoAno",  R(aqAno));
+  set("mc2rend",          R(c.opor));
+  set("outParcela",       R2(c.parc));
+  set("outJurosAno",      R(c.jTot));
+  set("outOportunidade",  R(c.opor));
+  set("outAquisicaoAno",  R(c.aqAno));
 
   /* ── Outputs Step 3 ── */
   set("slManut",          n("manutencaoPct").toFixed(1));
-  set("slManutR",         R(manut));
+  set("slManutR",         R(c.manut));
   set("slSeg",            n("seguroPct").toFixed(1));
-  set("slSegR",           R(seg));
-  set("outIpva",          R(ipva));
-  set("outIndisp",        R(parad));
-  set("outDepreciacao",   R(deprA));
-  set("outValorContabil", R(valorContabil));
-  set("outImpGanhoCap",   R(impGanhoCap));
-  set("outLic",           R(lic));
-  set("outAtivacao",      R(ativ));
-  set("outDesativacao",   R(desativ));
-  set("outOperacionalAno",R(opAno));
+  set("slSegR",           R(c.seg));
+  set("outIpva",          R(c.ipva));
+  set("outIndisp",        R(c.parad));
+  set("outDepreciacao",   R(c.deprA));
+  set("outValorContabil", R(c.valorContabil));
+  set("outImpGanhoCap",   R(c.impGanhoCap));
+  set("outLic",           R(c.lic));
+  set("outAtivacao",      R(c.ativ));
+  set("outDesativacao",   R(c.desativ));
+  set("outOperacionalAno",R(c.opAno));
 
   /* ── Outputs Step 4 ── */
-  set("crPis",        R(pisA));
-  set("crIrpj",       R(irjA));
-  set("crCsll",       R(cslA));
-  set("crTotal",      R(tribA));
-  set("outAluguelAnual", R(valP));
+  set("crPis",        R(c.pisA));
+  set("crIrpj",       R(c.irjA));
+  set("crCsll",       R(c.cslA));
+  set("crTotal",      R(c.tribA));
+  set("outAluguelAnual", R(c.valP));
   set("outAdicSeguro",     R(n("adicSeguroTotal") * 12));
   set("outAdicVidros",     R(n("adicVidros") * 12));
   set("outAdicTelemetria", R(n("adicTelemetria") * 12));
+  if (el("outPneusAnual")) set("outPneusAnual", R(c.pneusAnual));
+  renderProjecaoGF(c);
 
   /* ── Executive Dashboard ── */
-  const scale = Math.max(aqAno, jTot + opor, opAno + deprA, tribP, fAno, 1);
+  const scale = Math.max(c.aqAno, c.jTot + c.opor, c.opAno + c.deprA, c.tribP, c.fAno, 1);
   const pct   = v => Math.max(0, Math.min(100, Math.abs(v) / scale * 100)).toFixed(1) + "%";
 
-  set("th0v", R(baseOp));         el("th0b").style.width = pct(baseOp);
-  set("th1v", R(jTot + opor));    el("th1b").style.width = pct(jTot + opor);
-  set("th2v", R(opAno + deprA));  el("th2b").style.width = pct(opAno + deprA);
-  set("th3v", R(tribP));          el("th3b").style.width = pct(tribP);
+  set("th0v", R(c.entr + c.gParc));  el("th0b").style.width = pct(c.entr + c.gParc);
+  set("th1v", R(c.jTot + c.opor));   el("th1b").style.width = pct(c.jTot + c.opor);
+  set("th2v", R(c.opAno + c.deprA)); el("th2b").style.width = pct(c.opAno + c.deprA);
+  set("th3v", R(c.tribP));           el("th3b").style.width = pct(c.tribP);
 
   const ceEl = el("bigFrota");
-  ceEl.textContent = R(fAno);
-  ceEl.className   = "ce-value" + (fAno > cAlq ? "" : " neutral");
-  set("bigFrotaMes", R(fAno / 12));
+  ceEl.textContent = R(c.fAno);
+  ceEl.className   = "ce-value" + (c.fAno > c.cAlq ? "" : " neutral");
+  set("bigFrotaMes", R(c.fAno / 12));
 
   /* ── Finalist ── */
-  set("vFrotaVal",   R(fAno));
-  set("vAluguelVal", R(cAlq));
-  set("vAluguelContratoVal", R(valorTotalContrato));
-  set("vAluguelProdutoBadge", (produtoLoc === "gf" ? "GF" : "RAC PJ") + " · " + prazoMeses + " meses");
-  el("vFrota").className   = "v-card" + (venc === "propria" ? " winner" : "");
-  el("vAluguel").className = "v-card" + (venc === "aluguel" ? " winner" : "");
+  set("vFrotaVal",   R(c.fAno));
+  set("vAluguelVal", R(c.cAlq));
+  set("vAluguelContratoVal", R(c.valorTotalContrato));
+  set("vAluguelProdutoBadge", (c.produtoLoc === "gf" ? "GF" : "RAC PJ") + " · " + c.prazoMeses + " meses");
+  el("vFrota").className   = "v-card" + (c.venc === "propria" ? " winner" : "");
+  el("vAluguel").className = "v-card" + (c.venc === "aluguel" ? " winner" : "");
 
   const ep = el("econPill");
   const perVeic = "por veículo / ano";
-  if (venc === "aluguel") {
+  if (c.venc === "aluguel") {
     ep.className = "econ-pill";
     set("epLabel", "Economia estimada com locação");
-    set("epVal",   R(econAbs));
+    set("epVal",   R(c.econAbs));
     set("epSub",   perVeic);
-  } else if (venc === "propria") {
+  } else if (c.venc === "propria") {
     ep.className = "econ-pill red";
     set("epLabel", "Vantagem da frota própria");
-    set("epVal",   R(econAbs));
+    set("epVal",   R(c.econAbs));
     set("epSub",   perVeic);
   } else {
     ep.className = "econ-pill";
@@ -276,7 +229,7 @@ function calc() {
   const ceTR = el("ceTotalRow");
   if (ceTR) {
     ceTR.style.display = hasFleet ? "block" : "none";
-    if (hasFleet) set("bigFrotaTotal", R(fAno * qtdVeiculos));
+    if (hasFleet) set("bigFrotaTotal", R(c.fAno * qtdVeiculos));
   }
 
   // versus totals
@@ -284,19 +237,19 @@ function calc() {
   if (vFT) vFT.style.display = hasFleet ? "block" : "none";
   if (vAT) vAT.style.display = hasFleet ? "block" : "none";
   if (hasFleet) {
-    set("vFrotaTotalVal",   R(fAno  * qtdVeiculos));
-    set("vAluguelTotalVal", R(cAlq  * qtdVeiculos));
+    set("vFrotaTotalVal",   R(c.fAno  * qtdVeiculos));
+    set("vAluguelTotalVal", R(c.cAlq  * qtdVeiculos));
   }
 
   // econ-pill total
   const epTR = el("epTotalRow");
   if (epTR) epTR.style.display = hasFleet ? "block" : "none";
   if (hasFleet) {
-    const totalLabel = venc === "aluguel" ? "Economia total · " + qtdLabel
-                     : venc === "propria" ? "Vantagem total · " + qtdLabel
+    const totalLabel = c.venc === "aluguel" ? "Economia total · " + qtdLabel
+                     : c.venc === "propria" ? "Vantagem total · " + qtdLabel
                      : "Diferença total · " + qtdLabel;
     set("epTotalLabel", totalLabel);
-    set("epTotalVal",   R(econAbs * qtdVeiculos));
+    set("epTotalVal",   R(c.econAbs * qtdVeiculos));
   }
 
   saveLS();
@@ -327,8 +280,9 @@ const LS_IDS = [
   "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal",
   "custoAtivacao","custoDesativacao",
   "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim",
-  "produtoLocacao","prazoContratoMeses","categoriaVeiculo","precoRevendaEstimado",
-  "adicSeguroTotal","adicVidros","adicTelemetria"
+  "prazoContratoMeses","categoriaVeiculo","precoRevendaEstimado",
+  "adicSeguroTotal","adicVidros","adicTelemetria",
+  "franquiaKm","pneusAnual","ipcaRef"
 ];
 
 function saveLS() {
@@ -352,7 +306,7 @@ function restoreState() {
       const e = el(id);
       if (e && d[id] !== undefined) e.value = d[id];
     });
-    refreshProdutoUI();
+    syncProdutoUI();
     if (d._perfil) selectRegime(d._perfil);
     if (d._step)   goStep(Number(d._step));
   } catch(e) {}

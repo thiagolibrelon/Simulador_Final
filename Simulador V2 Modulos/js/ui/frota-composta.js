@@ -211,12 +211,6 @@ function fcToggleDepr() {
   if (sel && box) box.style.display = sel.value === "real" ? "block" : "none";
 }
 
-function setManutCenarioFC(tipo) {
-  el("fc_manutencaoPct").value = MANUT_REF[tipo];
-  el("fc_mscNovo").classList.toggle("active", tipo === "novo");
-  el("fc_mscUsado").classList.toggle("active", tipo === "usado");
-}
-
 function fcTogglePrazo() {
   const p = el("fc_produtoLocacao")?.value || "rac";
   const wrap = el("fc_prazoWrap");
@@ -237,11 +231,14 @@ function importarDoSimulador() {
     "custoAtivacao","custoDesativacao","modoDepreciacao",
     "depreciacaoPct","precoRevendaEstimado","aluguelMensal","admAluguel",
     "adicSeguroTotal","adicVidros","adicTelemetria","atividadeFim",
-    "produtoLocacao","prazoContratoMeses","categoriaVeiculo",
+    "prazoContratoMeses","categoriaVeiculo",
     "pisPropPct","irpjPropPct","csllPropPct"];
   const m = {
     descricao: (el("clientNameTopbar")?.textContent?.trim() || "Importado") + " — Simulador",
-    qtd: qtdVeiculos || 1
+    qtd: qtdVeiculos || 1,
+    /* Produto vem do login (global), não é mais um campo do wizard do Simulador */
+    produtoLocacao: loginProduto,
+    pneusAnual: el("pneusAnual")?.value || 0
   };
   FIELDS.forEach(f => { const e = el(f); if (e) m[f] = e.value; });
   const eEl = el("estado");

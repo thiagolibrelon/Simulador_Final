@@ -9,8 +9,9 @@ function switchTab(t) {
     "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal",
     "custoAtivacao","custoDesativacao",
     "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim",
-    "produtoLocacao","prazoContratoMeses","categoriaVeiculo","precoRevendaEstimado",
-    "adicSeguroTotal","adicVidros","adicTelemetria"
+    "prazoContratoMeses","categoriaVeiculo","precoRevendaEstimado",
+    "adicSeguroTotal","adicVidros","adicTelemetria",
+    "franquiaKm","pneusAnual","ipcaRef"
   ];
   const fromSim = el("tabSim")?.classList.contains("active");
   const fromEv  = el("tabEv")?.classList.contains("active");
@@ -28,7 +29,7 @@ function switchTab(t) {
     });
     sliderUpdate("manutencaoPct","slManut","slManutR");
     sliderUpdate("seguroPct","slSeg","slSegR");
-    refreshProdutoUI();
+    syncProdutoUI();
   }
 
   ["sim","ev","gloss","fc","dec"].forEach(id => {

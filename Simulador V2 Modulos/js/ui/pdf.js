@@ -240,6 +240,17 @@ body{
   </div>
 </div>
 
+${c.produtoLoc === "gf" ? `
+<!-- OBSERVAÇÕES GF -->
+<div class="stitle">Observações do Contrato GF</div>
+<div style="background:#F7F7F7;border:1px solid #E6E6E6;border-radius:10px;padding:16px 18px;margin-bottom:20px;font-size:11px;color:#4A4A4A;line-height:1.7">
+  ${c.franquiaKm ? `<div>Franquia de Km (referência contratual): <strong>${c.franquiaKm}</strong></div>` : ""}
+  <div>Pneus (desgaste/reposição): <strong>${R(c.pneusAnual)}/ano</strong>${c.pneusTotalContrato ? ` · ${R(c.pneusTotalContrato)} no contrato` : ""}</div>
+  ${c.ipcaRef ? `<div>IPCA de referência informado na negociação: <strong>${c.ipcaRef}% a.a.</strong> — reajuste real previsto em contrato, valor futuro não travado nesta simulação.</div>` : ""}
+  ${c.projecaoManutencao ? `<div style="margin-top:6px">Projeção de manutenção ao longo do contrato <em>(estimativa, pendente de validação contábil)</em>: ${c.projecaoManutencao.map(a => `Ano ${a.ano}: ${a.pct.toFixed(1)}% (${R(a.valor)})`).join(" · ")} — total: <strong>${R(c.manutTotalContrato)}</strong></div>` : ""}
+  ${c.riscoReclassificacaoArrendamento ? `<div style="margin-top:6px;color:#A0631A">⚠ Prazo ≥ 45 meses se aproxima de 75% da vida útil fiscal (60 meses) — risco de reclassificação para arrendamento mercantil financeiro (Res. BACEN 2.309/96), o que mudaria a dedutibilidade do aluguel. Confirmar com a área contábil antes de fechar o contrato.</div>` : ""}
+</div>` : ""}
+
 <!-- CONCLUSÃO -->
 <div class="stitle">Conclusão da Análise</div>
 <div class="concl">
@@ -393,6 +404,15 @@ body{font-family:Inter,sans-serif;background:#fff;color:#4A4A4A;-webkit-print-co
     <div style="font-size:9px;color:#919191;margin-top:4px">Valor total do contrato (${prazoLabel}): ${R(cc.valorTotalContrato)}</div>
   </div>
 </div>
+${cc.produtoLoc === "gf" ? `
+<div class="st">Observações do Contrato GF</div>
+<div style="background:#F7F7F7;border:1px solid #E6E6E6;border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:9px;color:#4A4A4A;line-height:1.6">
+  ${cc.franquiaKm ? `<div>Franquia de Km (referência contratual): <strong>${cc.franquiaKm}</strong></div>` : ""}
+  <div>Pneus (desgaste/reposição): <strong>${R(cc.pneusAnual)}/ano</strong>${cc.pneusTotalContrato ? ` · ${R(cc.pneusTotalContrato)} no contrato` : ""}</div>
+  ${cc.ipcaRef ? `<div>IPCA de referência informado na negociação: <strong>${cc.ipcaRef}% a.a.</strong></div>` : ""}
+  ${cc.projecaoManutencao ? `<div style="margin-top:4px">Projeção de manutenção <em>(estimativa, pendente validação contábil)</em>: ${cc.projecaoManutencao.map(a => `Ano ${a.ano}: ${a.pct.toFixed(1)}%`).join(" · ")} — total: <strong>${R(cc.manutTotalContrato)}</strong></div>` : ""}
+  ${cc.riscoReclassificacaoArrendamento ? `<div style="margin-top:4px;color:#A0631A">⚠ Prazo ≥ 45 meses — risco de reclassificação para arrendamento mercantil financeiro (Res. BACEN 2.309/96). Confirmar com a área contábil.</div>` : ""}
+</div>` : ""}
 <div class="st">Conclusão</div>
 <div class="concl"><div class="conclt">Análise Comparativa — ${clientName || "Simulação"}</div><div class="conclp">${conclusao}</div></div>
 <div class="ft">

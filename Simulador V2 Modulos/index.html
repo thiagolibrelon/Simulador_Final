@@ -40,6 +40,19 @@
       <div class="login-headline">Simulador Estratégico de Frota</div>
       <div class="login-desc">Compare o custo efetivo entre frota própria e locação corporativa considerando custos operacionais, financeiros e tributários.</div>
 
+      <!-- PRODUTO DE LOCAÇÃO — motor RAC × motor GF ── decidido aqui, não muda mais dentro do simulador -->
+      <div class="login-section-label">Produto de Locação</div>
+      <div class="login-field">
+        <div class="regime-grid" style="margin-bottom:0">
+          <div class="regime-card selected" id="startPcRac" onclick="selectStartProduto('rac')">
+            <div class="regime-name">RAC</div>
+          </div>
+          <div class="regime-card" id="startPcGf" onclick="selectStartProduto('gf')">
+            <div class="regime-name">GF — Gestão de Frotas</div>
+          </div>
+        </div>
+      </div>
+
       <!-- INFORMAÇÕES DA SIMULAÇÃO -->
       <div class="login-section-label">Informações da Simulação</div>
 
@@ -56,24 +69,9 @@
         <input id="startQtd" type="number" value="1" min="1" max="9999" placeholder="Ex: 10" onkeydown="if(event.key==='Enter')doStart()"/>
       </div>
 
-      <div class="login-field">
-        <label>Veículo Simulado <span class="tip" data-tip="Modelo/versão do carro sendo simulado, para referência no relatório.">?</span></label>
-        <input id="startVeiculo" type="text" placeholder="Ex: Fiat Toro Freedom 1.3" maxlength="60" autocomplete="off" onkeydown="if(event.key==='Enter')doStart()"/>
-      </div>
-
-      <!-- BLOCO DE VALOR -->
-      <div class="login-value-block">
-        <div class="lvb-title">Ao final da simulação você terá:</div>
-        <div class="lvb-item"><span class="lvb-check">✓</span>Custo efetivo da frota própria</div>
-        <div class="lvb-item"><span class="lvb-check">✓</span>Comparativo com locação corporativa</div>
-        <div class="lvb-item"><span class="lvb-check">✓</span>Economia potencial estimada</div>
-        <div class="lvb-item"><span class="lvb-check">✓</span>Impacto financeiro consolidado da frota</div>
-        <div class="lvb-item"><span class="lvb-check">✓</span>Relatório executivo em PDF</div>
-      </div>
-
       <div class="login-error" id="startError" style="display:none"></div>
-      <button class="login-btn" onclick="doStart()">Iniciar Simulação →</button>
       <button class="login-btn-tour" onclick="startWithTour()">▶ Fazer tour pela ferramenta</button>
+      <button class="login-btn" id="startBtn" onclick="doStart()">Iniciar Simulação — RAC →</button>
       <div class="login-footer">Localiza&amp;Co · Simulador Estratégico de Frota · Uso interno</div>
     </div>
   </div>
@@ -175,6 +173,11 @@
             <input type="checkbox" id="jaPossuiVeiculo" onchange="toggleJaPossui()" style="width:16px;height:16px;accent-color:var(--green)"/>
             Já possuo este veículo — quero avaliar vender e alugar em vez de comprar novo
           </label>
+        </div>
+
+        <div class="field-group">
+          <div class="f-label">Veículo Simulado <span class="tip" data-tip="Modelo/versão do carro sendo simulado, para referência no relatório.">?</span></div>
+          <input id="veiculoSimuladoInput" type="text" placeholder="Ex: Fiat Toro Freedom 1.3" maxlength="60" autocomplete="off" oninput="veiculoSimulado=this.value"/>
         </div>
 
         <div class="field-group">
@@ -285,11 +288,7 @@
             <span class="slider-name">Manutenção anual</span>
             <span class="slider-val"><span id="slManut">1.5</span>% · <span id="slManutR">R$ 0</span></span>
           </div>
-          <div class="manut-sc">
-            <button type="button" class="manut-sc-btn" id="mscNovo" onclick="setManutCenario('novo')">Carro novo <span class="manut-sc-sub">(ano 1)</span></button>
-            <button type="button" class="manut-sc-btn" id="mscUsado" onclick="setManutCenario('usado')">Com 1 ano de uso <span class="manut-sc-sub">1ª revisão paga, desgaste</span></button>
-          </div>
-          <input type="range" id="manutencaoPct" min="0" max="10" step="0.1" value="0" oninput="sliderUpdate('manutencaoPct','slManut','slManutR');clearManutCenario();calc()"/>
+          <input type="range" id="manutencaoPct" min="0" max="10" step="0.1" value="0" oninput="sliderUpdate('manutencaoPct','slManut','slManutR');calc()"/>
           <div class="slider-hint">Revisões, pneus, peças e mão de obra. Referência: 1,5–2,5% (carro novo) · 2,5–3,5% (com 1 ano de uso, fora de garantia/1ª revisão)</div>
         </div>
 
@@ -300,6 +299,14 @@
           </div>
           <input type="range" id="seguroPct" min="0" max="15" step="0.1" value="0" oninput="sliderUpdate('seguroPct','slSeg','slSegR');calc()"/>
           <div class="slider-hint">Cobertura compreensiva + responsabilidade civil. Referência: 2–4%</div>
+        </div>
+
+        <div class="field-group" id="gfPneusWrap" style="display:none">
+          <div class="f-label">Pneus — desgaste/reposição <span class="tip" data-tip="Valor anual fixo, separado da manutenção. A depreciação real do pneu é por km rodado — o simulador não rastreia km, então este é um valor de referência manual, sem escalonamento automático.">?</span></div>
+          <div class="input-row">
+            <div class="input-wrap"><div class="input-unit">R$</div><input id="pneusAnual" type="number" value="0" step="50" oninput="calc()"/></div>
+            <div class="chip"><div class="chip-l">Pneus/ano</div><div class="chip-v" id="outPneusAnual">R$ 0</div></div>
+          </div>
         </div>
 
         <div class="field-group">
@@ -473,32 +480,12 @@
         <div class="aluguel-section">
           <div class="step-eyebrow" style="margin-bottom:12px">Configuração do Aluguel</div>
 
-          <div class="field-group">
-            <div class="f-label">Produto de locação <span class="tip" data-tip="RAC PJ: contratos de até 12 meses. GF (Gestão de Frotas): contratos de até 36 meses.">?</span></div>
-            <div class="regime-grid" style="margin-bottom:0">
-              <div class="regime-card selected" id="pcRac" onclick="selectProduto('rac')">
-                <div class="regime-name">RAC PJ</div>
-                <div class="regime-desc">Locação de curto prazo — contratos de até 12 meses.</div>
-              </div>
-              <div class="regime-card" id="pcGf" onclick="selectProduto('gf')">
-                <div class="regime-name">GF — Gestão de Frotas</div>
-                <div class="regime-desc">Locação de longo prazo — contratos de até 36 meses.</div>
-              </div>
-            </div>
-            <select id="produtoLocacao" style="display:none" onchange="calc()">
-              <option value="rac" selected>rac</option>
-              <option value="gf">gf</option>
-            </select>
-            <div class="field-group" id="prazoContratoWrap" style="display:none;margin-top:10px;margin-bottom:0">
-              <div class="f-label">Prazo do contrato</div>
-              <div class="input-wrap">
-                <select id="prazoContratoMeses" onchange="calc()">
-                  <option value="12">12 meses</option>
-                  <option value="24">24 meses</option>
-                  <option value="36" selected>36 meses</option>
-                </select>
-              </div>
-            </div>
+          <div class="field-group" id="gfCamposWrap" style="display:none">
+            <div class="f-label">Franquia de Km <span class="tip" data-tip="Referência contratual — não entra no cálculo, só aparece no PDF.">?</span></div>
+            <div class="input-wrap"><input id="franquiaKm" type="text" placeholder="Ex: 36.000 km/ano" oninput="calc()"/></div>
+
+            <div id="gfProjecaoManut" class="slider-hint" style="margin-top:14px"></div>
+            <div id="gfRiscoDepreciacao" class="slider-hint" style="display:none;color:#A0631A"></div>
           </div>
 
           <div class="field-group">
@@ -563,6 +550,10 @@
               <div class="chip"><div class="chip-l">Custo anual</div><div class="chip-v a" id="outAluguelAnual">R$ 0</div></div>
             </div>
           </div>
+          <div class="field-group" id="ipcaWrap" style="display:none">
+            <div class="f-label">IPCA de referência <span class="tip" data-tip="O contrato prevê reajuste anual pelo IPCA, mas o valor futuro não dá pra travar hoje. Campo só informativo, para o EV usar de referência na negociação — não entra em nenhum cálculo.">?</span></div>
+            <div class="input-wrap"><input id="ipcaRef" type="number" value="0" step="0.1" oninput="calc()"/><div class="input-unit">% a.a.</div></div>
+          </div>
           <div class="field-group">
             <div class="f-label">Administração do aluguel / mês <span class="tip" data-tip="Custo de gestão do contrato de locação.">?</span></div>
             <div class="input-wrap"><div class="input-unit">R$</div><input id="admAluguel" type="number" value="0" step="50" oninput="calc()"/></div>
@@ -605,6 +596,19 @@
 
     <!-- RIGHT PANE: EXECUTIVE DASHBOARD -->
     <div class="right-pane">
+
+      <!-- PRAZO DO CONTRATO (só GF) -->
+      <div class="field-group" id="prazoContratoWrap" style="display:none;margin-bottom:14px">
+        <div class="f-label">Prazo do contrato</div>
+        <div class="input-wrap">
+          <select id="prazoContratoMeses" onchange="calc()">
+            <option value="12">12 meses</option>
+            <option value="24">24 meses</option>
+            <option value="36" selected>36 meses</option>
+            <option value="48">48 meses</option>
+          </select>
+        </div>
+      </div>
 
       <!-- CAMPO QUANTIDADE DE VEÍCULOS -->
       <div class="fleet-qty-row">
@@ -831,10 +835,6 @@
           </div>
           <div class="ev-card-body">
             <div class="ev-frow"><div class="ev-flabel">Manutenção <span class="tip" data-tip="% anual sobre valor do veículo. Ref: 1,5–2,5% (novo) · 2,5–3,5% (com 1 ano de uso)">?</span></div><div class="input-wrap"><input id="ev_manutencaoPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
-            <div class="manut-sc" style="margin:-4px 0 8px">
-              <button type="button" class="manut-sc-btn" id="ev_mscNovo" onclick="setManutCenarioEV('novo')">Carro novo</button>
-              <button type="button" class="manut-sc-btn" id="ev_mscUsado" onclick="setManutCenarioEV('usado')">Com 1 ano de uso</button>
-            </div>
             <div class="ev-frow"><div class="ev-flabel">Seguro anual</div><div class="input-wrap"><input id="ev_seguroPct" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
             <div class="ev-frow"><div class="ev-flabel">Estado (IPVA)</div><div class="input-wrap"><select id="ev_estado" onchange="calcEV()"><option value="0">Isento – 0,0%</option><option value="2">Acre – 2,0%</option><option value="3.25">Alagoas – 3,25%</option><option value="3">Amapá – 3,0%</option><option value="3">Amazonas – 3,0%</option><option value="2.5">Bahia – 2,5%</option><option value="3.5">Ceará – 3,5%</option><option value="3.5">Distrito Federal – 3,5%</option><option value="2">Espírito Santo – 2,0%</option><option value="3.75">Goiás – 3,75%</option><option value="2.5">Maranhão – 2,5%</option><option value="3">Mato Grosso – 3,0%</option><option value="3">Mato Grosso do Sul – 3,0%</option><option value="4">Minas Gerais – 4,0%</option><option value="2.5">Pará – 2,5%</option><option value="2.5">Paraíba – 2,5%</option><option value="3.5">Paraná – 3,5%</option><option value="2">Pernambuco – 2,0%</option><option value="3">Piauí – 3,0%</option><option value="4">Rio de Janeiro – 4,0%</option><option value="3">Rio Grande do Norte – 3,0%</option><option value="3">Rio Grande do Sul – 3,0%</option><option value="3">Rondônia – 3,0%</option><option value="3">Roraima – 3,0%</option><option value="2">Santa Catarina – 2,0%</option><option value="4">São Paulo – 4,0%</option><option value="3">Sergipe – 3,0%</option><option value="4">Tocantins – 4,0%</option></select></div></div>
             <div class="ev-frow"><div class="ev-flabel">Licenciamento <span class="tip" data-tip="Valor anual de licenciamento e emplacamento.">?</span></div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_licenciamentoAno" type="number" value="0" step="50" oninput="calcEV()"/></div></div>
@@ -884,8 +884,13 @@
             <div class="ev-alg-strip">
               <div>
                 <div class="ev-alg-title">Parâmetros</div>
-                <div class="ev-frow wide"><div class="ev-flabel">Produto de locação</div><div class="input-wrap"><select id="ev_produtoLocacao" onchange="evTogglePrazo()"><option value="rac">RAC PJ (até 12m)</option><option value="gf">GF (até 36m)</option></select></div></div>
-                <div class="ev-frow wide" id="ev_prazoWrap" style="display:none"><div class="ev-flabel">Prazo do contrato</div><div class="input-wrap"><select id="ev_prazoContratoMeses" onchange="calcEV()"><option value="12">12 meses</option><option value="24">24 meses</option><option value="36" selected>36 meses</option></select></div></div>
+                <div class="ev-frow wide"><div class="ev-flabel">Produto de locação</div><div class="input-wrap" style="font-weight:700" id="ev_produtoLocacaoBadge">RAC PJ · 12 meses</div></div>
+                <div class="ev-frow wide" id="ev_prazoWrap" style="display:none"><div class="ev-flabel">Prazo do contrato</div><div class="input-wrap"><select id="ev_prazoContratoMeses" onchange="calcEV()"><option value="12">12 meses</option><option value="24">24 meses</option><option value="36" selected>36 meses</option><option value="48">48 meses</option></select></div></div>
+                <div id="ev_gfCamposWrap" style="display:none">
+                  <div class="ev-frow wide"><div class="ev-flabel">Franquia de Km</div><div class="input-wrap"><input id="ev_franquiaKm" type="text" placeholder="Ex: 36.000 km/ano" oninput="calcEV()"/></div></div>
+                  <div class="ev-frow wide"><div class="ev-flabel">Pneus (desgaste/reposição) / ano</div><div class="input-wrap"><div class="input-unit">R$</div><input id="ev_pneusAnual" type="number" value="0" step="50" oninput="calcEV()"/></div></div>
+                </div>
+                <div class="ev-frow wide" id="ev_ipcaWrap" style="display:none"><div class="ev-flabel">IPCA de referência <span class="tip" data-tip="Informativo — reajuste real do contrato só é conhecido no futuro.">?</span></div><div class="input-wrap"><input id="ev_ipcaRef" type="number" value="0" step="0.1" oninput="calcEV()"/><div class="input-unit">%</div></div></div>
                 <div class="ev-frow wide"><div class="ev-flabel">Categoria do veículo</div><div class="input-wrap"><select id="ev_categoriaVeiculo" onchange="calcEV()">
                   <optgroup label="Econômico"><option value="Compacto">Compacto</option><option value="Econômico" selected>Econômico</option><option value="Econômico Especial">Econômico Especial</option><option value="Econômico Hatch">Econômico Hatch</option><option value="Econômico Sedan">Econômico Sedan</option></optgroup>
                   <optgroup label="Intermediário"><option value="Intermediário Sedan">Intermediário Sedan</option><option value="Intermediário Hatch Automático">Intermediário Hatch Automático</option><option value="Intermediário Automático">Intermediário Automático</option></optgroup>
@@ -1067,6 +1072,19 @@
           <li>Implementados os <strong>Adicionais</strong>: Proteção Total Avarias, Vidros e Pneus, Telemetria (nome real do produto: <strong>"Carro Conectado"</strong>, sistema de gestão da GF — inclusão sem custo à parte mencionada em fonte não-oficial, não confirmada publicamente).</li>
           <li>Implementado o toggle <strong>"Já Possuo Este Veículo"</strong> (vender e alugar) no Simulador principal. O Heitor validou (Adendo ao Parecer 09): mesma regra tributária de sempre, só que a venda vira imediata em vez de hipotética; alertou que custo de oportunidade não é despesa dedutível — não usar isso como argumento de venda.</li>
           <li><strong>Bug encontrado e corrigido no mesmo dia:</strong> a fórmula do cenário "já possuo" dava resultado negativo absurdo (ex: um carro de R$80 mil aparecia com custo de -R$62 mil). Causa: o valor do carro não entrava simetricamente contra o valor de revenda na conta. Corrigido e validado com uma invariante rigorosa: "já possuo um carro de R$80 mil" agora dá <strong>exatamente</strong> o mesmo custo anual que "acabei de comprar à vista um carro de R$80 mil" — R$21.183,20 nos dois casos.</li>
+        </ul>
+      </div>
+
+      <div class="dec-entry">
+        <div class="dec-date">26/08/2026</div>
+        <div class="dec-title">Motor GF separado do RAC — reversão da decisão de 20-21/08</div>
+        <ul class="dec-list">
+          <li><strong>Reverte a decisão de arquitetura registrada em 20-21/08/2026</strong> (mesa Heitor × Time de Desenvolvimento, "nenhuma aba nova para o GF, entra como parâmetro"). Motivo: RAC e GF passaram a ter regras de negócio genuinamente diferentes (prazo até 48 meses, franquia de km, manutenção que escala com o tempo de contrato, pneus separados, IPCA), não só um rótulo de classificação.</li>
+          <li>Produto de locação (RAC × GF) sai do wizard e passa a ser escolhido <strong>na tela de login</strong> — decidido uma vez por sessão, não editável dentro do simulador (para trocar, volta ao início). Removido o campo "Produto de locação" e o toggle "Carro novo / Com 1 ano de uso" do wizard (Simulador, Comparativo Individual e do modal da Frota Composta).</li>
+          <li>Extraído motor único <code>calcCusto()</code> (<code>js/calc/calcCusto.js</code>) a partir das 3 implementações quase-idênticas que existiam (<code>calc()</code>, <code>calcEV()</code>, <code>calcModelo()</code>) — pré-requisito para não replicar a lógica nova de GF em 3 lugares.</li>
+          <li>Novo em GF: <strong>Franquia de Km</strong> (referência manual, só aparece no PDF), <strong>Pneus</strong> (valor anual fixo, separado da manutenção — não escala com uso porque o simulador não rastreia km rodado), <strong>IPCA de referência</strong> (campo informativo abaixo da mensalidade, não entra em nenhum cálculo), e uma <strong>projeção de manutenção plurianual</strong> com curva de incremento por ano de contrato.</li>
+          <li><strong>Pendências assumidas conscientemente:</strong> a curva de manutenção por idade é um <em>placeholder</em> (+15% a.a., marcado como "pendente de validação contábil" na UI e no PDF) — nenhum parecer do Heitor cobre esse número ainda, nem depreciação variável por prazo, nem pneus por km. Depreciação por prazo virou só uma <em>nota de risco</em> no PDF (contratos ≥45 meses, baseada no Parecer 07), não uma fórmula nova. ICMS e opção de compra no GF <strong>não mudaram</strong> — já resolvidos pela nota do Heitor, sem impacto na modelagem.</li>
+          <li>Frota Composta manteve produto/prazo <strong>por modelo</strong> (não migrou para o login global) — frota heterogênea pode legitimamente misturar categorias RAC e GF na mesma simulação.</li>
         </ul>
       </div>
 
@@ -1279,10 +1297,6 @@
         <div class="fc-grid fc-g2">
           <div class="fc-fg"><label>Manutenção anual</label>
             <div class="input-wrap"><input id="fc_manutencaoPct" type="number" value="1.5" step="0.1"/><div class="input-unit">% a.a.</div></div>
-            <div class="manut-sc" style="margin-top:6px">
-              <button type="button" class="manut-sc-btn" id="fc_mscNovo" onclick="setManutCenarioFC('novo')">Novo</button>
-              <button type="button" class="manut-sc-btn" id="fc_mscUsado" onclick="setManutCenarioFC('usado')">1 ano de uso</button>
-            </div>
           </div>
           <div class="fc-fg"><label>Seguro anual</label>
             <div class="input-wrap"><input id="fc_seguroPct" type="number" value="2" step="0.1"/><div class="input-unit">% a.a.</div></div></div>
@@ -1319,7 +1333,7 @@
           <div class="fc-fg"><label>Produto de locação</label>
             <div class="input-wrap"><select id="fc_produtoLocacao" onchange="fcTogglePrazo()"><option value="rac">RAC PJ (até 12m)</option><option value="gf">GF (até 36m)</option></select></div></div>
           <div class="fc-fg" id="fc_prazoWrap" style="display:none"><label>Prazo do contrato</label>
-            <div class="input-wrap"><select id="fc_prazoContratoMeses"><option value="12">12 meses</option><option value="24">24 meses</option><option value="36" selected>36 meses</option></select></div></div>
+            <div class="input-wrap"><select id="fc_prazoContratoMeses"><option value="12">12 meses</option><option value="24">24 meses</option><option value="36" selected>36 meses</option><option value="48">48 meses</option></select></div></div>
           <div class="fc-fg"><label>Categoria do veículo</label>
             <div class="input-wrap"><select id="fc_categoriaVeiculo">
               <optgroup label="Econômico"><option value="Compacto">Compacto</option><option value="Econômico" selected>Econômico</option><option value="Econômico Especial">Econômico Especial</option><option value="Econômico Hatch">Econômico Hatch</option><option value="Econômico Sedan">Econômico Sedan</option></optgroup>
@@ -1405,6 +1419,7 @@
 <script src="js/utils.js"></script>
 <script src="js/state.js"></script>
 <script src="js/ui/theme.js"></script>
+<script src="js/calc/calcCusto.js"></script>
 <script src="js/calc/locacao-individual.js"></script>
 <script src="js/calc/comparativo-individual.js"></script>
 <script src="js/calc/frota-composta.js"></script>

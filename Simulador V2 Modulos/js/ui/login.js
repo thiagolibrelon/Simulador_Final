@@ -1,5 +1,16 @@
 // login screen -> app start flow
 /* ══════════════════════════════════════════
+   PRODUTO DE LOCAÇÃO (RAC × GF) — escolhido no login
+══════════════════════════════════════════ */
+function selectStartProduto(p) {
+  loginProduto = p === "gf" ? "gf" : "rac";
+  el("startPcRac")?.classList.toggle("selected", loginProduto === "rac");
+  el("startPcGf")?.classList.toggle("selected", loginProduto === "gf");
+  const btn = el("startBtn");
+  if (btn) btn.textContent = loginProduto === "gf" ? "Iniciar Simulação — GF →" : "Iniciar Simulação — RAC →";
+}
+
+/* ══════════════════════════════════════════
    INÍCIO DA SIMULAÇÃO
 ══════════════════════════════════════════ */
 function doStart() {
@@ -19,10 +30,14 @@ function doStart() {
   loginMatricula   = evN;
   loginCodigo      = cliN;
   clientName       = cliN;
-  veiculoSimulado  = (el("startVeiculo").value || "").trim();
+  veiculoSimulado  = "";
   qtdVeiculos      = Math.max(1, qty);
+  loginPrazoContratoMeses = loginProduto === "gf" ? 36 : 12;
   const qInp = el("qtdVeiculosInput");
   if (qInp) qInp.value = qtdVeiculos;
+  const vInp = el("veiculoSimuladoInput");
+  if (vInp) vInp.value = "";
+  syncProdutoUI();
 
   if (cliN) {
     el("clientNameInput").value = cliN;
