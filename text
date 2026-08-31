@@ -1,40 +1,116 @@
-Gerado por IA. Certifique-se de verificar a precisão.
-Anotações da reunião:
-Adaptação da Ferramenta à Reforma Tributária: 
-Juliano e Thiago discutiram a prontidão da ferramenta para a reforma tributária, destacando que ela já está programada para a mudança, mas que ainda precisam validar impactos em contratos firmados antes da virada da legislação.
-	Prontidão da Ferramenta: Juliano afirmou que a ferramenta já está pronta para operar com o novo modelo tributário, e que a transição será rápida, pois a mudança já está programada, o que pode atrair mais empresas para o lucro real devido ao benefício fiscal.
-	Validação de Contratos Anteriores: Thiago ressaltou a necessidade de validar como a reforma tributária impactará contratos firmados antes da mudança, especialmente em contratos de 12 e 36 meses, pois ainda não há posicionamento oficial do governo sobre o tema.
-Simulações e Parâmetros de Cálculo da Ferramenta: 
-Juliano e Thiago revisaram parâmetros utilizados nas simulações da ferramenta, abordando questões como lucro da empresa, custos de manutenção, depreciação, preço de venda do carro e inclusão de seguros, além de sugerirem melhorias para maior credibilidade e usabilidade.
-	Consideração de Lucro e Créditos Fiscais: Juliano explicou que as simulações assumem que a empresa terá lucro e conseguirá recuperar créditos fiscais, mas reconheceu que, caso a empresa não tenha lucro, não conseguirá aproveitar os benefícios, sendo esse um ponto relevante para análise.
-	Custos de Manutenção e Depreciação: Foi discutido o caso de custos elevados de manutenção em carros mais antigos, sugerindo que as simulações considerem custos de manutenção para carros com um ano de uso, evitando vieses e tornando os resultados mais realistas.
-	Preço de Venda e Ganho de Capital: Juliano explicou que, por orientação contábil, a ferramenta atualmente não considera ganho de capital na venda do carro, pois isso adicionaria complexidade, mas está no radar para futuras versões.
-	Comparação de Períodos e Renovação de Frota: Foi sugerido ampliar as simulações para períodos de 24 e 36 meses, considerando o tempo médio de renovação de frota dos clientes, para aumentar a credibilidade da ferramenta.
-	Inclusão de Seguro e Adicionais: Discutiu-se a estratégia de apresentar inicialmente o valor sem adicionais como seguro e telemetria, para depois mostrar o impacto desses custos, facilitando a venda e a comparação justa entre opções.
-Estratégias de Escala e Monitoramento de Uso: 
-Juliano e Thiago debateram estratégias para escalar o uso da ferramenta, incluindo parcerias com empresas de contabilidade, monitoramento do uso pelos times e a necessidade de segmentar a análise entre vendas internas e externas.
-	Parcerias com Contabilidades: Juliano relatou a sugestão de buscar empresas de contabilidade para ajudar a vender o produto para clientes com frota própria, permitindo que essas empresas também se beneficiem financeiramente.
-	Monitoramento de Uso da Ferramenta: Foi destacada a importância de monitorar quem está utilizando a ferramenta, para evitar esforços dispersos e garantir foco nas equipes que realmente estão engajadas.
-	Segmentação de Usuários: Discutiu-se a necessidade de separar a análise de uso entre vendas externas, internas e accounts, para entender melhor a efetividade e direcionar ações específicas para cada grupo.
-	Descontinuação do HTML Antigo: Juliano e Thiago conversaram sobre a necessidade de desligar a versão HTML antiga da ferramenta, concluindo que o uso já está em desuso e que não é necessário enviar comandos para desativação, pois poucos ainda utilizam.
-Preocupações com Concorrência e Estratégia Comercial: 
-Juliano e Thiago abordaram preocupações sobre a possibilidade da ferramenta ser copiada por concorrentes e discutiram estratégias comerciais, como ajuste de preços e apresentação de resultados para diretoria e conselho.
-	Risco de Cópia pela Concorrência: Juliano mencionou o receio de que a ferramenta seja copiada facilmente por concorrentes, já que um PDF gerado pode ser replicado rapidamente por soluções em nuvem.
-	Ajuste de Preços e Visão da Diretoria: Foi discutido que, ao apresentar resultados positivos, a diretoria pode sugerir aumento do preço do aluguel, pois a economia gerada para o cliente indica que o valor cobrado está baixo.
-Planejamento de Entregas e Férias da Equipe: 
-Juliano e Thiago alinharam o cronograma de entregas da ferramenta, considerando o período de férias da equipe e a necessidade de garantir monitoramento e avanços paralelos durante esse tempo.
-	Cronograma de Entregas: Foi definido que a entrega principal deve ocorrer até o dia 10, antes do início das férias de Thiago, com foco em garantir que cada gestor possa monitorar seu time.
-	Atividades Paralelas Durante Férias: Juliano destacou que, durante as férias, continuarão as ações de incentivo ao uso e estratégias que não dependem do desenvolvimento da ferramenta.
-Tarefas de acompanhamento:
-Validação de Contratos na Reforma Tributária: 
-Levantar como a reforma tributária impacta contratos firmados antes da mudança, especialmente para contratos de 12 e 36 meses. (Juliano, Thiago)
-Simulação de Custos de Manutenção: 
-Adicionar no speed a opção de simulação de custo de manutenção considerando carro novo e carro com um ano de uso. (Juliano)
-Comparação de Períodos na Simulação: 
-Realizar simulações de comparação de custos para períodos de 24 e 36 meses, conforme tempo médio de renovação de frota dos clientes. (Juliano)
-Monitoramento de Uso da Ferramenta: 
-Implementar monitoramento detalhado para identificar quem está utilizando a ferramenta e quem não está, com apoio do time local. (Juliano)
-Análise de Usabilidade por Cluster: 
-Separar e analisar a usabilidade da ferramenta por clusters: venda externa, venda interna e account, para avaliar efetividade. (Juliano)
-Descontinuação do HTML Antigo: 
-Definir e executar um plano para desligar o acesso ao HTML antigo da ferramenta, garantindo que usuários migrem para a nova versão. (Juliano, Thiago)
+Anotações da reunião
+
+Recolher todos
+Acesso Segmentado Entre Hack E GF: Juliano, Mateus, Thiago e Nelson discutiram como impedir que executivos visualizem ou utilizem indevidamente os dados e simuladores de Hack e GF, propondo diferenciação por login e matrícula, condicionada à implementação do Labs.
+.
+Controle Por Login: Mateus perguntou se a matrícula poderia diferenciar os acessos. Thiago explicou que tecnicamente seria possível associar cada login a um motor específico, como GF ou Rack, mas a implementação depende do Labs e está fora do controle direto da equipe.
+
+.
+Risco Comercial: Juliano destacou que um vendedor de Hack poderia inserir dados incorretos e apresentar uma simulação de GF, e o inverso também poderia ocorrer. A preocupação é garantir que cada executivo venda a solução adequada ao cliente, com dados corretos e sem induzir a comparação para um produto que o vendedor não domina.
+
+.
+Decisão Provisória: Enquanto a separação de acessos não estiver disponível, o tema será colocado no backlog. A prioridade é manter o simulador fiel, sem viés entre locação e compra, para que o cliente receba uma comparação segura e baseada em informações concretas.
+
+Atualizações Do Simulador De GF: Thiago apresentou o andamento das adaptações para GF, incluindo prazos de 24, 36 e 48 meses, separação de pneus, remoção da opção de carro próprio e ajustes de texto e manutenção antes da publicação online.
+.
+Funcionalidades Em Desenvolvimento: Thiago informou que removeu a flag de carro próprio, está revisando possíveis falhas com testes exaustivos no motor de GF e trabalha em melhorias de design no valor simulado. A versão atualizada já existe em HTML, mas ainda depende da publicação no ambiente online.
+
+.
+Pneus Separados: Juliano orientou que pneus sejam apresentados separadamente da manutenção, com uma observação indicando que a manutenção não inclui pneus. Mateus explicou que o objetivo é mostrar quanto o cliente gastaria com a própria frota, pois pneus podem ser um custo relevante e não estar incluídos na percepção usual de manutenção.
+
+.
+Carro Reserva: A equipe discutiu que o custo de indisponibilidade deve depender da escolha do cliente por carro reserva. Se houver carro reserva no contrato de GF, não deve existir custo de indisponibilidade; sem carro reserva, esse custo precisa ser refletido no simulador. Thiago e Juliano ficaram de ajustar a forma de apresentar essa diferença.
+
+.
+Modelos Contratuais: Juliano pediu que Thiago obtenha contratos de GF com as especificidades de pneus, prazo, quilometragem e carro reserva para que Claudinho analise os modelos e sugira como representar corretamente essas regras na ferramenta.
+
+Prazos Flexíveis E Tratamento Fiscal: José, Mateus, Thiago e Juliano avaliaram os prazos disponíveis no simulador, especialmente a inclusão de 18 meses e a possibilidade de permitir períodos flexíveis, mas identificaram dependências de controladoria e regras de impostos.
+.
+Prazos Disponíveis: José questionou a limitação aos prazos de 12, 24, 36 e 48 meses e sugeriu incluir 18 meses, pois a relação de preço entre 12 e 18 meses é relevante após uma atualização do ROIC. Juliano concordou que o prazo de 18 meses merece ser avaliado.
+
+.
+Período Flexível: Juliano considerou importante permitir que o usuário informe a quantidade de meses negociada. Mateus sugeriu inicialmente anualizar a economia para simplificar a conta e a explicação ao cliente, enquanto a solução flexível não estiver desenvolvida.
+
+.
+Validação Fiscal: Thiago explicou que prazos não fechados em anos podem exigir validação da controladoria e da contabilidade, especialmente para determinar como distribuir benefícios ou tributos em períodos como 14 ou 18 meses. Juliano direcionou o tema para o backlog e pediu a confirmação do tratamento fiscal, inclusive quando a contratação ocorre perto do encerramento do ano fiscal.
+
+Correção Das Contas Em Prazos Longos: Juliano, Thiago, Alan, Nelson e José identificaram que multiplicar diretamente a simulação anual por dois ou três pode duplicar custos que ocorrem uma única vez, exigindo ajustes no cálculo para que comparações de 24, 36 e 48 meses sejam precisas.
+.
+Tipos De Custos: Juliano explicou que há custos anuais, custos multiplicados pela quantidade de veículos e custos que ocorrem uma única vez, como aquisição e desativação do veículo. Cada indicador precisa ser classificado corretamente antes de ser multiplicado pelo prazo ou pelo número de carros.
+
+.
+Duplicação De Aquisição: Thiago esclareceu que simplesmente multiplicar a conta de 12 meses por dois faz parecer que o cliente compra e vende o carro novamente ao completar 24 meses. José reforçou que isso equivale a substituir a frota anualmente, o que não representa a realidade.
+
+.
+Depreciação E Manutenção: Alan observou que alguns valores, como depreciação, podem ser calculados de forma diferente de custos únicos. A equipe concluiu que o modelo precisa distinguir quais componentes realmente se repetem ao longo do período para evitar distorções contra o cliente.
+
+.
+Versão Corrigida: Thiago informou que a versão HTML já incorpora a lógica necessária para os prazos maiores, embora a atualização ainda não esteja online. Juliano pediu que a equipe acelerasse a publicação e a validação.
+
+Remoção Do IPCA Da Simulação: Juliano, José, Mateus, Alan e Thiago concordaram em remover o reajuste por IPCA da simulação, pois aplicar inflação apenas ao contrato de GF tornaria a comparação inconsistente com os custos futuros da frota própria do cliente.
+.
+Comparação A Valor Presente: Juliano explicou que, ao trazer os valores para o presente, a ferramenta evita aplicar IPCA ao contrato de GF. Se o IPCA fosse mantido, também seria necessário reajustar manutenção, aquisição, venda e demais custos da frota própria do cliente.
+
+.
+Decisão De Simplificação: José, Mateus e Alan concordaram que retirar o IPCA mantém a comparação mais equilibrada e evita uma cadeia de reajustes difíceis de explicar e implementar. Thiago confirmou que o motor não será alterado para incluir essa lógica e que o IPCA será removido.
+
+.
+Categorias De Cálculo: Juliano reforçou que a equipe deve verificar se cada indicador é anual, proporcional ao prazo, dependente da quantidade de veículos ou único no contrato. Essa classificação é necessária para manter a coerência dos cálculos sem depender de reajustes genéricos.
+
+Monitoramento E Permissões Administrativas: Thiago demonstrou o painel administrativo, enquanto Juliano solicitou filtros e subadministradores separados para que as equipes de GF e Hack acompanhem apenas seus próprios logins, simulações e indicadores de utilização.
+.
+Indicadores Disponíveis: Thiago mostrou que o painel permite consultar a quantidade de simulações, executivos únicos, clientes únicos e veículos simulados em um período escolhido. Como ainda não existe uma base de clientes consolidada, entradas de teste com nomes diferentes podem ser contabilizadas como clientes distintos.
+
+.
+Impacto Dos Testes: Thiago explicou que os testes atuais contaminam os indicadores, pois cada simulação entra no painel. A equipe precisará definir uma data a partir da qual os dados passarão a valer oficialmente e corrigir problemas como a ausência do nome do executivo no PDF.
+
+.
+Separação De Acessos: Juliano pediu a criação de subadministradores e filtros para que Mateus visualize os dados de GF, enquanto os responsáveis por Hack vejam apenas os logins e indicadores de Hack. Thiago registrará essa necessidade no backlog para permitir dashboards específicos de acompanhamento.
+
+Publicação, Testes E Treinamento: Mateus propôs um treinamento para os vendedores em 18 de setembro, mas Juliano, Thiago e José destacaram que a data depende da publicação pelo Labs, de testes ampliados e da correção de erros antes do lançamento.
+.
+Dependência Do Labs: Thiago informou que a intenção era publicar a ferramenta antes de suas férias, mas a equipe depende do Labs para subir a atualização. Atualmente não há um squad dedicado nem uma janela de publicação definida, e alterações simples, como a atualização de logo, podem permanecer pendentes por semanas.
+
+.
+Plano De Validação: Thiago sugeriu antecipar a reunião de validação para terça-feira ou realizar uma sessão na quinta-feira, permitindo testes durante o fim de semana e pequenos ajustes antes do envio ao Labs. Juliano reforçou que a decisão deve separar o que está pronto para avançar do que ainda não pode ser publicado.
+
+.
+Risco Do HTML: A versão HTML pode ser usada para testes, mas não oferece login, mascaramento, APIs ou monitoramento. Por esse motivo, Juliano explicou que ela não deve ser compartilhada amplamente nem usada como substituta segura do ambiente online.
+
+.
+Treinamento De GF: Mateus planejou reservar uma hora com todos os vendedores de GF em 18 de setembro, sujeito à confirmação. José considerou a data apertada e defendeu ampliar o grupo de testes com pelo menos um representante por GV. Juliano afirmou que, se necessário, o treinamento deve ser adiado para evitar que um erro de cálculo faça os vendedores abandonarem a ferramenta.
+
+Pontos Focais E Governança De Uso: Juliano propôs integrar representantes de GF ao grupo de pontos focais já existente para Hack, criando um canal de testes, dúvidas, casos e melhorias sem concentrar toda a operação em poucas pessoas.
+.
+Estrutura De Suporte: Juliano explicou que cada distrito ou território do grupo de Hack possui um executivo e um distrital como pontos focais. A proposta é que dúvidas sejam tratadas primeiro pelo ponto focal local e só depois escaladas ao grupo maior.
+
+.
+Representação De GF: José concordou com a necessidade de pontos focais adicionais e sugeriu incluir representantes de diferentes GVs para testar a ferramenta no máximo possível. Mateus ficou responsável por avaliar quem deve participar da estrutura de GF.
+
+.
+Testes Com A Ponta: Juliano pediu que os novos participantes recebam contexto antes de entrar no grupo e que usem a ferramenta para fornecer feedback real. A experiência anterior mostrou que a participação de executivos ajudou a encontrar erros de cálculo e problemas de uso antes da disponibilização ao time de vendas.
+
+Estas anotações são úteis?
+
+
+Tarefas de acompanhamento
+.
+Segmentação De Acessos: Defina com o Labs a associação dos logins e matrículas aos motores de GF e de rack, restringindo a visualização de cada vendedor à solução correspondente e mantendo o acesso completo apenas para quem vende ambas. (Thiago)
+.
+Atualização Da Publicação: Solicite ao Labs a publicação do modelo atualizado, incluindo o logo da Localiza Empresa, os custos de aquisição e venda e a atualização específica de GF. (Thiago)
+.
+Parâmetros De Simulação: Implemente e valide os prazos de 24, 36 e 48 meses no motor de GF, incluindo a separação dos pneus do custo de manutenção e o ajuste do texto para indicar “exceto pneus”. (Thiago)
+.
+Contratos De Pneus: Envie contratos de GF com as especificidades de pneus para Thiago e permita que Claudinho os analise e recomende o tratamento adequado no simulador. (Nelson, Jose)
+.
+Carro Reserva: Inclua na simulação de GF a opção de contrato com ou sem carro reserva, refletindo corretamente o custo de indisponibilidade quando o cliente não optar pelo veículo reserva. (Thiago)
+.
+Cálculos De Longo Prazo: Revise e valide as fórmulas para distinguir custos únicos, custos anuais e custos por quantidade de veículos, evitando multiplicar indevidamente aquisição, venda e desativação em períodos de 24, 36 ou 48 meses. (Thiago)
+.
+Tratamento Do IPCA: Remova o campo de reajuste por IPCA da simulação, mantendo a comparação em valor presente para evitar aplicar o reajuste apenas à proposta da Localiza. (Thiago)
+.
+Tela De Comparativo: Remova a tela de comparativo individual e mantenha no fluxo apenas o simulador de frota composta e o glossário. (Thiago)
+.
+Monitoramento Por Perfil: Crie subadministradores e filtros no painel para que Mateus visualize apenas os logins de GF e os responsáveis por Localiza Empresa visualizem apenas os logins de rack, habilitando dashboards separados de acompanhamento. (Thiago)
+.
+Dados De Monitoramento: Corrija a identificação do executivo nos relatórios e estabeleça uma data de corte a partir da qual as simulações serão consideradas válidas, excluindo os testes dos indicadores. (Thiago)
