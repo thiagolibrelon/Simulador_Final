@@ -45,9 +45,11 @@
         <div class="regime-grid" style="margin-bottom:0">
           <div class="regime-card selected" id="startPcRac" onclick="selectStartProduto('rac')">
             <div class="regime-name">RAC</div>
+            <div class="regime-desc">Locação mensal — contratos de 6 a 24 meses</div>
           </div>
           <div class="regime-card" id="startPcGf" onclick="selectStartProduto('gf')">
-            <div class="regime-name">GF — Gestão de Frotas</div>
+            <div class="regime-name">GF</div>
+            <div class="regime-desc">Gestão de Frotas — contratos de 12 a 48 meses</div>
           </div>
         </div>
       </div>
@@ -60,7 +62,11 @@
         <input id="startEV" type="text" placeholder="Nome completo do executivo" maxlength="60" autocomplete="off" onkeydown="if(event.key==='Enter')doStart()"/>
       </div>
       <div class="login-field">
-        <label>Empresa Cliente</label>
+        <label>Matrícula do executivo <span class="opt">(opcional)</span></label>
+        <input id="startMatricula" type="text" placeholder="Ex: 04512" maxlength="20" autocomplete="off" onkeydown="if(event.key==='Enter')doStart()"/>
+      </div>
+      <div class="login-field">
+        <label>Empresa Cliente <span class="opt">(opcional)</span></label>
         <input id="startCliente" type="text" placeholder="Razão social ou nome fantasia" maxlength="60" autocomplete="off" onkeydown="if(event.key==='Enter')doStart()"/>
       </div>
       <div class="login-field">
@@ -69,7 +75,7 @@
       </div>
 
       <div class="login-error" id="startError" style="display:none"></div>
-      <button class="login-btn-tour" onclick="startWithTour()">▶ Fazer tour pela ferramenta</button>
+      <button class="login-btn-tour" onclick="startWithTour()"><span data-ic="play"></span> Fazer tour pela ferramenta</button>
       <button class="login-btn" id="startBtn" onclick="doStart()">Iniciar Simulação — RAC →</button>
       <div class="login-footer">Localiza&amp;Co · Simulador Estratégico de Frota · Uso interno</div>
     </div>
@@ -104,9 +110,9 @@
       </button>
       <div class="tb-separator"></div>
       <button class="tb-btn" id="presBtn" onclick="togglePresentation()" title="Ocultar campos de entrada para apresentação"><span class="btn-txt">Apresentação</span></button>
-      <button class="tb-btn" onclick="downloadChecklist()" title="Baixar ficha de levantamento de dados para enviar ao cliente">📋 <span class="btn-txt">Checklist</span></button>
-      <button class="tb-btn" onclick="startTour()" title="Tour guiado — conheça a ferramenta">▶ Tour</button>
-      <div class="theme-btn" id="themeBtn" title="Alternar tema"><div class="tt-k" id="ttK">🌙</div></div>
+      <button class="tb-btn" onclick="downloadChecklist()" title="Baixar ficha de levantamento de dados para enviar ao cliente"><span data-ic="clipboard"></span> <span class="btn-txt">Checklist</span></button>
+      <button class="tb-btn" onclick="startTour()" title="Tour guiado — conheça a ferramenta"><span data-ic="play"></span> <span class="btn-txt">Tour</span></button>
+      <button class="theme-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema claro/escuro"><span class="tt-k" id="ttK" data-ic="sun"></span></button>
     </div>
   </header>
 
@@ -125,7 +131,7 @@
   <!-- TABS -->
   <div class="tabs-bar">
     <button class="tab active" id="tabSim" onclick="switchTab('sim')">Simulador</button>
-    <button class="tab" id="tabFc" onclick="switchTab('fc')">⚡ Frota Composta</button>
+    <button class="tab" id="tabFc" onclick="switchTab('fc')"><span data-ic="layers"></span> Frota Composta</button>
     <button class="tab" id="tabGloss" onclick="switchTab('gloss')">Glossário</button>
   </div>
 
@@ -140,7 +146,7 @@
       <div class="progress-rail">
         <div class="prog-step-wrap">
           <div class="prog-dot active" id="pd0" onclick="goStep(0)">1</div>
-          <div class="prog-label">Compra</div>
+          <div class="prog-label">Aquisição</div>
         </div>
         <div class="prog-line" id="pl0"></div>
         <div class="prog-step-wrap">
@@ -155,7 +161,7 @@
         <div class="prog-line" id="pl2"></div>
         <div class="prog-step-wrap">
           <div class="prog-dot" id="pd3" onclick="goStep(3)">4</div>
-          <div class="prog-label">Fiscal</div>
+          <div class="prog-label">Impostos</div>
         </div>
       </div>
 
@@ -201,7 +207,7 @@
         </div>
 
         <div class="microcopy" style="margin-top:18px" id="mc1box">
-          💡 <strong>Saída imediata de caixa:</strong> no momento da compra, <strong id="mc1entrada">R$ 0</strong> saem da conta da empresa — antes mesmo do veículo rodar 1 km.
+          <span data-ic="bulb"></span> <strong>Saída imediata de caixa:</strong> no momento da compra, <strong id="mc1entrada">R$ 0</strong> saem da conta da empresa — antes mesmo do veículo rodar 1 km.
         </div>
 
         <div class="nav-btns">
@@ -216,7 +222,7 @@
         <div class="step-subtitle">Além do valor investido na compra, é fundamental considerar o custo de capital dos recursos financeiros empregados e o impacto do financiamento sobre o caixa.</div>
 
         <div class="microcopy" id="mc2box">
-          🎯 Esse capital, rendendo <strong id="mc2taxa">14,5%</strong> a.a. no próprio negócio, geraria <strong id="mc2rend">R$ 0</strong> por ano sobre os <strong id="mc2entrada">R$ 0</strong> imobilizados. Parado no veículo, é esse retorno que a empresa deixa de ter.
+          <span data-ic="target"></span> Esse capital, rendendo <strong id="mc2taxa">14,5%</strong> a.a. no próprio negócio, geraria <strong id="mc2rend">R$ 0</strong> por ano sobre os <strong id="mc2entrada">R$ 0</strong> imobilizados. Parado no veículo, é esse retorno que a empresa deixa de ter.
         </div>
 
         <div class="field-group" id="fgFinanciamento">
@@ -379,37 +385,44 @@
           <div class="slider-hint">Valor contábil líquido (custo − depreciação): <strong id="outValorContabil">R$ 0</strong> · <a href="#" onclick="usarValorContabil();return false" style="color:var(--green-tx);font-weight:600;text-decoration:none">usar como revenda</a></div>
         </div>
 
-        <div class="field-group">
-          <div class="f-label">Licenciamento <span class="tip" data-tip="Taxa anual de licenciamento e emplacamento.">?</span></div>
-          <div class="input-row">
-            <div class="input-wrap"><div class="input-unit">R$</div><input id="licenciamentoAno" type="number" value="0" step="50" oninput="calc()"/></div>
-            <div class="chip"><div class="chip-l">Lic./ano</div><div class="chip-v r" id="outLic">R$ 0</div></div>
-          </div>
-        </div>
+        <details class="adv">
+          <summary><span data-ic="chevron"></span> Ajustes avançados — licenciamento, frete, administração</summary>
+          <div class="adv-body">
 
-        <div class="field-group">
-          <div class="f-label">Custo de Ativação <span class="tip" data-tip="Despesas para colocar o veículo em operação: frete/transporte interestadual até a empresa, deslocamento da equipe, seguro de transporte, combustível e taxas de documentação na retirada.">?</span></div>
-          <div class="input-row">
-            <div class="input-wrap"><div class="input-unit">R$</div><input id="custoAtivacao" type="number" value="0" step="100" oninput="calc()"/></div>
-            <div class="chip"><div class="chip-l">Ativ./ano</div><div class="chip-v r" id="outAtivacao">R$ 0</div></div>
-          </div>
-        </div>
+            <div class="field-group">
+              <div class="f-label">Licenciamento <span class="tip" data-tip="Taxa anual de licenciamento e emplacamento.">?</span></div>
+              <div class="input-row">
+                <div class="input-wrap"><div class="input-unit">R$</div><input id="licenciamentoAno" type="number" value="0" step="50" oninput="calc()"/></div>
+                <div class="chip"><div class="chip-l">Lic./ano</div><div class="chip-v r" id="outLic">R$ 0</div></div>
+              </div>
+            </div>
 
-        <div class="field-group">
-          <div class="f-label">Custo de Desativação <span class="tip" data-tip="Despesas para tirar o veículo de operação: frete/transporte até outro estado para revenda, preparação (revisão, higienização, funilaria leve), anúncio/comissão e taxas de baixa ou transferência.">?</span></div>
-          <div class="input-row">
-            <div class="input-wrap"><div class="input-unit">R$</div><input id="custoDesativacao" type="number" value="0" step="100" oninput="calc()"/></div>
-            <div class="chip"><div class="chip-l">Desativ./ano</div><div class="chip-v r" id="outDesativacao">R$ 0</div></div>
-          </div>
-        </div>
+            <div class="field-group">
+              <div class="f-label">Custo de Ativação <span class="tip" data-tip="Despesas para colocar o veículo em operação: frete/transporte interestadual até a empresa, deslocamento da equipe, seguro de transporte, combustível e taxas de documentação na retirada.">?</span></div>
+              <div class="input-row">
+                <div class="input-wrap"><div class="input-unit">R$</div><input id="custoAtivacao" type="number" value="0" step="100" oninput="calc()"/></div>
+                <div class="chip"><div class="chip-l">Ativ./ano</div><div class="chip-v r" id="outAtivacao">R$ 0</div></div>
+              </div>
+            </div>
 
-        <div class="field-group">
-          <div class="f-label">Administração de frota / mês <span class="tip" data-tip="Sistemas, RH dedicado e controles de multas. Frequentemente esquecido na conta.">?</span></div>
-          <div class="input-row">
-            <div class="input-wrap"><div class="input-unit">R$</div><input id="admFrotaMensal" type="number" value="0" step="50" oninput="calc()"/></div>
-            <div></div>
+            <div class="field-group">
+              <div class="f-label">Custo de Desativação <span class="tip" data-tip="Despesas para tirar o veículo de operação: frete/transporte até outro estado para revenda, preparação (revisão, higienização, funilaria leve), anúncio/comissão e taxas de baixa ou transferência.">?</span></div>
+              <div class="input-row">
+                <div class="input-wrap"><div class="input-unit">R$</div><input id="custoDesativacao" type="number" value="0" step="100" oninput="calc()"/></div>
+                <div class="chip"><div class="chip-l">Desativ./ano</div><div class="chip-v r" id="outDesativacao">R$ 0</div></div>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <div class="f-label">Administração de frota / mês <span class="tip" data-tip="Sistemas, RH dedicado e controles de multas. Frequentemente esquecido na conta.">?</span></div>
+              <div class="input-row">
+                <div class="input-wrap"><div class="input-unit">R$</div><input id="admFrotaMensal" type="number" value="0" step="50" oninput="calc()"/></div>
+                <div></div>
+              </div>
+            </div>
+
           </div>
-        </div>
+        </details>
 
         <div class="sub-chip">
           <label>Custo operacional / ano</label>
@@ -428,35 +441,41 @@
         <div class="step-title">Impacto Tributário e Comparativo</div>
         <div class="step-subtitle">Aqui são considerados os efeitos tributários de cada modelo, permitindo a comparação definitiva entre frota própria e locação com base no custo efetivo.</div>
 
+        <div class="step-field-label">Regime tributário da empresa</div>
         <div class="regime-grid">
           <div class="regime-card selected" id="rcReal" onclick="selectRegime('real')">
-            <div class="regime-name"><h1>Lucro Real</h1></div>
+            <div class="regime-name">Lucro Real</div>
             <div class="regime-desc">Aluguel e despesas operacionais geram créditos de IRPJ, CSLL e PIS/COFINS.</div>
             <div class="regime-badge badge-real">Benefício tributário ativo</div>
           </div>
           <div class="regime-card" id="rcPres" onclick="selectRegime('presumido')">
-            <div class="regime-name"><h1>Lucro Presumido</h1></div>
+            <div class="regime-name">Lucro Presumido</div>
             <div class="regime-desc">Regime simplificado. Despesas específicas não geram créditos diretos.</div>
             <div class="regime-badge badge-pres">Sem créditos diretos</div>
           </div>
         </div>
 
-        <div class="warn-box" id="tributosNote">⚠️ No Lucro Presumido os benefícios tributários são zerados — as despesas não geram créditos diretos de IRPJ/CSLL.</div>
+        <div class="warn-box" id="tributosNote">No Lucro Presumido os benefícios tributários são zerados — as despesas não geram créditos diretos de IRPJ/CSLL.</div>
 
-        <div class="tax-grid">
-          <div class="field-group" style="margin-bottom:0">
-            <div class="f-label">PIS/COFINS</div>
-            <div class="input-wrap"><input id="pisPropPct" type="number" value="9.25" step="0.01" oninput="calc()"/><div class="input-unit">%</div></div>
+        <details class="adv" data-keep-closed>
+          <summary><span data-ic="chevron"></span> Alíquotas tributárias</summary>
+          <div class="adv-body">
+            <div class="tax-grid">
+              <div class="field-group" style="margin-bottom:0">
+                <div class="f-label">PIS/COFINS</div>
+                <div class="input-wrap"><input id="pisPropPct" type="number" value="9.25" step="0.01" oninput="calc()"/><div class="input-unit">%</div></div>
+              </div>
+              <div class="field-group" style="margin-bottom:0">
+                <div class="f-label">IRPJ</div>
+                <div class="input-wrap"><input id="irpjPropPct" type="number" value="25" step="0.5" oninput="calc()"/><div class="input-unit">%</div></div>
+              </div>
+              <div class="field-group" style="margin-bottom:0">
+                <div class="f-label">CSLL</div>
+                <div class="input-wrap"><input id="csllPropPct" type="number" value="9" step="0.5" oninput="calc()"/><div class="input-unit">%</div></div>
+              </div>
+            </div>
           </div>
-          <div class="field-group" style="margin-bottom:0">
-            <div class="f-label">IRPJ</div>
-            <div class="input-wrap"><input id="irpjPropPct" type="number" value="25" step="0.5" oninput="calc()"/><div class="input-unit">%</div></div>
-          </div>
-          <div class="field-group" style="margin-bottom:0">
-            <div class="f-label">CSLL</div>
-            <div class="input-wrap"><input id="csllPropPct" type="number" value="9" step="0.5" oninput="calc()"/><div class="input-unit">%</div></div>
-          </div>
-        </div>
+        </details>
 
         <div class="credit-box" id="creditAnim">
           <div style="font-size:11px;font-weight:700;color:var(--green-tx);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">↓ Créditos tributários abatendo o aluguel</div>
@@ -599,29 +618,51 @@
     <!-- RIGHT PANE: EXECUTIVE DASHBOARD -->
     <div class="right-pane">
 
-      <!-- PRAZO DO CONTRATO — opções montadas por produto em syncProdutoUI() (RAC 6/12/18/24 · GF 12/24/36/48) -->
-      <div class="field-group" id="prazoContratoWrap" style="margin-bottom:14px">
-        <div class="f-label">Prazo do contrato</div>
-        <div class="input-wrap">
-          <select id="prazoContratoMeses" onchange="calc()">
-            <option value="6">6 meses</option>
-            <option value="12" selected>12 meses</option>
-            <option value="18">18 meses</option>
-            <option value="24">24 meses</option>
-          </select>
+      <!-- ═══ HERO DE RESULTADO — sempre acima da dobra (Parecer 13, itens 01 e 02) ═══ -->
+      <div class="result-hero" id="resultHero">
+        <div class="rh-verdict" id="rhVerdict">Preencha o simulador</div>
+        <div class="rh-big" id="rhBig">—</div>
+        <div class="rh-sub" id="rhSub">a economia aparece aqui</div>
+        <div class="rh-fleet" id="rhFleet" style="display:none">
+          <span id="rhFleetLabel">Frota</span><strong id="rhFleetVal">R$ 0</strong>
+        </div>
+        <div class="rh-cards">
+          <div class="rh-card" id="rhCardPropria"><span>Frota própria</span><strong id="rhProp">R$ 0</strong></div>
+          <div class="rh-card" id="rhCardAluguel"><span id="rhAlugLabel">Aluguel</span><strong id="rhAlug">R$ 0</strong></div>
+        </div>
+        <div class="rh-note" id="rhNote"></div>
+      </div>
+
+      <!-- CONTROLES "e se" -->
+      <div class="rh-controls">
+        <div class="ctl" id="prazoContratoWrap">
+          <label>Prazo do contrato</label>
+          <div class="input-wrap">
+            <select id="prazoContratoMeses" onchange="calc()">
+              <option value="6">6 meses</option>
+              <option value="12" selected>12 meses</option>
+              <option value="18">18 meses</option>
+              <option value="24">24 meses</option>
+            </select>
+          </div>
+        </div>
+        <div class="ctl fleet-qty-row">
+          <span class="fleet-qty-label">Frota</span>
+          <div class="fleet-qty-ctrl">
+            <button class="fleet-qty-btn" onclick="changeQty(-1)" aria-label="menos um veículo">−</button>
+            <input id="qtdVeiculosInput" class="fleet-qty-input" type="number" value="1" min="1" max="9999" oninput="updateQty(this.value)"/>
+            <button class="fleet-qty-btn" onclick="changeQty(1)" aria-label="mais um veículo">+</button>
+          </div>
+          <span class="fleet-qty-unit">veículos</span>
         </div>
       </div>
 
-      <!-- CAMPO QUANTIDADE DE VEÍCULOS -->
-      <div class="fleet-qty-row">
-        <span class="fleet-qty-label">Frota</span>
-        <div class="fleet-qty-ctrl">
-          <button class="fleet-qty-btn" onclick="changeQty(-1)">−</button>
-          <input id="qtdVeiculosInput" class="fleet-qty-input" type="number" value="1" min="1" max="9999" oninput="updateQty(this.value)"/>
-          <button class="fleet-qty-btn" onclick="changeQty(1)">+</button>
-        </div>
-        <span class="fleet-qty-unit">veículos</span>
-      </div>
+      <button class="pdf-btn" onclick="exportPDF()"><span data-ic="clipboard"></span> Exportar PDF Executivo</button>
+
+      <!-- ═══ DETALHAMENTO — recolhido por padrão ═══ -->
+      <details class="dash-details" id="dashDetails">
+        <summary><span data-ic="chevron"></span> Ver como chegamos nesse número</summary>
+        <div class="dash-details-body">
 
       <div class="dash-block-title">Custo Acumulado — Frota Própria</div>
 
@@ -729,9 +770,8 @@
         </div>
       </div>
 
-      <div class="dash-pdf-btn">
-        <button class="pdf-btn" onclick="exportPDF()">📄 Exportar PDF Executivo</button>
-      </div>
+        </div><!-- /dash-details-body -->
+      </details>
 
     </div><!-- /right-pane -->
 
@@ -744,7 +784,7 @@
     <p class="gloss-intro">Referência completa de todos os termos, fórmulas e variáveis utilizados no simulador. Use como guia durante a apresentação ao cliente ou para aprofundar a análise financeira.</p>
 
     <div class="gloss-section">
-      <div class="gloss-stitle">🚗 Aquisição & Veículo</div>
+      <div class="gloss-stitle"><span data-ic="car"></span> Aquisição &amp; Veículo</div>
       <div class="gloss-grid">
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🏷️</div><div class="gcard-term">Preço de Tabela</div><div class="gcard-tag">Input</div></div><div class="gcard-def">Valor bruto conforme tabela FIPE ou preço de venda antes de qualquer negociação.</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🤝</div><div class="gcard-term">Desconto Negociado</div><div class="gcard-tag">Input %</div></div><div class="gcard-def">Percentual de desconto obtido na compra, aplicado sobre o preço de tabela para chegar ao valor final.</div><div class="gcard-form">Valor Final = Preço × (1 − Desconto%)</div></div>
@@ -753,7 +793,7 @@
     </div>
 
     <div class="gloss-section">
-      <div class="gloss-stitle">🏦 Financiamento & Custo de Capital</div>
+      <div class="gloss-stitle"><span data-ic="bank"></span> Financiamento &amp; Custo de Capital</div>
       <div class="gloss-grid">
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">📈</div><div class="gcard-term">Juros Mensais</div><div class="gcard-tag">Input % a.m.</div></div><div class="gcard-def">Taxa de juros do financiamento calculada pelo método Price (parcelas fixas). Use 0 para compra sem juros.</div><div class="gcard-form">Parcela = PV × [i(1+i)ⁿ / ((1+i)ⁿ−1)]</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🎯</div><div class="gcard-term">Custo de Capital (TMA)</div><div class="gcard-tag">Input % a.a.</div></div><div class="gcard-def">Taxa mínima de atratividade — o retorno que o capital geraria aplicado no próprio negócio da empresa (não é o CDI). Imobilizado no veículo, esse retorno deixa de ser obtido: é o custo invisível da compra.</div><div class="gcard-form">Custo = (Entrada + Parcelas_Ano) × TMA%</div></div>
@@ -762,7 +802,7 @@
     </div>
 
     <div class="gloss-section">
-      <div class="gloss-stitle">🔧 Custos Operacionais</div>
+      <div class="gloss-stitle"><span data-ic="wrench"></span> Custos Operacionais</div>
       <div class="gloss-grid">
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🔩</div><div class="gcard-term">Manutenção</div><div class="gcard-tag">Slider %</div></div><div class="gcard-def">Custo anual com revisões, peças e mão de obra — <strong>não inclui pneus</strong>, que entram em campo próprio. Referência: 1,5–2,5% a.a. sobre o valor do veículo.</div><div class="gcard-form">Manutenção = Valor Veículo × Taxa%</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🛡️</div><div class="gcard-term">Seguro Anual</div><div class="gcard-tag">Slider %</div></div><div class="gcard-def">Prêmio anual contra danos, furto e responsabilidade civil. Varia por perfil, uso e cobertura. Referência: 2–4% a.a.</div></div>
@@ -775,7 +815,7 @@
     </div>
 
     <div class="gloss-section">
-      <div class="gloss-stitle">💰 Tributos & Regimes Fiscais</div>
+      <div class="gloss-stitle"><span data-ic="percent"></span> Tributos &amp; Regimes Fiscais</div>
       <div class="gloss-grid">
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🏢</div><div class="gcard-term">Lucro Real</div><div class="gcard-tag">Regime</div></div><div class="gcard-def">IRPJ/CSLL sobre lucro líquido real. Permite deduzir despesas operacionais e depreciação, gerando créditos tributários relevantes.</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🏬</div><div class="gcard-term">Lucro Presumido</div><div class="gcard-tag">Regime</div></div><div class="gcard-def">Regime simplificado. IRPJ/CSLL sobre margem presumida. Não permite deduzir despesas específicas — benefícios tributários zerados.</div></div>
@@ -785,7 +825,7 @@
     </div>
 
     <div class="gloss-section">
-      <div class="gloss-stitle">⚖️ Resultado Final</div>
+      <div class="gloss-stitle"><span data-ic="scale"></span> Resultado Final</div>
       <div class="gloss-grid">
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🏁</div><div class="gcard-term">Custo Efetivo — Frota</div><div class="gcard-tag">Resultado</div></div><div class="gcard-def">Todos os desembolsos menos benefícios tributários e valor de revenda. O custo real de possuir o veículo por um ano.</div><div class="gcard-form">Custo = Aq. + Operacional − Tributos − Revenda</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🏁</div><div class="gcard-term">Custo Efetivo — Aluguel</div><div class="gcard-tag">Resultado</div></div><div class="gcard-def">Custo anual de aluguel descontados os créditos tributários no Lucro Real, mais o custo administrativo do contrato.</div><div class="gcard-form">Custo = (Aluguel × 12) − Tributos + Adm.</div></div>
@@ -801,7 +841,7 @@
 
     <div class="fc-bar">
       <div class="fc-bar-left">
-        <span class="ev-badge-tag">⚡ Frota Composta</span>
+        <span class="ev-badge-tag"><span data-ic="layers"></span> Frota Composta</span>
         <span class="ev-bar-desc">Análise multi-modelo · Estratégia ótima automática</span>
       </div>
       <div class="ev-bar-right">
@@ -810,13 +850,13 @@
           <option value="presumido">Lucro Presumido</option>
         </select>
         <button class="fc-bar-btn" onclick="importarDoSimulador()" title="Importa os dados atuais do Simulador como novo modelo">⬇ Importar do Simulador</button>
-        <button class="fc-bar-btn green" onclick="exportPDFFrota()">📄 PDF</button>
+        <button class="fc-bar-btn green" onclick="exportPDFFrota()"><span data-ic="clipboard"></span> PDF</button>
       </div>
     </div>
 
     <div class="fc-layout">
       <div class="fc-col-left">
-        <button class="fc-add-btn" onclick="openModalModelo(null)">＋ Adicionar Categoria de Veículo</button>
+        <button class="fc-add-btn" onclick="openModalModelo(null)"><span data-ic="plus"></span> Adicionar categoria de veículo</button>
         <div id="fcModelosList"></div>
       </div>
       <div class="fc-col-right" id="fcDashboard"></div>
@@ -960,7 +1000,7 @@
 <div id="checklistModalOverlay" style="display:none" onclick="if(event.target===this)closeChecklistModal()">
   <div class="fc-modal" style="max-width:500px">
     <div class="fc-modal-head">
-      <span class="fc-modal-head-title">📋 Checklist para o Cliente</span>
+      <span class="fc-modal-head-title"><span data-ic="clipboard"></span> Checklist para o Cliente</span>
       <button class="fc-modal-close" onclick="closeChecklistModal()">×</button>
     </div>
     <div class="fc-modal-body">
@@ -969,7 +1009,7 @@
     </div>
     <div class="fc-modal-foot">
       <button class="fc-modal-cancel" onclick="closeChecklistModal()">Fechar</button>
-      <button class="fc-modal-save" id="checklistCopyBtn" onclick="copyChecklistText()">📋 Copiar texto</button>
+      <button class="fc-modal-save" id="checklistCopyBtn" onclick="copyChecklistText()"><span data-ic="clipboard"></span> Copiar texto</button>
     </div>
   </div>
 </div>
@@ -996,6 +1036,7 @@
 
 <script src="js/utils.js"></script>
 <script src="js/state.js"></script>
+<script src="js/ui/icons.js"></script>
 <script src="js/ui/theme.js"></script>
 <script src="js/calc/calcCusto.js"></script>
 <script src="js/calc/locacao-individual.js"></script>

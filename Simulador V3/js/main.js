@@ -15,6 +15,12 @@ window.addEventListener("DOMContentLoaded", () => {
     inp.addEventListener("change", calc);
   });
 
+  /* Abre "Ajustes avançados" se algum campo lá dentro já tem valor (Parecer 13) */
+  document.querySelectorAll("details.adv:not([data-keep-closed])").forEach(d => {
+    const temValor = [...d.querySelectorAll("input[type=number]")].some(i => (+i.value || 0) !== 0);
+    if (temValor) d.open = true;
+  });
+
   calc();
   restoreLSFC();
 });

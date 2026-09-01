@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Auditoria de Produto e Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f2f1ec;
+  --surface:#fffefb;
+  --surface-2:#ece9e1;
+  --ink:#20241f;
+  --muted:#5c6259;
+  --faint:#8a8f83;
+  --line:rgba(32,36,31,.14);
+  --line-strong:rgba(32,36,31,.28);
+  --accent:#3a5a7a;
+  --accent-soft:rgba(58,90,122,.09);
+  --tag-confirmed:#2f6e4f;
+  --tag-confirmed-soft:rgba(47,110,79,.1);
+  --tag-deductive:#9c7218;
+  --tag-deductive-soft:rgba(156,114,24,.12);
+  --tag-unconfirmed:#a63a3a;
+  --tag-unconfirmed-soft:rgba(166,58,58,.1);
+  --shadow:0 1px 2px rgba(32,36,31,.04),0 12px 32px -16px rgba(32,36,31,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171a; --surface:#1a1e1c; --surface-2:#20241f;
+    --ink:#eceae2; --muted:#a7ac9f; --faint:#767c70;
+    --line:rgba(236,234,226,.14); --line-strong:rgba(236,234,226,.26);
+    --accent:#8fb2da; --accent-soft:rgba(143,178,218,.1);
+    --tag-confirmed:#59a67e; --tag-confirmed-soft:rgba(89,166,126,.14);
+    --tag-deductive:#d1a545; --tag-deductive-soft:rgba(209,165,69,.14);
+    --tag-unconfirmed:#dd8078; --tag-unconfirmed-soft:rgba(221,128,120,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171a; --surface:#1a1e1c; --surface-2:#20241f;
+  --ink:#eceae2; --muted:#a7ac9f; --faint:#767c70;
+  --line:rgba(236,234,226,.14); --line-strong:rgba(236,234,226,.26);
+  --accent:#8fb2da; --accent-soft:rgba(143,178,218,.1);
+  --tag-confirmed:#59a67e; --tag-confirmed-soft:rgba(89,166,126,.14);
+  --tag-deductive:#d1a545; --tag-deductive-soft:rgba(209,165,69,.14);
+  --tag-unconfirmed:#dd8078; --tag-unconfirmed-soft:rgba(221,128,120,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Newsreader",Georgia,"Times New Roman",serif;-webkit-font-smoothing:antialiased;line-height:1.6}
+.page{max-width:820px;margin:0 auto;padding:56px 20px 96px}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow);padding:52px 56px 48px}
+@media (max-width:640px){.sheet{padding:36px 22px 32px}.page{padding:28px 12px 64px}}
+
+.label{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",Consolas,monospace}
+
+.letterhead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:28px;border-bottom:2px solid var(--ink)}
+.letterhead-ref{margin-bottom:14px}
+.letterhead-ref .label{margin-bottom:3px}
+.letterhead h1{font-size:27px;font-weight:700;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+.letterhead .role{font-family:"IBM Plex Sans",sans-serif;font-size:13px;color:var(--muted);max-width:46ch;line-height:1.5}
+.seal{flex:none;width:92px;height:92px;border-radius:50%;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;position:relative;transform:rotate(-6deg);opacity:.9}
+.seal::before{content:"";position:absolute;inset:6px;border:1px dashed var(--accent);border-radius:50%}
+.seal-inner{font-family:"IBM Plex Mono",monospace;text-align:center;line-height:1.2}
+.seal-inner .initials{font-size:19px;font-weight:600;color:var(--accent);letter-spacing:.02em}
+.seal-inner .crc{font-size:7.5px;color:var(--accent);letter-spacing:.06em;margin-top:2px}
+
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:16px 32px;padding:22px 0 28px;border-bottom:1px solid var(--line)}
+.meta dt{margin:0 0 3px}
+.meta dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink)}
+.meta dd.wrap{font-family:"Newsreader",serif;font-size:14.5px}
+
+.intro{padding:26px 0 4px;font-size:16px;color:var(--ink)}
+.intro p{margin:0 0 14px;max-width:64ch}
+.intro p:last-child{margin-bottom:0}
+
+section.topic{padding:32px 0;border-bottom:1px solid var(--line)}
+section.topic:last-of-type{border-bottom:none}
+.topic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.topic-num{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--faint)}
+.topic h2{font-size:19px;font-weight:600;margin:0;text-wrap:balance;flex:1 1 auto;min-width:200px}
+.tag{font-family:"IBM Plex Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.tag.p0{color:var(--tag-unconfirmed);background:var(--tag-unconfirmed-soft)}
+.tag.p1{color:var(--tag-deductive);background:var(--tag-deductive-soft)}
+.tag.p2{color:var(--muted);background:var(--surface-2)}
+.tag.ok{color:var(--tag-confirmed);background:var(--tag-confirmed-soft)}
+
+.topic p{margin:0 0 13px;max-width:66ch;font-size:15.5px}
+.topic p:last-child{margin-bottom:0}
+.topic ul{margin:0 0 13px;padding-left:20px;max-width:62ch}
+.topic li{margin-bottom:6px;font-size:15.5px}
+
+code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);background:var(--surface-2);padding:1px 6px;border-radius:3px}
+
+.callout{margin-top:16px;padding:16px 18px;background:var(--tag-unconfirmed-soft);border-left:3px solid var(--tag-unconfirmed);border-radius:0 4px 4px 0;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;color:var(--ink);max-width:64ch}
+.callout strong{color:var(--tag-unconfirmed)}
+.callout.fix{background:var(--accent-soft);border-left-color:var(--accent)}
+.callout.fix strong{color:var(--accent)}
+
+.compare-wrap{overflow-x:auto;margin:18px 0 6px;border:1px solid var(--line);border-radius:6px}
+table.compare{width:100%;border-collapse:collapse;font-family:"IBM Plex Sans",sans-serif;font-size:13px;min-width:540px}
+table.compare th,table.compare td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.4}
+table.compare thead th{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+table.compare tbody th{font-weight:600;color:var(--ink);white-space:nowrap}
+table.compare td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.compare tbody tr:last-child td,table.compare tbody tr:last-child th{border-bottom:none}
+
+.reco{margin:18px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.reco li{display:flex;gap:12px;padding:13px 16px;background:var(--accent-soft);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;line-height:1.55;max-width:68ch}
+.reco-n{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--accent);flex:none;padding-top:2px;white-space:nowrap}
+
+.ressalvas{margin-top:30px;padding:18px 20px;border:1px dashed var(--line-strong);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;color:var(--muted);line-height:1.6}
+.ressalvas p{margin:0 0 8px}
+.ressalvas p:last-child{margin-bottom:0}
+
+.sig{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.sig-name{font-size:17px;font-weight:600;font-style:italic;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:4px}
+.sig-role{font-family:"IBM Plex Sans",sans-serif;font-size:12px;color:var(--muted)}
+.sig-date{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);text-align:right}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="sheet">
+
+    <div class="letterhead">
+      <div>
+        <div class="letterhead-ref"><div class="label">Parecer Técnico Nº 13/2026</div></div>
+        <h1>Auditoria de Produto &amp; Design — Simulador Estratégico de Frota</h1>
+        <div class="role">Revisão de usabilidade, arquitetura de informação e design visual da ferramenta na versão modular atual, feita percorrendo todas as telas e fluxos.</div>
+      </div>
+      <div class="seal" aria-hidden="true">
+        <div class="seal-inner"><div class="initials">JR</div><div class="crc">DESIGN · PROD</div></div>
+      </div>
+    </div>
+
+    <dl class="meta">
+      <div><dt class="label">Destinatário</dt><dd class="wrap">Time Simulador de Frota — Juliano, Mateus, José, Nelson &amp; Thiago</dd></div>
+      <div><dt class="label">Data</dt><dd>31/08/2026</dd></div>
+      <div><dt class="label">Escopo</dt><dd class="wrap">Login · wizard (4 passos) · painel de resultado · Frota Composta · Glossário · tour · modo claro/escuro · PDF</dd></div>
+      <div><dt class="label">Antecedente</dt><dd class="wrap">Parecer 10 (Camila Andrade), pré-modularização — vários pontos dele já foram resolvidos</dd></div>
+    </dl>
+
+    <div class="intro">
+      <p>Percorri a ferramenta inteira, na pele de um executivo de vendas abrindo pela primeira vez e de um EV experiente usando na frente do cliente. O motor de cálculo não é objeto desta auditoria (isso é com o Heitor) — aqui é experiência: o quão rápido e claro é chegar da tela em branco ao número que fecha a venda.</p>
+      <p><strong>Resumo:</strong> a ferramenta funciona e tem uma base tipográfica bonita. Mas ela ainda entrega como um <em>formulário técnico</em>, não como um <em>argumento de vendas</em>. O problema mais grave: <strong>a economia — o motivo de a ferramenta existir — fica abaixo da dobra</strong>. Depois disso vêm desequilíbrio do wizard, sobrecarga de números, modo escuro quebrado e uma camada de emoji que tira a cara de produto Localiza.</p>
+      <p>Organizei por prioridade: <span class="tag p0">P0</span> conserta antes do treinamento de 18/09 · <span class="tag p1">P1</span> próxima rodada · <span class="tag p2">P2</span> polimento.</p>
+    </div>
+
+    <section class="topic">
+      <div class="topic-head"><span class="topic-num">01</span><h2>A economia fica abaixo da dobra</h2><span class="tag p0">P0</span></div>
+      <p>Depois de preencher o wizard, o painel direito tem cerca de <strong>1.257&nbsp;px</strong> de altura: prazo do contrato, seletor de frota, quatro termômetros de "custo acumulado", o cartão de custo efetivo, o comparativo lado a lado, <em>duas</em> linhas de economia e o botão de PDF. Numa tela de notebook (≈ 700&nbsp;px úteis), o EV precisa <strong>rolar a página</strong> para ver o número que ele quer mostrar ao cliente.</p>
+      <p>É o oposto do que o próprio time definiu como estratégia — "mostrar o valor primeiro". A economia não pode depender de scroll.</p>
+      <div class="callout fix"><strong>Correção —</strong> um bloco de resultado <strong>fixo (sticky) no topo do painel direito</strong>, sempre visível, com <strong>um</strong> número grande ("Locação economiza R$ X no contrato de N meses") e o veredito. O detalhamento (termômetros, comparativo lado a lado, base anual) desce para baixo, para quem quiser abrir.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head"><span class="topic-num">02</span><h2>Sobrecarga numérica no comparativo</h2><span class="tag p0">P0</span></div>
+      <p>No comparativo, cada lado (Frota Própria / Aluguel) mostra <strong>três</strong> valores — por veículo/ano, no contrato de N meses, frota total/ano. Abaixo, mais <strong>duas</strong> economias: "R$ 16.151 por veículo/ano" e "R$ 1.210.597 · frota (R$ 100.883/veíc.)". São oito números disputando a atenção, misturando base anual e base de contrato no mesmo bloco.</p>
+      <p>O cliente e o EV precisam de <strong>uma</strong> resposta. Hoje a ferramenta oferece um cardápio.</p>
+      <div class="callout fix"><strong>Correção —</strong> eleger a base do <strong>contrato inteiro</strong> como a manchete (é a comparação fiel, conforme o Parecer 11) e mostrar "por veículo/ano" só como uma linha discreta de apoio. Nunca os dois com o mesmo peso visual. A base anual pode virar um "ver comparação anual" recolhido.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head"><span class="topic-num">03</span><h2>O wizard está desequilibrado</h2><span class="tag p1">P1</span></div>
+      <p>Quatro passos, mas a carga é toda no fim:</p>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead><tr><th>Passo</th><th>Título na tela</th><th>Campos</th></tr></thead>
+          <tbody>
+            <tr><th>1 · "Compra"</th><td>Aquisição do Veículo</td><td class="num">4</td></tr>
+            <tr><th>2 · "Capital"</th><td>Custo de Capital</td><td class="num">3</td></tr>
+            <tr><th>3 · "Operação"</th><td>Custos Operacionais e Depreciação</td><td class="num">13</td></tr>
+            <tr><th>4 · "Fiscal"</th><td>Impacto Tributário e Comparativo</td><td class="num">13</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A barra de progresso diz "50% concluído" depois do Passo 2, quando ainda faltam 26 dos 33 campos. Os Passos 3 e 4 são paredes de 13 inputs cada, com rolagem, sem subgrupos visuais e com defaults pouco úteis (tudo em 0, ou 14,5). Além disso, os rótulos da barra ("Compra", "Operação") não batem com os títulos das telas ("Aquisição do Veículo", "Custos Operacionais e Depreciação").</p>
+      <div class="callout fix"><strong>Correção —</strong> reagrupar em <strong>3 passos de peso parecido</strong> (Veículo &amp; aquisição · Custos de operar · Locação &amp; impostos), ou manter 4 mas mover os itens raros (ativação, desativação, licenciamento, aumento de manutenção) para um bloco "Ajustes avançados" recolhido. E alinhar rótulo da barra com o título da tela.</p></div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head"><span class="topic-num">04</span><h2>Modo escuro quebrado</h2><span class="tag p0">P0</span></div>
+      <p>No tema escuro, o fundo do conteúdo do wizard fica quase preto esverdeado (<code>#070B09</code>), enquanto o painel direito usa outro tom (<code>#111A12</code>) — duas superfícies escuras brigando. Os subtítulos e hints ficam em um verde dessaturado (<code>#537A60</code>) com contraste de ~4:1 sobre esse fundo — <strong>reprova no WCAG AA</strong> para texto normal. Os cartões de regime (Real / Presumido) recebem tratamentos diferentes e nenhum lê como "selecionado".</p>
+      <div class="callout"><strong>Impacto —</strong> se alguém apresentar no escuro (ou o sistema operacional estiver em dark), metade dos textos some. Como o tema segue a preferência do sistema por padrão, isso vai acontecer sem o EV escolher.</p></div>
+      <div class="callout fix"><strong>Correção —</strong> ou uma passada dedicada de tokens de cor para o dark (um único fundo, contraste de texto mínimo 4,5:1, seleção visível), ou <strong>travar a ferramenta em claro</strong> até essa passada acontecer. Meio-termo quebrado é pior que só claro.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head"><span class="topic-num">05</span><h2>Emoji como elemento de interface</h2><span class="tag p1">P1</span></div>
+      <p>A ferramenta usa emoji em toda parte estrutural: <code>⚡</code> na aba Frota Composta, <code>📋</code> Checklist, <code>▶</code> Tour, <code>☀️</code> no tema, <code>🎯</code> e <code>💡</code> nas microcopy, <code>🚗</code> e <code>📊</code> nos estados vazios, <code>🏆</code> <code>⚖</code> nos selos da Frota Composta, e emoji em todos os títulos de seção do glossário (<code>🚗 🏦 🔧 💰 ⚖️</code>).</p>
+      <p>Emoji renderiza diferente em cada sistema, não acompanha a paleta e passa recado de protótipo, não de produto de uma marca do porte da Localiza. Para uma ferramenta que vai ser apresentada a diretores de clientes, isso pesa.</p>
+      <div class="callout fix"><strong>Correção —</strong> trocar por ícones SVG de traço fino, na cor da paleta, pelo menos nos lugares estruturais (abas, topbar, títulos de seção, estados vazios). Emoji pontual dentro de uma microcopy conversacional pode ficar, com parcimônia.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head"><span class="topic-num">06</span><h2>Frota Composta parece um rascunho</h2><span class="tag p1">P1</span></div>
+      <ul>
+        <li><strong>Bordas tracejadas</strong> no botão "＋ Adicionar", no card vazio e no dashboard vazio — cara de wireframe, não de tela final.</li>
+        <li><strong>Contexto perdido:</strong> o EV enche o Simulador, troca para a aba Frota Composta e cai numa <strong>tela vazia</strong>. Só "Importar do Simulador" traz os dados — mas isso não é óbvio.</li>
+        <li><strong>Modal de 34 campos, 6 seções, com rolagem</strong>, para cadastrar <em>uma</em> categoria de veículo. Uma frota de 5 categorias = 170 preenchimentos. Sem defaults, sem disclosure progressivo.</li>
+        <li><strong>Terminologia embaralhada:</strong> a aba fala "Categoria", o modal diz "Modelo de Veículo", o estado vazio diz "modelo". O texto do estado vazio manda clicar em "＋ Adicionar", mas o botão diz "＋ Adicionar Categoria de Veículo".</li>
+      </ul>
+      <div class="callout fix"><strong>Correção —</strong> ao abrir a aba com o Simulador preenchido, oferecer "Começar com o veículo do Simulador" já como primeiro card. Bordas sólidas. Modal com as seções colapsáveis e defaults de mercado por categoria. Fixar um termo — "categoria de veículo" — e usar só ele.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head"><span class="topic-num">07</span><h2>Login pede rolagem e "RAC" não é explicado</h2><span class="tag p1">P1</span></div>
+      <p>O cartão de login tem ~803&nbsp;px; numa tela menor, o botão <strong>"Iniciar Simulação" fica abaixo da dobra</strong> — a pessoa preenche às cegas até rolar.</p>
+      <p>Os dois produtos aparecem como <strong>"RAC"</strong> e <strong>"GF — Gestão de Frotas"</strong>. Assimétrico: um é sigla crua, o outro é explicado. Um EV novo (ou o cliente, se a tela aparecer numa reunião) não sabe o que "RAC" significa.</p>
+      <div class="callout fix"><strong>Correção —</strong> compactar o cartão para caber sem rolagem (reduzir espaçamentos, agrupar os 3 campos). Expandir o rótulo: <strong>"RAC — Locação Mensal"</strong> (ou o nome comercial correto). Considerar um campo de <strong>matrícula</strong> do executivo — o time pediu isso para o monitoramento por perfil.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head"><span class="topic-num">08</span><h2>Tour de 14 passos</h2><span class="tag p2">P2</span></div>
+      <p>O tour guiado tem 14 passos e abre em cima do wizard, que já é razoavelmente autoexplicativo. É uma ferramenta que o mesmo EV vai abrir dezenas de vezes — 14 telas de onboarding é muito. A maioria vai pular no primeiro uso e nunca mais ver.</p>
+      <div class="callout fix"><strong>Correção —</strong> cortar para <strong>5–6 passos</strong> que contem a história ("preencha o veículo → os custos de operar → o aluguel → aqui está a economia → exporte o PDF"). O resto vira tooltip contextual ou fica no Glossário.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head"><span class="topic-num">09</span><h2>Detalhes que somam</h2><span class="tag p2">P2</span></div>
+      <ul>
+        <li><strong>Estado selecionado fraco:</strong> os cartões de regime (Real / Presumido) só ganham uma borda e um selo minúsculo — o texto (26&nbsp;px serifado, cinza <code>#4A4A4A</code>) não muda. Difícil bater o olho e saber qual está ativo. Vale o mesmo para outros toggles.</li>
+        <li><strong>Contraste no claro:</strong> títulos e corpo em <code>#4A4A4A</code> sobre branco-creme; subtítulos e hints mais claros ainda. Está no limite. Escurecer os títulos para algo perto de <code>#20241f</code> dá respiro sem perder a sobriedade.</li>
+        <li><strong>Tooltips só no hover</strong> (o Parecer 10 já apontou): os 24 <code>?</code> da ferramenta não abrem no toque. Se for usada em tablet, a ajuda some.</li>
+        <li><strong>Hints longos:</strong> a projeção de manutenção é uma tabela espremida numa frase corrida ("Ano 1: 2.5% — R$ 3.938 · Ano 2: 2.9% — R$ 4.528 · ..."). Vira uma mini-tabela.</li>
+        <li><strong>Verde do card vencedor</strong> (<code>#78DE1F</code>) é quase fluorescente e destoa do verde LDS mais sóbrio do resto. Usar o verde institucional (<code>#00843D</code>) com um fundo suave.</li>
+        <li><strong>Prazo do contrato</strong> mora no topo do painel direito, longe do resto da configuração da locação (Passo 4). Fica órfão.</li>
+      </ul>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-bottom:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>O que já está bom</h2><span class="tag ok">Manter</span></div>
+      <ul>
+        <li>A tipografia — serifada nos títulos (Playfair/Newsreader), Inter no corpo — dá um ar editorial e distinto, raro numa ferramenta interna.</li>
+        <li>Os sliders de manutenção e seguro — bom padrão, com referência de faixa no hint.</li>
+        <li>O <strong>Glossário</strong> é a tela mais bem resolvida: cards de 3 colunas, fórmula em monoespaçada, tag de tipo. Serve de norte para o resto.</li>
+        <li>Os campos de entrada (<code>.input-wrap</code>) — agora consistentes (o "Veículo Simulado" era o único fora do padrão e foi corrigido).</li>
+        <li>A limpeza pós-reunião: sair do Comparativo Individual e da aba Decisões enxugou bastante — vários pontos do Parecer 10 caíram junto.</li>
+      </ul>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-top:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Prioridades</h2></div>
+      <ol class="reco">
+        <li><span class="reco-n">P0 · 01</span><span>Bloco de resultado fixo no topo do painel direito, com <strong>um</strong> número grande — a economia acima da dobra, sempre.</span></li>
+        <li><span class="reco-n">P0 · 02</span><span>Consolidar o comparativo — base do contrato como manchete, anual como apoio discreto.</span></li>
+        <li><span class="reco-n">P0 · 04</span><span>Consertar o modo escuro (tokens, contraste 4,5:1) ou travar em claro até lá.</span></li>
+        <li><span class="reco-n">P1 · 03</span><span>Rebalancear o wizard (3 passos, ou "Ajustes avançados" recolhido) e alinhar rótulos da barra com os títulos.</span></li>
+        <li><span class="reco-n">P1 · 05</span><span>Trocar emoji por ícones SVG nos lugares estruturais.</span></li>
+        <li><span class="reco-n">P1 · 06</span><span>Frota Composta: herdar o veículo do Simulador, bordas sólidas, modal com disclosure e defaults.</span></li>
+        <li><span class="reco-n">P1 · 07</span><span>Login sem rolagem; expandir "RAC"; avaliar campo de matrícula.</span></li>
+        <li><span class="reco-n">P2 · 08</span><span>Tour de 5–6 passos.</span></li>
+        <li><span class="reco-n">P2 · 09</span><span>Reforçar estado selecionado, escurecer títulos, tooltips no toque, encurtar hints, verde institucional no card vencedor.</span></li>
+      </ol>
+    </section>
+
+    <div class="ressalvas">
+      <p><strong>Ressalvas.</strong> Auditoria feita percorrendo a ferramenta na versão modular (<code>Simulador V2 Modulos/</code>) em resolução de notebook (1366×≈650), tema claro e escuro. Não cobre teste com usuários reais (o José pediu ampliar o grupo de testes — recomendo fortemente antes de 18/09) nem uma auditoria de acessibilidade completa (só os pontos de contraste que saltaram).</p>
+      <p>Prioridades são sugestão de designer; a ordem final é do time de produto. Nenhum ponto aqui é sobre a correção dos cálculos — isso é escopo do Heitor (Pareceres 11 e 12).</p>
+    </div>
+
+    <div class="sig">
+      <div>
+        <div class="sig-name">Julia Rennó</div>
+        <div class="sig-role">Designer de Produto · Experiência e Interface</div>
+      </div>
+      <div class="sig-date">São Paulo, 31 de agosto de 2026</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

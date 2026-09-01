@@ -5,7 +5,7 @@
 const TOUR_STEPS = [
   {
     title: "Bem-vindo ao Simulador Estratégico de Frota",
-    desc: "Esta ferramenta compara o custo real de frota própria versus locação corporativa Localiza&Co, considerando todos os fatores financeiros, operacionais e tributários. Você verá as 4 abas disponíveis neste tour.",
+    desc: "Esta ferramenta compara o custo real de frota própria versus locação corporativa Localiza&Co, considerando todos os fatores financeiros, operacionais e tributários. Você verá as abas disponíveis neste tour.",
     target: null, tab: "sim"
   },
   {
@@ -15,7 +15,7 @@ const TOUR_STEPS = [
   },
   {
     title: "Simulador — Custo de Capital",
-    desc: "Defina o financiamento (método Price) e o custo de oportunidade — o rendimento perdido ao imobilizar capital no veículo. Este é o custo invisível frequentemente ignorado.",
+    desc: "Defina o financiamento (método Price) e o custo de capital (TMA) — o retorno que o dinheiro geraria no próprio negócio da empresa, e que se perde ao imobilizá-lo no veículo. Se o financiamento for mais longo que o prazo do contrato, a ferramenta avisa.",
     target: "#step1", wizardStep: 1, tab: "sim"
   },
   {
@@ -29,8 +29,8 @@ const TOUR_STEPS = [
     target: "#step3", wizardStep: 3, tab: "sim"
   },
   {
-    title: "Simulador — Produto de Locação",
-    desc: "RAC e GF são motores diferentes, escolhidos na tela de login — não dá mais para trocar aqui dentro. Em contratos GF, o prazo (12 a 48 meses) aparece sempre visível aqui no painel direito, logo acima da Frota. Você também ganha campos próprios no wizard: pneus separados da manutenção (Passo 3), franquia de km, projeção de manutenção crescente e um campo de IPCA de referência (Passo 4).",
+    title: "Simulador — Produto de Locação e Prazo",
+    desc: "RAC e GF são motores diferentes, escolhidos na tela de login — não dá mais para trocar aqui dentro. O prazo do contrato aparece sempre visível aqui no painel direito, logo acima da Frota (RAC: 6 a 24 meses · GF: 12 a 48 meses). Os pneus entram como linha separada da manutenção (Passo 3); em contratos GF você também tem franquia de km, % de aumento anual da manutenção e a opção de carro reserva.",
     target: ".fleet-qty-row", tab: "sim"
   },
   {
@@ -42,11 +42,6 @@ const TOUR_STEPS = [
     title: "Simulador — Dashboard Executivo",
     desc: "O painel à direita atualiza em tempo real: custo efetivo de cada alternativa, economia unitária e — para frotas — impacto financeiro consolidado. O vencedor aparece destacado em verde.",
     target: ".right-pane", tab: "sim"
-  },
-  {
-    title: "Aba: Comparativo Individual",
-    desc: "Painel técnico completo com decomposição linha a linha de cada componente de custo — aquisição, operacional, tributário, depreciação e aluguel. Ideal para apresentações técnicas à controladoria.",
-    target: "#tabEv", tab: "ev"
   },
   {
     title: "Frota Composta — Visão Geral",
@@ -65,7 +60,7 @@ const TOUR_STEPS = [
   },
   {
     title: "Aba: Glossário",
-    desc: "Referência completa de todos os termos e variáveis utilizados nas simulações — do PMT Price ao custo de oportunidade. Útil para alinhar vocabulário com o cliente durante a apresentação.",
+    desc: "Referência completa de todos os termos e variáveis utilizados nas simulações — do PMT Price ao custo de capital. Útil para alinhar vocabulário com o cliente durante a apresentação.",
     target: "#tabGloss", tab: "gloss"
   },
   {
@@ -75,7 +70,7 @@ const TOUR_STEPS = [
   },
   {
     title: "Tudo pronto!",
-    desc: "Você conheceu as 4 abas do simulador. Ajuste os parâmetros e veja o comparativo atualizar ao vivo. Para repetir este tour a qualquer momento, clique em '▶ Tour' na barra superior.",
+    desc: "Você conheceu as abas do simulador. Ajuste os parâmetros e veja o comparativo atualizar ao vivo. Para repetir este tour a qualquer momento, clique em '▶ Tour' na barra superior.",
     target: null, tab: "sim"
   }
 ];

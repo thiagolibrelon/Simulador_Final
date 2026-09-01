@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Memória de Cálculo das Simulações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f2f1ec; --surface:#fffefb; --surface-2:#ece9e1;
+  --ink:#20241f; --muted:#5c6259; --faint:#8a8f83;
+  --line:rgba(32,36,31,.14); --line-strong:rgba(32,36,31,.30);
+  --rac:#2c4a6e; --rac-soft:rgba(44,74,110,.09);
+  --gf:#9c7218;  --gf-soft:rgba(156,114,24,.12);
+  --win:#2f6e4f; --win-soft:rgba(47,110,79,.10);
+  --lose:#a63a3a; --lose-soft:rgba(166,58,58,.10);
+  --shadow:0 1px 2px rgba(32,36,31,.04),0 14px 34px -18px rgba(32,36,31,.20);
+  --accent:var(--rac); --accent-soft:var(--rac-soft);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171a; --surface:#1a1e1c; --surface-2:#22262210;
+    --surface-2:#23271f;
+    --ink:#eceae2; --muted:#a7ac9f; --faint:#767c70;
+    --line:rgba(236,234,226,.14); --line-strong:rgba(236,234,226,.30);
+    --rac:#8fb2da; --rac-soft:rgba(143,178,218,.13);
+    --gf:#d1a545;  --gf-soft:rgba(209,165,69,.15);
+    --win:#59a67e; --win-soft:rgba(89,166,126,.15);
+    --lose:#dd8078; --lose-soft:rgba(221,128,120,.15);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 22px 44px -22px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171a; --surface:#1a1e1c; --surface-2:#23271f;
+  --ink:#eceae2; --muted:#a7ac9f; --faint:#767c70;
+  --line:rgba(236,234,226,.14); --line-strong:rgba(236,234,226,.30);
+  --rac:#8fb2da; --rac-soft:rgba(143,178,218,.13);
+  --gf:#d1a545;  --gf-soft:rgba(209,165,69,.15);
+  --win:#59a67e; --win-soft:rgba(89,166,126,.15);
+  --lose:#dd8078; --lose-soft:rgba(221,128,120,.15);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 22px 44px -22px rgba(0,0,0,.55);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Newsreader",Georgia,"Times New Roman",serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.page{max-width:880px;margin:0 auto;padding:52px 20px 96px}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow);padding:52px 56px 44px}
+@media (max-width:680px){.sheet{padding:34px 20px 30px}.page{padding:24px 10px 60px}}
+
+.san{font-family:"IBM Plex Sans",system-ui,sans-serif}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;font-variant-numeric:tabular-nums}
+.label{font-family:"IBM Plex Sans",sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* ── Letterhead ── */
+.letterhead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:26px;border-bottom:2px solid var(--ink)}
+.letterhead .ref{margin-bottom:12px}
+.letterhead h1{font-size:28px;font-weight:700;letter-spacing:-.012em;margin:0 0 7px;text-wrap:balance}
+.letterhead .lede{font-family:"IBM Plex Sans",sans-serif;font-size:13px;color:var(--muted);max-width:44ch;line-height:1.55}
+.seal{flex:none;width:88px;height:88px;border-radius:50%;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;position:relative;transform:rotate(-6deg)}
+.seal::before{content:"";position:absolute;inset:6px;border:1px dashed var(--accent);border-radius:50%}
+.seal b{font-family:"IBM Plex Mono",monospace;font-size:30px;font-weight:600;color:var(--accent)}
+@media (max-width:680px){.seal{display:none}}
+
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:14px 32px;padding:20px 0 26px;border-bottom:1px solid var(--line)}
+.meta dt{margin:0 0 3px}
+.meta dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink);line-height:1.5}
+@media (max-width:520px){.meta{grid-template-columns:1fr}}
+
+/* ── Tabs ── */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:26px 0 0;padding:0}
+.tab{
+  font-family:"IBM Plex Sans",sans-serif;appearance:none;cursor:pointer;
+  background:transparent;border:1px solid var(--line);border-radius:5px;
+  padding:9px 13px;text-align:left;color:var(--muted);line-height:1.3;
+  transition:border-color .15s,background .15s,color .15s;
+}
+.tab:hover{border-color:var(--line-strong);color:var(--ink)}
+.tab .tt{display:block;font-size:13px;font-weight:600;color:var(--ink)}
+.tab .ts{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.02em;margin-top:2px}
+.tab[data-prod="rac"] .ts{color:var(--rac)}
+.tab[data-prod="gf"] .ts{color:var(--gf)}
+.tab[aria-selected="true"]{background:var(--surface-2);border-color:var(--line-strong)}
+.tab[aria-selected="true"][data-prod="rac"]{box-shadow:inset 0 -3px 0 var(--rac)}
+.tab[aria-selected="true"][data-prod="gf"]{box-shadow:inset 0 -3px 0 var(--gf)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ── Panel ── */
+.panel{padding-top:6px}
+.panel[hidden]{display:none}
+.panel--rac{--accent:var(--rac);--accent-soft:var(--rac-soft)}
+.panel--gf{--accent:var(--gf);--accent-soft:var(--gf-soft)}
+
+.phead{padding:28px 0 6px}
+.ptag{display:inline-flex;font-family:"IBM Plex Sans",sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:100px;margin-bottom:12px}
+.phead h2{font-size:22px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance}
+.psub{font-family:"IBM Plex Sans",sans-serif;font-size:13px;color:var(--muted);line-height:1.6}
+.psub b{color:var(--ink);font-weight:600}
+
+section.grp{padding:26px 0;border-bottom:1px solid var(--line)}
+.grp-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.grp-num{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--faint)}
+.grp-head h3{font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink);margin:0}
+
+.vars{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:0 40px}
+.vars .v{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:7px 0;border-bottom:1px solid var(--line)}
+.vars .v dt{font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;color:var(--muted);line-height:1.4}
+.vars .v dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.vars .v dd.na{color:var(--faint)}
+.vars .v.dim dd{color:var(--muted)}
+
+.calc-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.calc-strip .c{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:9px 13px;min-width:132px;flex:1 0 auto}
+.calc-strip .c span{display:block;font-family:"IBM Plex Sans",sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.calc-strip .c strong{font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ── Result ── */
+section.result{border-bottom:none;padding-bottom:8px}
+.rbase{font-family:"IBM Plex Sans",sans-serif;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.rcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.rcards{grid-template-columns:1fr}}
+.rcard{border:1px solid var(--line);border-radius:8px;padding:16px 18px;background:var(--surface)}
+.rcard .rl{font-family:"IBM Plex Sans",sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.rcard .rv{font-family:"IBM Plex Mono",monospace;font-size:24px;font-weight:600;color:var(--ink);letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1}
+.rcard .rn{font-family:"IBM Plex Sans",sans-serif;font-size:11px;color:var(--faint);margin-top:6px}
+.rcard.win{border-color:var(--win);background:var(--win-soft)}
+.rcard.win .rl,.rcard.win .rv{color:var(--win)}
+.rcard.lose{border-color:var(--lose)}
+
+.reco{margin-top:14px;padding:14px 18px;background:var(--accent-soft);border-radius:8px;font-family:"IBM Plex Sans",sans-serif;font-size:14px;line-height:1.55}
+.reco b{font-weight:700}
+.reco .big{font-family:"IBM Plex Mono",monospace;font-weight:600}
+
+.rextra{margin-top:14px}
+.rextra .vars{gap:0 40px}
+
+.snap{margin-top:12px;font-family:"IBM Plex Sans",sans-serif;font-size:11.5px;color:var(--muted);line-height:1.6}
+.snap .mono{font-size:11.5px}
+
+.note{margin-top:14px;padding:13px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 6px 6px 0;font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;line-height:1.55;color:var(--ink)}
+.note.warn{border-left-color:var(--lose);background:var(--lose-soft)}
+.note.warn b{color:var(--lose)}
+.note b{font-weight:700}
+
+.foot{margin-top:34px;padding-top:20px;border-top:1px solid var(--line);font-family:"IBM Plex Sans",sans-serif;font-size:11.5px;color:var(--muted);line-height:1.6}
+.foot b{color:var(--ink);font-weight:600}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="sheet">
+
+    <div class="letterhead">
+      <div>
+        <div class="ref"><span class="label">Anexo Técnico — Bateria de Validação</span></div>
+        <h1>Memória de Cálculo das Simulações</h1>
+        <p class="lede">Todas as variáveis de entrada e os resultados dos 6 cenários de teste do Simulador Estratégico de Frota — 3 contratos RAC PJ e 3 contratos GF (Gestão de Frotas).</p>
+      </div>
+      <div class="seal" aria-hidden="true"><b>6</b></div>
+    </div>
+
+    <dl class="meta">
+      <div><dt class="label">Gerado em</dt><dd>31/08/2026</dd></div>
+      <div><dt class="label">Motor</dt><dd>Simulador V2 Modulos · pós-reunião 31/08 + motor plurianual (Parecer 11)</dd></div>
+      <div><dt class="label">Cenários</dt><dd>6 · RAC 6/12/18 meses · GF 24/36/48 meses · locação vence em 6/6</dd></div>
+      <div><dt class="label">Premissas fixas</dt><dd>PIS/COFINS 9,25% · IRPJ 25% · CSLL 9% · depreciação 20% a.a. (quota mensal)</dd></div>
+      <div><dt class="label">Preços de veículo</dt><dd>tabelas de mercado ago/2026 (Mobiauto, Mercado Livre, Auto+, Garagem360)</dd></div>
+      <div><dt class="label">Mensalidades</dt><dd>estimadas acima da assinatura PF (contrato empresarial, pacote completo) — InfoMoney, Edenred</dd></div>
+    </dl>
+
+    <div class="tabs" role="tablist" aria-label="Cenários de teste" id="tablist"></div>
+    <div id="panels"></div>
+
+    <div class="foot">
+      <b>Como ler o resultado.</b> Para prazo de 12 meses a comparação-título é o <b>snapshot anual</b> (modelo validado). Para prazos ≠ 12 meses é o <b>custo no contrato inteiro</b> (Parecer 11): aquisição, ativação/desativação e revenda entram uma única vez; aluguel, manutenção, seguro, IPVA, oportunidade, pneus e créditos acompanham o prazo; depreciação é a quota mensal × nº de meses; o saldo devedor do financiamento ao fim é quitado com o produto da revenda. <b>Pneus</b> são custo de frota própria (o pacote GF/RAC já inclui troca).
+    </div>
+
+  </div>
+</div>
+
+<script>
+const money = n => 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+const money2 = n => 'R$ ' + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct = n => n.toLocaleString('pt-BR',{maximumFractionDigits:2}) + '%';
+
+const T = [
+{
+  n:1, prod:'rac', prodLabel:'RAC PJ', prazo:12, base:'anual',
+  cliente:'Distribuidora Norte Alimentos Ltda', exec:'Carlos Menezes', qtd:20,
+  veiculo:'Fiat Argo Drive 1.3 CVT 2026', regime:'Lucro Real',
+  precoTabela:103000, desconto:8, entrada:30, parcelas:24, juros:1.49, oport:12.5,
+  vNeg:94760, entradaRS:28428, parcelaRS:3308, jurosTot:13053, saldoFim:39693,
+  manut:2.0, manutInc:15, pneus:2400, seguro:4.0, estado:'São Paulo — 4,0%',
+  indisp:4000, licenc:160, ativ:1200, desativ:900, admFrota:180,
+  deprModo:'Contábil / Fiscal — 20% a.a.', revenda:68000,
+  categoria:'Econômico', mensalidade:2190, admAluguel:0, protTotal:0, protVidros:0, telemetria:120,
+  atividadeFim:'Sim — dedução total',
+  rPropria:30449, rAluguel:16354, ecoVeic:14095, ecoFrota:281906, vencedor:'aluguel',
+  aluguelBruto:26280
+},
+{
+  n:2, prod:'rac', prodLabel:'RAC PJ', prazo:6, base:'contrato',
+  cliente:'Vega & Associados Auditoria Contábil', exec:'Fernanda Prado', qtd:5,
+  veiculo:'Toyota Corolla XEi 2.0 Flex 2026', regime:'Lucro Presumido',
+  precoTabela:175000, desconto:5, entrada:40, parcelas:36, juros:1.65, oport:11.0,
+  vNeg:166250, entradaRS:66500, parcelaRS:3697, jurosTot:33339, saldoFim:110907,
+  manut:1.8, manutInc:15, pneus:3200, seguro:3.2, estado:'Minas Gerais — 4,0%',
+  indisp:6000, licenc:150, ativ:1500, desativ:1500, admFrota:250,
+  deprModo:'Contábil / Fiscal — 20% a.a.', revenda:150000,
+  categoria:'Intermediário Sedan', mensalidade:3850, admAluguel:0, protTotal:0, protVidros:0, telemetria:0,
+  atividadeFim:'Não',
+  rPropria:72470, rAluguel:23100, ecoVeic:49370, ecoFrota:246850, vencedor:'aluguel',
+  aluguelBruto:23100,
+  snapPropria:39317, snapAluguel:46200,
+  manutTot:1496, pneusTot:1600, vcFim:149625, ganhoCap:375, revendaLiq:38965,
+  nota:'O snapshot anual sugeriria comprar (R$ 39.317 &lt; R$ 46.200). Mas comprar um Corolla de R$ 166 mil para usar 6 meses e revender — ainda devendo R$ 110.907 de financiamento — custa R$ 72.470 no período. A projeção do contrato mostra o resultado correto.'
+},
+{
+  n:3, prod:'rac', prodLabel:'RAC PJ', prazo:18, base:'contrato',
+  cliente:'Construtora Alvorada Engenharia S.A.', exec:'Rodrigo Tavares', qtd:8,
+  veiculo:'Volkswagen T-Cross Comfortline 200 TSI 2026', regime:'Lucro Real',
+  precoTabela:165000, desconto:6, entrada:25, parcelas:24, juros:1.55, oport:13.0,
+  vNeg:155100, entradaRS:38775, parcelaRS:5841, jurosTot:23864, saldoFim:35047,
+  manut:2.2, manutInc:15, pneus:2800, seguro:3.5, estado:'Paraná — 3,5%',
+  indisp:5000, licenc:170, ativ:1400, desativ:1100, admFrota:220,
+  deprModo:'Contábil / Fiscal — 20% a.a.', revenda:108000,
+  categoria:'Intermediário Hatch Automático', mensalidade:3100, admAluguel:0, protTotal:280, protVidros:90, telemetria:130,
+  atividadeFim:'Sim — dedução total',
+  rPropria:109767, rAluguel:40667, ecoVeic:69101, ecoFrota:552808, vencedor:'aluguel',
+  aluguelBruto:55800,
+  snapPropria:45835, snapAluguel:27111,
+  manutTot:5374, pneusTot:4200, vcFim:108570, ganhoCap:0, revendaLiq:72953
+},
+{
+  n:4, prod:'gf', prodLabel:'GF — Gestão de Frotas', prazo:36, base:'contrato',
+  cliente:'Agropecuária Vale Verde Ltda', exec:'Juliana Campos', qtd:15,
+  veiculo:'Fiat Toro Freedom 1.3 T270 AT 2026', regime:'Lucro Real',
+  franquia:'3.000 km/mês (36.000 km/ano)', carroReserva:'Incluído no contrato',
+  precoTabela:175000, desconto:10, entrada:20, parcelas:48, juros:1.45, oport:12.0,
+  vNeg:157500, entradaRS:31500, parcelaRS:3662, jurosTot:49769, saldoFim:43942,
+  manut:2.5, manutInc:15, pneus:4200, seguro:3.8, estado:'Goiás — 3,75%',
+  indisp:7000, licenc:180, ativ:2000, desativ:1800, admFrota:300,
+  deprModo:'Contábil / Fiscal — 20% a.a.', revenda:82000,
+  categoria:'Pick-up Com Ar Plus', mensalidade:4450, admAluguel:0, protTotal:0, protVidros:0, telemetria:0,
+  atividadeFim:'Sim — dedução total',
+  rPropria:208539, rAluguel:90914, ecoVeic:117626, ecoFrota:1764388, vencedor:'aluguel',
+  aluguelBruto:160200,
+  snapPropria:49088, snapAluguel:30305,
+  manutTot:13673, pneusTot:12600, vcFim:63000, ganhoCap:19000, revendaLiq:31598
+},
+{
+  n:5, prod:'gf', prodLabel:'GF — Gestão de Frotas', prazo:24, base:'contrato',
+  cliente:'Holding Participações Meridiano S.A.', exec:'André Bittencourt', qtd:6,
+  veiculo:'Toyota Corolla Cross XRX Hybrid 2026', regime:'Lucro Real',
+  franquia:'2.000 km/mês (24.000 km/ano)', carroReserva:'NÃO incluído',
+  precoTabela:219900, desconto:4, entrada:50, parcelas:24, juros:1.50, oport:11.5,
+  vNeg:211104, entradaRS:105552, parcelaRS:5270, jurosTot:20918, saldoFim:0,
+  manut:1.8, manutInc:12, pneus:3600, seguro:3.0, estado:'São Paulo — 4,0%',
+  indisp:9000, licenc:170, ativ:1800, desativ:1500, admFrota:280,
+  deprModo:'Contábil / Fiscal — 20% a.a.', revenda:152000,
+  categoria:'Executivo Híbrido', mensalidade:5200, admAluguel:0, protTotal:0, protVidros:0, telemetria:0,
+  atividadeFim:'Não',
+  rPropria:160645, rAluguel:100368, ecoVeic:60277, ecoFrota:361660, vencedor:'aluguel',
+  aluguelBruto:124800,
+  snapPropria:70064, snapAluguel:50184,
+  manutTot:8056, pneusTot:7200, vcFim:126662, ganhoCap:25338, revendaLiq:143385,
+  indispLoc:18000,
+  nota:'Contrato marcado <b>sem carro reserva</b> → o custo de indisponibilidade (R$ 9.000/ano) foi somado também ao lado do aluguel, R$ 18.000 no contrato. Com carro reserva incluído, o custo do aluguel cairia para ~R$ 82.368 e a economia subiria.'
+},
+{
+  n:6, prod:'gf', prodLabel:'GF — Gestão de Frotas', prazo:48, base:'contrato',
+  cliente:'Logística Integrada Continental Ltda', exec:'Patrícia Nogueira', qtd:25,
+  veiculo:'Jeep Compass Longitude T270 2026', regime:'Lucro Real',
+  franquia:'2.500 km/mês (30.000 km/ano)', carroReserva:'Incluído no contrato',
+  precoTabela:195000, desconto:9, entrada:15, parcelas:60, juros:1.39, oport:12.5,
+  vNeg:177450, entradaRS:26618, parcelaRS:3723, jurosTot:72528, saldoFim:44672,
+  manut:2.0, manutInc:18, pneus:3800, seguro:3.5, estado:'Rio de Janeiro — 4,0%',
+  indisp:8000, licenc:180, ativ:2200, desativ:2000, admFrota:320,
+  deprModo:'Contábil / Fiscal — 20% a.a.', revenda:58000,
+  categoria:'SUV Compacto', mensalidade:4900, admAluguel:0, protTotal:0, protVidros:0, telemetria:0,
+  atividadeFim:'Sim — dedução total',
+  rPropria:304048, rAluguel:133476, ecoVeic:170572, ecoFrota:4264308, vencedor:'aluguel',
+  aluguelBruto:235200,
+  snapPropria:61618, snapAluguel:33369,
+  manutTot:18510, pneusTot:15200, vcFim:35490, ganhoCap:22510, revendaLiq:5675,
+  risco:true
+}
+];
+
+const v = (k,val,cls='') => `<div class="v ${cls}"><dt>${k}</dt><dd${cls.includes('na')?' class="na"':''}>${val}</dd></div>`;
+const c = (k,val) => `<div class="c"><span>${k}</span><strong>${val}</strong></div>`;
+const grp = (num,title,rows,calc='') =>
+  `<section class="grp"><div class="grp-head"><span class="grp-num">${num}</span><h3>${title}</h3></div>
+   <dl class="vars">${rows}</dl>${calc?`<div class="calc-strip">${calc}</div>`:''}</section>`;
+
+function panel(t){
+  const isGf = t.prod === 'gf';
+  const baseLabel = t.base === 'anual'
+    ? `Comparação: snapshot anual — ${t.prazo} meses`
+    : `Comparação: contrato inteiro — ${t.prazo} meses`;
+
+  const aquisicao = grp('01','Aquisição do veículo',
+    v('Preço de tabela', money2(t.precoTabela)) +
+    v('Desconto negociado', pct(t.desconto)) +
+    v('Percentual de entrada', pct(t.entrada)) +
+    v('Financiamento', `${t.parcelas} meses`) +
+    v('Juros mensais', pct(t.juros) + ' a.m.') +
+    v('Custo de oportunidade', pct(t.oport) + ' a.a.'),
+    c('Valor negociado', money(t.vNeg)) +
+    c('Entrada', money(t.entradaRS)) +
+    c('Parcela (' + t.parcelas + '×)', money(t.parcelaRS)) +
+    c('Juros no financiamento', money(t.jurosTot))
+  );
+
+  const operacional = grp('02','Custos operacionais — frota própria',
+    v('Manutenção anual <span class="san" style="color:var(--faint)">(exceto pneus)</span>', pct(t.manut)) +
+    v('Aumento anual da manutenção', pct(t.manutInc) + ' a.a.') +
+    v('Pneus / ano', money2(t.pneus)) +
+    v('Seguro anual', pct(t.seguro)) +
+    v('Estado (IPVA)', t.estado) +
+    v('Custo de indisponibilidade / ano', money2(t.indisp)) +
+    v('Licenciamento / ano', money2(t.licenc)) +
+    v('Custo de ativação', money2(t.ativ)) +
+    v('Custo de desativação', money2(t.desativ)) +
+    v('Administração de frota / mês', money2(t.admFrota))
+  );
+
+  let deprRows =
+    v('Modo de depreciação', t.deprModo) +
+    v('Preço estimado de revenda', money2(t.revenda));
+  if (t.base === 'contrato') {
+    deprRows +=
+      v('Valor contábil ao fim do contrato', money(t.vcFim), 'dim') +
+      v('Ganho de capital na revenda', money(t.ganhoCap), 'dim') +
+      v('Saldo devedor quitado na revenda', money(t.saldoFim), 'dim') +
+      v('Revenda líquida (revenda − imposto − saldo)', money(t.revendaLiq), 'dim');
+  }
+  const depreciacao = grp('03','Depreciação e revenda', deprRows);
+
+  const fiscal = grp('04','Regime tributário',
+    v('Regime', t.regime) +
+    v('PIS / COFINS', pct(9.25)) +
+    v('IRPJ', pct(25)) +
+    v('CSLL', pct(9))
+  );
+
+  const locacao = grp('05','Configuração da locação',
+    v('Produto de locação', t.prodLabel) +
+    v('Prazo do contrato', `${t.prazo} meses`) +
+    v('Franquia de Km', isGf ? t.franquia : '—', isGf ? '' : 'na') +
+    v('Categoria do veículo', t.categoria) +
+    v('Mensalidade do aluguel', money2(t.mensalidade)) +
+    v('Administração do aluguel / mês', money2(t.admAluguel)) +
+    v('Proteção Total Avarias / mês', money2(t.protTotal)) +
+    v('Proteção Vidros e Pneus / mês', money2(t.protVidros)) +
+    v('Telemetria (Carro Conectado) / mês', money2(t.telemetria)) +
+    v('Carro reserva', isGf ? t.carroReserva : '—', isGf ? '' : 'na') +
+    v('Atividade fim?', t.atividadeFim),
+    c('Aluguel bruto no contrato', money(t.aluguelBruto)) +
+    (isGf ? c('Manutenção no contrato (própria)', money(t.manutTot)) : '') +
+    (t.base === 'contrato' ? c('Pneus no contrato (própria)', money(t.pneusTot)) : '')
+  );
+
+  const wProp = t.vencedor === 'propria';
+  const wAlug = t.vencedor === 'aluguel';
+  const dir = wAlug ? 'A locação economiza' : wProp ? 'A frota própria economiza' : 'Empate técnico —';
+  const unidade = t.base === 'anual' ? '/ veículo / ano' : `/ veículo no contrato de ${t.prazo} meses`;
+
+  let extra = '';
+  if (t.base === 'contrato') {
+    extra = `<div class="snap">Snapshot anual (só referência): frota própria <span class="mono">${money(t.snapPropria)}</span> · aluguel <span class="mono">${money(t.snapAluguel)}</span>.</div>`;
+  }
+  let notes = '';
+  if (t.indispLoc) notes += `<div class="note"><b>Toggle carro reserva.</b> ${t.nota}</div>`;
+  else if (t.nota) notes += `<div class="note">${t.nota}</div>`;
+  if (t.risco) notes += `<div class="note warn"><b>⚠ Alerta de arrendamento mercantil.</b> Prazo de ${t.prazo} meses ≥ 45 meses (75% da vida útil fiscal de 60 meses) → risco de reclassificação do contrato como arrendamento mercantil financeiro (Lei 6.099/1974, Res. BACEN 2.309/96), o que mudaria a dedutibilidade do aluguel. Confirmar as cláusulas com a área contábil. Base: Parecer 07/11.</div>`;
+
+  const result = `<section class="grp result">
+    <div class="grp-head"><span class="grp-num">06</span><h3>Resultado</h3></div>
+    <div class="rbase">${baseLabel}</div>
+    <div class="rcards">
+      <div class="rcard ${wProp?'win':'lose'}">
+        <div class="rl">Frota própria</div>
+        <div class="rv">${money(t.rPropria)}</div>
+        <div class="rn">${t.base==='anual'?'por veículo / ano':`no contrato de ${t.prazo} meses`}</div>
+      </div>
+      <div class="rcard ${wAlug?'win':'lose'}">
+        <div class="rl">Aluguel — ${isGf?'GF':'RAC PJ'}</div>
+        <div class="rv">${money(t.rAluguel)}</div>
+        <div class="rn">${t.base==='anual'?'por veículo / ano':`no contrato de ${t.prazo} meses`}</div>
+      </div>
+    </div>
+    <div class="reco"><b>${dir}</b> <span class="big">${money(t.ecoVeic)}</span> ${unidade} → <span class="big">${money(t.ecoFrota)}</span> para a frota de ${t.qtd} veículos${t.base==='anual'?' / ano':''}.</div>
+    ${extra}
+    ${notes}
+  </section>`;
+
+  return `<article class="panel panel--${t.prod}" role="tabpanel" id="panel-${t.n}" aria-labelledby="tab-${t.n}" tabindex="0" hidden>
+    <div class="phead">
+      <div class="ptag">${t.prodLabel} · ${t.prazo} meses</div>
+      <h2>${t.cliente}</h2>
+      <div class="psub"><b>Executivo:</b> ${t.exec} &nbsp;·&nbsp; <b>Veículo:</b> ${t.veiculo} &nbsp;·&nbsp; <b>Frota:</b> ${t.qtd} veículos &nbsp;·&nbsp; <b>Regime:</b> ${t.regime}</div>
+    </div>
+    ${aquisicao}${operacional}${depreciacao}${fiscal}${locacao}${result}
+  </article>`;
+}
+
+const tablist = document.getElementById('tablist');
+const panels = document.getElementById('panels');
+tablist.innerHTML = T.map(t =>
+  `<button class="tab" role="tab" id="tab-${t.n}" data-prod="${t.prod}" aria-controls="panel-${t.n}" aria-selected="false" tabindex="-1">
+     <span class="tt">Teste ${t.n}</span><span class="ts">${t.prod==='gf'?'GF':'RAC'} · ${t.prazo} m</span>
+   </button>`).join('');
+panels.innerHTML = T.map(panel).join('');
+
+const tabs = [...tablist.querySelectorAll('[role=tab]')];
+const pnls = [...panels.querySelectorAll('[role=tabpanel]')];
+function select(i){
+  tabs.forEach((tb,j)=>{ const on=j===i; tb.setAttribute('aria-selected',on); tb.tabIndex=on?0:-1; });
+  pnls.forEach((p,j)=> p.hidden = j!==i );
+  location.hash = 'teste-' + (i+1);
+}
+tabs.forEach((tb,i)=>{
+  tb.addEventListener('click',()=>select(i));
+  tb.addEventListener('keydown',e=>{
+    let n=null;
+    if(e.key==='ArrowRight'||e.key==='ArrowDown') n=(i+1)%tabs.length;
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp') n=(i-1+tabs.length)%tabs.length;
+    else if(e.key==='Home') n=0;
+    else if(e.key==='End') n=tabs.length-1;
+    if(n!==null){ e.preventDefault(); select(n); tabs[n].focus(); }
+  });
+});
+const m = (location.hash.match(/teste-(\d)/)||[])[1];
+select(m ? Math.min(6,Math.max(1,+m))-1 : 0);
+</script>
+</body>
+</html>

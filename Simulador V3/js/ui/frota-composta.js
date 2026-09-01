@@ -1,15 +1,26 @@
 // Frota Composta tab: card/dashboard rendering, modal CRUD, localStorage persistence
+const IC = (n, cls) => (typeof window.icon === "function")
+  ? window.icon(n, cls) : `<svg class="ic ${cls || ""}"><use href="#i-${n}"/></svg>`;
+
 /* ── Render card ── */
 function renderFCEmpty() {
   const c = el("fcModelosList");
-  if (c) c.innerHTML = `<div class="fc-empty"><div class="fc-empty-icon">🚗</div>
-    <p>Nenhum modelo adicionado.<br/>Clique em <strong>+ Adicionar</strong> para começar.</p></div>`;
+  if (!c) return;
+  /* Se o Simulador já tem um veículo preenchido, oferece começar por ele (Parecer 13, item 06) */
+  const temSim = typeof n === "function" && n("valorVeiculoBruto") > 0;
+  c.innerHTML = `<div class="fc-empty">
+    <div class="fc-empty-icon">${IC("car", "ic-lg")}</div>
+    <p>Nenhuma categoria de veículo ainda.</p>
+    ${temSim ? `<button class="fc-empty-cta" onclick="importarDoSimulador()">${IC("plus")} Começar com o veículo do Simulador</button>` : ""}
+    <button class="fc-empty-cta ghost" onclick="openModalModelo(null)">${IC("plus")} Adicionar categoria em branco</button>
+  </div>`;
 }
 
 function renderFCEmptyDash() {
   const d = el("fcDashboard");
-  if (d) d.innerHTML = `<div class="fc-dash-empty"><div style="font-size:2.5rem">📊</div>
-    <p>O painel aparecerá aqui após adicionar modelos à frota.</p></div>`;
+  if (d) d.innerHTML = `<div class="fc-dash-empty">
+    <div>${IC("chart", "ic-lg")}</div>
+    <p>O comparativo consolidado aparece aqui depois que você adiciona categorias.</p></div>`;
 }
 
 function renderFCCard(m, idx) {
@@ -17,7 +28,7 @@ function renderFCCard(m, idx) {
   const r   = calcModelo(m, fcPerfil);
   const qtd = +m.qtd || 1;
   const vc  = r.venc;
-  const badgeIcon  = vc === "aluguel" ? "🏆" : vc === "propria" ? "🚗" : "⚖";
+  const badgeIcon  = IC(vc === "aluguel" ? "trophy" : vc === "propria" ? "car" : "scale");
   const badgeLabel = vc === "aluguel" ? "Locação vence" : vc === "propria" ? "Frota Própria vence" : "Empate técnico";
   const ecoLabel   = qtd > 1
     ? `${R(r.econAbs)}/un. · ${R(r.econAbs * qtd)} total`
@@ -31,8 +42,8 @@ function renderFCCard(m, idx) {
         <div class="fc-card-qty">${(m.produtoLocacao === "gf" ? "GF" : "RAC PJ") + " · " + (m.prazoContratoMeses || (m.produtoLocacao === "gf" ? 36 : 12)) + " meses"}</div>
       </div>
       <div class="fc-card-actions">
-        <button class="fc-card-btn edit" onclick="openModalModelo(${idx})">✏ Editar</button>
-        <button class="fc-card-btn remove" onclick="removeModelo(${idx})">✕</button>
+        <button class="fc-card-btn edit" onclick="openModalModelo(${idx})">Editar</button>
+        <button class="fc-card-btn remove" onclick="removeModelo(${idx})" aria-label="remover">✕</button>
       </div>
     </div>
     <div class="fc-card-body">

@@ -160,7 +160,7 @@ body{
     ${logoClientHTML}${nomeClientHTML}
     <div class="meta" style="margin-top:6px">
       <div>Data: <strong>${agora}</strong></div>
-      <div>Executivo de Vendas: <strong>${loginMatricula || "—"}</strong></div>
+      <div>Executivo de Vendas: <strong>${loginMatricula || "—"}</strong>${loginExecMatricula ? ` (mat. ${loginExecMatricula})` : ""}</div>
       <div>Qtd. de Veículos: <strong>${qtdVeiculos > 1 ? qtdVeiculos + " veículos" : "1 veículo"}</strong></div>
       <div>Regime Fiscal: <strong>${perfLabel}</strong></div>
       <div>Produto de Locação: <strong>${produtoLabel} (${prazoLabel})</strong></div>
@@ -360,7 +360,7 @@ td{padding:6px 9px;border-bottom:1px solid #eee}tr:nth-child(even)td{background:
 .footer{margin-top:28px;font-size:8pt;color:#bbb;text-align:center;border-top:1px solid #eee;padding-top:8px}
 @media print{body{padding:8px}}</style></head><body>
 <h1>⚡ Frota Composta — Análise Estratégica</h1>
-<div class="meta">Gerado em ${now} · Executivo de Vendas: <strong>${loginMatricula || "—"}</strong>${(clientName || loginCodigo) ? ` · Cliente: <strong>${clientName || loginCodigo}</strong>` : ""} · Regime: ${fcPerfil === "real" ? "Lucro Real" : "Lucro Presumido"} · ${totQtd} veículos em ${resultados.length} categorias</div>
+<div class="meta">Gerado em ${now} · Executivo de Vendas: <strong>${loginMatricula || "—"}</strong>${loginExecMatricula ? ` (mat. ${loginExecMatricula})` : ""}${(clientName || loginCodigo) ? ` · Cliente: <strong>${clientName || loginCodigo}</strong>` : ""} · Regime: ${fcPerfil === "real" ? "Lucro Real" : "Lucro Presumido"} · ${totQtd} veículos em ${resultados.length} categorias</div>
 <div class="hero">
   <div class="hero-title">Recomendação Global: ${vencGlobal}</div>
   <div class="hero-sub">Economia estimada vs. alternativa: ${R(poupanca)}/ano · Estratégia ótima (mix): ${R(totOtimo)}/ano</div>

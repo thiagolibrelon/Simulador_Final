@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Competência em Contratos de Prazo Quebrado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f2f1ec;
+  --surface:#fffefb;
+  --surface-2:#ece9e1;
+  --ink:#20241f;
+  --muted:#5c6259;
+  --faint:#8a8f83;
+  --line:rgba(32,36,31,.14);
+  --line-strong:rgba(32,36,31,.28);
+  --accent:#2c4a6e;
+  --accent-soft:rgba(44,74,110,.08);
+  --tag-confirmed:#2f6e4f;
+  --tag-confirmed-soft:rgba(47,110,79,.1);
+  --tag-deductive:#9c7218;
+  --tag-deductive-soft:rgba(156,114,24,.12);
+  --tag-unconfirmed:#a63a3a;
+  --tag-unconfirmed-soft:rgba(166,58,58,.1);
+  --shadow:0 1px 2px rgba(32,36,31,.04),0 12px 32px -16px rgba(32,36,31,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171a;
+    --surface:#1a1e1c;
+    --surface-2:#20241f;
+    --ink:#eceae2;
+    --muted:#a7ac9f;
+    --faint:#767c70;
+    --line:rgba(236,234,226,.14);
+    --line-strong:rgba(236,234,226,.26);
+    --accent:#8fb2da;
+    --accent-soft:rgba(143,178,218,.1);
+    --tag-confirmed:#59a67e;
+    --tag-confirmed-soft:rgba(89,166,126,.14);
+    --tag-deductive:#d1a545;
+    --tag-deductive-soft:rgba(209,165,69,.14);
+    --tag-unconfirmed:#dd8078;
+    --tag-unconfirmed-soft:rgba(221,128,120,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171a;
+  --surface:#1a1e1c;
+  --surface-2:#20241f;
+  --ink:#eceae2;
+  --muted:#a7ac9f;
+  --faint:#767c70;
+  --line:rgba(236,234,226,.14);
+  --line-strong:rgba(236,234,226,.26);
+  --accent:#8fb2da;
+  --accent-soft:rgba(143,178,218,.1);
+  --tag-confirmed:#59a67e;
+  --tag-confirmed-soft:rgba(89,166,126,.14);
+  --tag-deductive:#d1a545;
+  --tag-deductive-soft:rgba(209,165,69,.14);
+  --tag-unconfirmed:#dd8078;
+  --tag-unconfirmed-soft:rgba(221,128,120,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 40px -20px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Newsreader",Georgia,"Times New Roman",serif;-webkit-font-smoothing:antialiased;line-height:1.6}
+.page{max-width:800px;margin:0 auto;padding:56px 20px 96px}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow);padding:52px 56px 48px}
+@media (max-width:640px){.sheet{padding:36px 22px 32px}.page{padding:28px 12px 64px}}
+
+.label{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",Consolas,monospace}
+
+.letterhead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:28px;border-bottom:2px solid var(--ink)}
+.letterhead-ref{margin-bottom:14px}
+.letterhead-ref .label{margin-bottom:3px}
+.letterhead h1{font-size:27px;font-weight:700;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+.letterhead .role{font-family:"IBM Plex Sans",sans-serif;font-size:13px;color:var(--muted);max-width:46ch;line-height:1.5}
+.seal{flex:none;width:92px;height:92px;border-radius:50%;border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;position:relative;transform:rotate(-6deg);opacity:.9}
+.seal::before{content:"";position:absolute;inset:6px;border:1px dashed var(--accent);border-radius:50%}
+.seal-inner{font-family:"IBM Plex Mono",monospace;text-align:center;line-height:1.2}
+.seal-inner .initials{font-size:19px;font-weight:600;color:var(--accent);letter-spacing:.02em}
+.seal-inner .crc{font-size:7.5px;color:var(--accent);letter-spacing:.06em;margin-top:2px}
+
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:16px 32px;padding:22px 0 28px;border-bottom:1px solid var(--line)}
+.meta dt{margin:0 0 3px}
+.meta dd{margin:0;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink)}
+.meta dd.wrap{font-family:"Newsreader",serif;font-size:14.5px}
+
+.intro{padding:26px 0 4px;font-size:16px;color:var(--ink)}
+.intro p{margin:0 0 14px;max-width:64ch}
+.intro p:last-child{margin-bottom:0}
+.qbox{margin:18px 0 4px;padding:16px 18px;background:var(--surface-2);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:13px;line-height:1.6;max-width:64ch}
+.qbox ol{margin:6px 0 0;padding-left:20px}
+.qbox li{margin-bottom:5px}
+
+section.topic{padding:34px 0;border-bottom:1px solid var(--line)}
+section.topic:last-of-type{border-bottom:none}
+.topic-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.topic-num{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--faint)}
+.topic h2{font-size:19px;font-weight:600;margin:0;text-wrap:balance;flex:1 1 auto;min-width:200px}
+.tag{font-family:"IBM Plex Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.tag.confirmed{color:var(--tag-confirmed);background:var(--tag-confirmed-soft)}
+.tag.deductive{color:var(--tag-deductive);background:var(--tag-deductive-soft)}
+.tag.unconfirmed{color:var(--tag-unconfirmed);background:var(--tag-unconfirmed-soft)}
+
+.topic p{margin:0 0 13px;max-width:66ch;font-size:15.5px}
+.topic p:last-child{margin-bottom:0}
+.topic ul{margin:0 0 13px;padding-left:20px;max-width:62ch}
+.topic li{margin-bottom:6px;font-size:15.5px}
+
+cite{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);background:var(--surface-2);padding:1px 6px;border-radius:3px;white-space:nowrap}
+
+.callout{margin-top:16px;padding:16px 18px;background:var(--tag-unconfirmed-soft);border-left:3px solid var(--tag-unconfirmed);border-radius:0 4px 4px 0;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;color:var(--ink);max-width:62ch}
+.callout strong{color:var(--tag-unconfirmed)}
+.callout.ok{background:var(--tag-confirmed-soft);border-left-color:var(--tag-confirmed)}
+.callout.ok strong{color:var(--tag-confirmed)}
+
+.formula{margin:14px 0;padding:14px 16px;background:var(--surface-2);border-radius:6px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink);line-height:1.7;overflow-x:auto}
+.formula .c{color:var(--muted)}
+
+.compare-wrap{overflow-x:auto;margin:18px 0 6px;border:1px solid var(--line);border-radius:6px}
+table.compare{width:100%;border-collapse:collapse;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;min-width:560px}
+table.compare th,table.compare td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+table.compare thead th{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+table.compare tbody th{font-weight:600;color:var(--ink);white-space:nowrap;width:150px}
+table.compare tbody tr:last-child td,table.compare tbody tr:last-child th{border-bottom:none}
+table.compare td.risk{color:var(--tag-unconfirmed);font-weight:600}
+table.compare td.ok{color:var(--tag-confirmed);font-weight:600}
+
+.reco{margin:18px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.reco li{display:flex;gap:12px;padding:13px 16px;background:var(--accent-soft);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;line-height:1.55;max-width:66ch}
+.reco-n{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--accent);flex:none;padding-top:1px}
+
+.ressalvas{margin-top:30px;padding:18px 20px;border:1px dashed var(--line-strong);border-radius:6px;font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;color:var(--muted);line-height:1.6}
+.ressalvas p{margin:0 0 8px}
+.ressalvas p:last-child{margin-bottom:0}
+
+.sig{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.sig-name{font-size:17px;font-weight:600;font-style:italic;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:4px}
+.sig-role{font-family:"IBM Plex Sans",sans-serif;font-size:12px;color:var(--muted)}
+.sig-date{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);text-align:right}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="sheet">
+
+    <div class="letterhead">
+      <div>
+        <div class="letterhead-ref"><div class="label">Parecer Técnico Nº 11/2026</div></div>
+        <h1>Regime de Competência em Contratos de Prazo Quebrado — Locação × Frota Própria</h1>
+        <div class="role">Base para o motor de cálculo plurianual do simulador: como a dedução de imposto se distribui em contratos de 18, 24, 36 ou 48 meses, e o que difere entre alugar e comprar.</div>
+      </div>
+      <div class="seal" aria-hidden="true">
+        <div class="seal-inner"><div class="initials">HS</div><div class="crc">CRC · TRIB</div></div>
+      </div>
+    </div>
+
+    <dl class="meta">
+      <div><dt class="label">Destinatário</dt><dd class="wrap">Time Simulador de Frota — Juliano, Mateus, José, Nelson &amp; Thiago — Localiza&amp;Co</dd></div>
+      <div><dt class="label">Data</dt><dd>31/08/2026</dd></div>
+      <div><dt class="label">Assunto</dt><dd class="wrap">Competência da dedução em contratos que não fecham em anos-calendário</dd></div>
+      <div><dt class="label">Escopo</dt><dd class="wrap">Continuação dos Pareceres 07 e 09 (RAC×GF, ganho de capital)</dd></div>
+    </dl>
+
+    <div class="intro">
+      <p>O Thiago encaminhou quatro perguntas objetivas depois da reunião de 31/08, todas girando em torno da mesma dúvida: quando o contrato não fecha um número redondo de anos — o exemplo dado foi 18 meses —, a economia de imposto que o simulador mostra deve ser rateada mês a mês, ou ela só se realiza no fechamento de cada ano fiscal? E existe alguma assimetria entre o lado "alugar" e o lado "comprar" nesse rateio?</p>
+      <div class="qbox">
+        <strong>Perguntas encaminhadas:</strong>
+        <ol>
+          <li>A dedução do aluguel (IRPJ/CSLL no Lucro Real, e o crédito de PIS/COFINS) é apropriada proporcionalmente ao longo do contrato, ou só se consolida no fechamento do ano fiscal?</li>
+          <li>Contrato de 18 meses que começa em setembro e cruza dois anos-calendário — a parte parcial (set–dez) entra no resultado daquele ano, ou há regra de competência que empurra para frente?</li>
+          <li>Muda algo se a contratação ocorrer perto do encerramento do ano fiscal (nov/dez)?</li>
+          <li>Para a frota própria no mesmo prazo quebrado — depreciação e manutenção seguem a mesma lógica, ou há assimetria em relação ao aluguel?</li>
+        </ol>
+      </div>
+      <p>Resposta curta, adiantada: <strong>tudo é competência mensal, dos dois lados</strong>. Não há nada no ordenamento que faça a dedução "esperar dezembro". A assimetria real entre alugar e comprar não é de <em>quando</em> se deduz — é de <em>o que</em> se deduz. Detalho abaixo.</p>
+    </div>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">01</span>
+        <h2>Regra geral — a dedução é por competência, não por caixa nem por fechamento anual</h2>
+        <span class="tag confirmed">Confirmado</span>
+      </div>
+      <p>O lucro real parte do lucro líquido apurado pela escrituração comercial, que obedece obrigatoriamente ao <strong>regime de competência</strong> <cite>Lei 6.404/76, art. 177; RIR/2018, art. 258</cite>. A despesa de aluguel é despesa operacional dedutível <cite>Lei 4.506/64, art. 71; RIR/2018, art. 311</cite> e se reconhece <strong>no período a que corresponde</strong> — ou seja, a parcela de cada mês reduz a base de IRPJ e CSLL naquele mês, independentemente de quando foi paga.</p>
+      <p>Não existe regra que concentre a dedução no fechamento do exercício. O "ajuste anual em 31 de dezembro" é outra coisa (seção 03): é a conciliação do que já foi deduzido e antecipado ao longo do ano, não o momento em que a despesa passa a contar.</p>
+      <div class="callout ok"><strong>Para o simulador —</strong> um contrato de 18 meses gera 18 parcelas mensais de aluguel, cada uma dedutível no seu mês. A economia de imposto do contrato inteiro é a soma dessas 18 economias mensais. Modelar mês a mês (ou, o que dá no mesmo, "parcela × nº de meses") é fiel. O que <strong>não</strong> é fiel é pegar a economia de 12 meses e multiplicar por 1,5.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">02</span>
+        <h2>Aluguel pago à vista ou antecipado — vira despesa antecipada, apropriada mês a mês</h2>
+        <span class="tag confirmed">Confirmado</span>
+      </div>
+      <p>Se o cliente pagar o contrato adiantado (parcial ou integralmente), o desembolso <strong>não</strong> é despesa no ato do pagamento. Ele é registrado como <em>despesa antecipada</em> no ativo (circulante, ou realizável a longo prazo para a parte além de 12 meses) e apropriado ao resultado em duodécimos, conforme o período de locação transcorre <cite>despesas antecipadas — apropriação por competência</cite>.</p>
+      <div class="formula">Pagou R$ 90.000 por 36 meses de aluguel  <span class="c">// nada deduz no mês do pagamento</span><br/>despesaMensal = 90.000 / 36 = 2.500  <span class="c">// deduz 2.500/mês, por 36 meses</span></div>
+      <p>Consequência prática: a forma de pagamento (mensal, à vista, antecipado) <strong>não altera</strong> o perfil de dedução ao longo do tempo. Para o simulador, isso é uma simplificação legítima — basta trabalhar com a parcela mensal e o número de meses, sem se preocupar com o cronograma de caixa do aluguel.</p>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">03</span>
+        <h2>Apuração trimestral × anual — e o que realmente acontece em 31/12</h2>
+        <span class="tag confirmed">Confirmado</span>
+      </div>
+      <p>A empresa no Lucro Real apura IRPJ/CSLL de dois modos <cite>Lei 9.430/96, arts. 1º e 2º</cite>:</p>
+      <ul>
+        <li><strong>Trimestral:</strong> fecha o resultado a cada trimestre (mar/jun/set/dez). A despesa de aluguel dos três meses do trimestre já reduziu a base daquele trimestre.</li>
+        <li><strong>Anual por estimativa:</strong> recolhe antecipações mensais (sobre receita bruta, ou sobre balancete de suspensão/redução) e faz o <strong>ajuste anual em 31/12</strong>, quando apura o lucro real definitivo do ano-calendário. As antecipações mensais — inclusive a de dezembro — são tratadas como pagamento por conta do valor final <cite>Lei 9.430/96, art. 2º, §§ 3º e 4º</cite>.</li>
+      </ul>
+      <p>Nos dois casos, <strong>a despesa de aluguel entra na base no mês de competência</strong>. O ajuste de 31/12 não "libera" a dedução — ele apenas reconcilia. Se a empresa usa balancete de suspensão/redução, o efeito da despesa aparece já nas antecipações mensais.</p>
+      <div class="callout"><strong>Único caso em que o benefício pode não se materializar de imediato —</strong> se a empresa apurar prejuízo fiscal no período, a despesa de aluguel compõe esse prejuízo, mas o aproveitamento fica diferido: a compensação de prejuízo fiscal em anos seguintes é limitada a <strong>30% do lucro real</strong> de cada período <cite>Lei 9.065/95, art. 15; RIR/2018, art. 580</cite>. Isso não é específico de prazo quebrado — é a mesma premissa que o Parecer 07 já registrava ("a simulação assume que a empresa terá lucro e conseguirá recuperar os créditos").</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">04</span>
+        <h2>Contrato que cruza dois anos-calendário</h2>
+        <span class="tag confirmed">Confirmado</span>
+      </div>
+      <p>O ano-calendário do IRPJ/CSLL é fixo: 1º de janeiro a 31 de dezembro, para praticamente toda pessoa jurídica (não se confunde com "exercício social" estatutário). Um contrato de 18 meses iniciado em setembro/2026 se distribui assim:</p>
+      <div class="formula">set–dez/2026 ....... 4 parcelas  → deduzidas no ano-calendário 2026<br/>jan–dez/2027 ...... 12 parcelas  → deduzidas no ano-calendário 2027<br/>jan–fev/2028 ....... 2 parcelas  → deduzidas no ano-calendário 2028</div>
+      <p>Cada parcela cai no ano a que corresponde. <strong>Não há "empurrar para frente"</strong> — a competência é do mês, e o mês pertence ao seu ano. Também não há carry-forward da <em>dedução</em> em si; o que se transporta entre anos é eventual prejuízo fiscal (com a trava de 30% da seção 03).</p>
+      <div class="callout ok"><strong>Para o simulador —</strong> se a ferramenta trabalha com valor presente e uma taxa de desconto, o mês exato de início muda ligeiramente o resultado (parcelas mais distantes valem menos hoje). Se a ferramenta trabalha em valores nominais, o mês de início é irrelevante para o custo efetivo — só afeta em qual declaração cada parcela aparece, o que é problema do contador do cliente, não do simulador.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">05</span>
+        <h2>Contratação perto do fim do ano fiscal</h2>
+        <span class="tag confirmed">Confirmado</span>
+      </div>
+      <p>Não há regra especial. Vale a competência: se o contrato começa em 1º de dezembro, só a parcela de dezembro é dedutível naquele ano-calendário — as demais entram nos anos seguintes, conforme transcorrem. Assinar em dezembro não "antecipa" nem "adia" nada além do que a proporção mensal já determina.</p>
+      <p>A única situação a vigiar é a do <strong>pagamento antecipado feito em dezembro</strong> com intenção de "jogar despesa para o ano corrente" — isso é vedado pela regra da seção 02: o valor vira despesa antecipada no ativo e só se deduz mês a mês. Um aluguel pago em 20/12/2026 cobrindo 2027 inteiro não gera despesa dedutível em 2026.</p>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">06</span>
+        <h2>PIS/COFINS — crédito também é mensal, e a restrição de veículos continua</h2>
+        <span class="tag deductive">Confirmado / remissão ao Parecer 07</span>
+      </div>
+      <p>No regime não-cumulativo, o crédito sobre aluguel de <em>prédios, máquinas e equipamentos</em> utilizados na atividade é apurado <strong>no mês do dispêndio</strong>, sobre o valor da contraprestação daquele mês <cite>Lei 10.637/2002, art. 3º, IV; Lei 10.833/2003, art. 3º, IV</cite>. Mesma lógica de competência mensal do IRPJ/CSLL — nada espera o fim do ano.</p>
+      <p>Continua valendo, porém, a ressalva do Parecer 07: para a Receita, "veículo" é categoria distinta de "máquinas e equipamentos", e o entendimento predominante é de que <strong>aluguel de veículos não gera crédito de PIS/COFINS</strong> nem como locação do inciso IV, nem como insumo do inciso II <cite>Soluções de Consulta RFB; jurisprudência CARF</cite>. Há decisões pontuais do CARF admitindo o crédito quando o veículo é essencial à atividade-fim, mas é exceção, não regra. O simulador não deve prometer esse crédito por padrão.</p>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">07</span>
+        <h2>Frota própria — mesma competência mensal, assimetria está em outro lugar</h2>
+        <span class="tag confirmed">Confirmado — este é o ponto central</span>
+      </div>
+      <p>Do lado "comprar", tudo também é competência mensal:</p>
+      <ul>
+        <li><strong>Depreciação:</strong> quota anual (veículo = 20% a.a. / 5 anos <cite>IN RFB 1.700/2017, Anexo III</cite>) dividida em duodécimos, dedutível a partir do mês em que o bem entra em operação; se o carro é baixado dentro do ano, apropriam-se os duodécimos proporcionais aos meses em que ficou no ativo <cite>RIR/2018, art. 317</cite>.</li>
+        <li><strong>Manutenção:</strong> despesa dedutível no mês em que o serviço é prestado / a peça é consumida.</li>
+        <li><strong>Juros do financiamento:</strong> dedutíveis por competência, mês a mês.</li>
+      </ul>
+      <p>Então, em <em>timing</em>, alugar e comprar são simétricos: ambos deduzem mês a mês, ambos respeitam o ano-calendário, ambos dependem de a empresa ter lucro. <strong>A assimetria é de natureza e de magnitude:</strong></p>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead><tr><th></th><th>Alugar (RAC / GF)</th><th>Comprar (frota própria)</th></tr></thead>
+          <tbody>
+            <tr><th>O que se deduz no período de N meses</th><td class="ok">A contraprestação inteira — N parcelas de aluguel, integralmente dedutíveis (locação operacional)</td><td class="risk">Só depreciação (vV × 20%/12 × N meses) + manutenção + juros. O <strong>preço de compra não é despesa</strong> — é ativo.</td></tr>
+            <tr><th>Aquisição do bem</th><td>Não há — nunca entra na conta de despesa</td><td class="risk">Vira depreciação diluída em 60 meses fiscais, <em>independente</em> de o cliente pretender ficar só 18 ou 24 meses com o carro</td></tr>
+            <tr><th>Saída do bem no fim do prazo</th><td>Não há — devolve o carro, sem evento fiscal</td><td class="risk">Venda: diferença entre preço de mercado e valor contábil vira ganho/perda de capital (Parecer 09)</td></tr>
+            <tr><th>Eventos únicos (ativação, desativação, frete)</th><td>Não se aplica — locadora entrega pronto</td><td>Ocorrem <strong>uma vez</strong> no contrato, não a cada ano</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout"><strong>Onde a conta de longo prazo erra hoje —</strong> multiplicar a simulação de 12 meses por 2, 3 ou 4 infla o lado "comprar": faz parecer que o cliente compra e revende a frota a cada ano (repetindo aquisição, revenda, ativação e desativação N vezes) e deprecia o carro inteiro todo ano. O correto é: aquisição e revenda entram <strong>uma vez</strong>; depreciação é a quota mensal × nº de meses do período (não a quota "de um ano" repetida); manutenção e custos operacionais recorrentes multiplicam por N; e o aluguel multiplica por N parcelas.</div>
+    </section>
+
+    <section class="topic">
+      <div class="topic-head">
+        <span class="topic-num">08</span>
+        <h2>Ressalva — reclassificação para arrendamento financeiro (GF ≥ 45 meses)</h2>
+        <span class="tag deductive">Interpretação — remissão ao Parecer 07</span>
+      </div>
+      <p>Se um contrato GF longo for reclassificado como arrendamento mercantil financeiro (risco que o Parecer 07 mapeou para prazos que se aproximam de 75% da vida útil fiscal, ~45 meses, ou com opção de compra a preço vil / VRG embutido), a dedutibilidade muda de <em>caráter</em>: deixa de ser aluguel integralmente dedutível e passa a seguir a regra do arrendamento financeiro — dedução limitada aos encargos financeiros e à depreciação do bem <cite>Lei 6.099/74, art. 11, § 1º</cite>. Ou seja, o lado "GF 48 meses" do simulador, no pior cenário, se aproxima fiscalmente do lado "comprar financiado". É um alerta, não um cálculo — a caracterização depende das cláusulas concretas do contrato.</p>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-bottom:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Síntese</h2></div>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead><tr><th>Pergunta</th><th>Resposta</th></tr></thead>
+          <tbody>
+            <tr><th>Dedução proporcional ou no fecho do ano?</th><td class="ok">Proporcional — competência mensal, dos dois lados. O fecho de 31/12 só reconcilia.</td></tr>
+            <tr><th>Contrato cruzando dois anos</th><td class="ok">Cada parcela no seu ano-calendário. Sem diferimento; só prejuízo fiscal se transporta (trava de 30%).</td></tr>
+            <tr><th>Contratação perto do fim do ano</th><td class="ok">Sem regra especial. Vale a proporção mensal. Pagamento antecipado em dezembro não antecipa dedução.</td></tr>
+            <tr><th>Simetria aluguel × própria</th><td class="ok">Simétricos no <em>quando</em>. Assimétricos no <em>quê</em>: aluguel deduz a parcela inteira; própria deduz só depreciação + manutenção + juros.</td></tr>
+            <tr><th>Prazos flexíveis (14, 18 meses) — há trava fiscal?</th><td class="ok">Não. O contador do cliente rateia por competência normalmente. Nada impede o simulador de modelar N meses.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="topic" style="border-bottom:none;padding-top:8px">
+      <div class="topic-head"><span class="topic-num">—</span><h2>Recomendações para o motor de cálculo</h2></div>
+      <ol class="reco">
+        <li><span class="reco-n">01</span><span>Liberar prazos livres (o usuário informa N meses). Não há impedimento fiscal — a dedução se distribui por competência mensal e o simulador pode espelhar isso linearmente.</span></li>
+        <li><span class="reco-n">02</span><span>Classificar cada componente antes de multiplicar pelo prazo: <strong>parcela × N meses</strong> (aluguel, manutenção, seguro, IPVA, licenciamento, oportunidade, adm.); <strong>uma vez no contrato</strong> (entrada/aquisição, juros do financiamento no período, ativação, desativação, revenda no fim); <strong>quota mensal × N</strong> (depreciação = vV × 20%/12 × N, não a depreciação "de um ano" repetida).</span></li>
+        <li><span class="reco-n">03</span><span>A economia de imposto do contrato = soma das economias mensais. Para prazos redondos isso equivale a "economia anual × nº de anos"; para prazos quebrados, use meses. "Anualizar a economia" (proposta do Mateus) serve como número de comunicação ao cliente, mas o cálculo interno deve ser mensal.</span></li>
+        <li><span class="reco-n">04</span><span>Manter a premissa já registrada no Parecer 07: a simulação assume empresa lucrativa que aproveita os créditos no próprio período. Se quiser rigor, um aviso de que empresa em prejuízo fiscal difere o benefício (trava de 30%).</span></li>
+        <li><span class="reco-n">05</span><span>Para GF ≥ 45 meses, manter o alerta de reclassificação para arrendamento financeiro (seção 08) — nesse cenário o lado "GF" perde a dedutibilidade integral do aluguel.</span></li>
+        <li><span class="reco-n">06</span><span>Não prometer crédito de PIS/COFINS sobre o aluguel de veículos por padrão (seção 06). Se a ferramenta oferece o campo, deixá-lo zerado com nota, como já se faz.</span></li>
+      </ol>
+    </section>
+
+    <div class="ressalvas">
+      <p><strong>Ressalvas finais.</strong> Levantamento técnico-preliminar a partir de pesquisa em fontes públicas (Lei 6.404/76, Lei 4.506/64, Lei 9.430/96, Lei 9.065/95, Lei 6.099/74, Leis 10.637/2002 e 10.833/2003, RIR/2018 — Decreto 9.580/2018, IN RFB 1.700/2017, e conteúdo contábil especializado). As respostas descrevem a regra geral de competência, que é pacífica; casos concretos (empresa com exercício social diferente do ano-calendário, regimes especiais, contratos com cláusulas atípicas) podem ter nuances.</p>
+      <p>Não substitui parecer formal assinado por contador (CRC) ou advogado tributarista (OAB) habilitado, especialmente antes de liberar prazos flexíveis como funcionalidade apresentada ao cliente ou de usar os números como base de proposta comercial.</p>
+    </div>
+
+    <div class="sig">
+      <div>
+        <div class="sig-name">Heitor Salgado</div>
+        <div class="sig-role">Contador · Especialista em Tributação de Contratos de Locação e Arrendamento Mercantil</div>
+      </div>
+      <div class="sig-date">Belo Horizonte, 31 de agosto de 2026</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

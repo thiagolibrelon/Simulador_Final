@@ -98,6 +98,64 @@ function renderProjecaoGF(c) {
 }
 
 /* ══════════════════════════════════════════
+   HERO DE RESULTADO — painel direito (Parecer 13, itens 01/02)
+   Mostra UM número: a economia, na base do contrato (ou anual p/ 12 meses).
+══════════════════════════════════════════ */
+function renderResultHero(c, per, mostraPeriodo, venc, mesesLabel) {
+  const hero = el("resultHero");
+  if (!hero) return;
+
+  const vazio = n("valorVeiculoBruto") < 1 && n("aluguelMensal") < 1;
+  const econVeic  = mostraPeriodo ? per.econAbs      : c.econAbs;
+  const custoProp = mostraPeriodo ? per.custoPropria : c.fAno;
+  const custoAlug = mostraPeriodo ? per.custoAluguel : c.cAlq;
+  const baseSub   = mostraPeriodo ? "por veículo · contrato de " + mesesLabel : "por veículo / ano";
+
+  hero.classList.toggle("win", !vazio && venc === "aluguel");
+  hero.classList.toggle("red", !vazio && venc === "propria");
+  el("rhCardAluguel").className = "rh-card" + (!vazio && venc === "aluguel" ? " win" : "");
+  el("rhCardPropria").className = "rh-card" + (!vazio && venc === "propria" ? " win" : "");
+
+  if (vazio) {
+    set("rhVerdict", "Preencha o simulador");
+    set("rhBig", "—");
+    set("rhSub", "a economia aparece aqui");
+    el("rhFleet").style.display = "none";
+  } else if (venc === "empate") {
+    set("rhVerdict", "Empate técnico");
+    set("rhBig", "≈ R$ 0");
+    set("rhSub", "diferença abaixo de R$ 50 " + baseSub.replace("por veículo", ""));
+    el("rhFleet").style.display = "none";
+  } else {
+    set("rhVerdict", venc === "aluguel" ? "A locação economiza" : "A frota própria economiza");
+    set("rhBig", R(econVeic));
+    set("rhSub", baseSub);
+    const fleet = qtdVeiculos > 1;
+    el("rhFleet").style.display = fleet ? "flex" : "none";
+    if (fleet) {
+      set("rhFleetLabel", "Frota de " + qtdVeiculos + " veículos");
+      set("rhFleetVal", R(econVeic * qtdVeiculos));
+    }
+  }
+
+  set("rhProp", vazio ? "—" : R(custoProp));
+  set("rhAlug", vazio ? "—" : R(custoAlug));
+  set("rhAlugLabel", c.produtoLoc === "gf" ? "GF · " + mesesLabel : "RAC · " + mesesLabel);
+
+  const noteEl = el("rhNote");
+  if (noteEl) {
+    let note = "";
+    if (!vazio && mostraPeriodo && c.venc !== per.venc) {
+      note = "Pela conta anual o resultado seria outro — a projeção do contrato é a comparação fiel para " + mesesLabel + " (Parecer 11).";
+    } else if (!vazio && c.riscoReclassificacaoArrendamento) {
+      note = "Prazo ≥ 45 meses: ver alerta de arrendamento no detalhamento.";
+    }
+    noteEl.textContent = note;
+    noteEl.style.display = note ? "block" : "none";
+  }
+}
+
+/* ══════════════════════════════════════════
    CÁLCULO PRINCIPAL
 ══════════════════════════════════════════ */
 function calc() {
@@ -236,6 +294,9 @@ function calc() {
   const vencFinal = mostraPeriodo ? per.venc : c.venc;
   el("vFrota").className   = "v-card" + (vencFinal === "propria" ? " winner" : "");
   el("vAluguel").className = "v-card" + (vencFinal === "aluguel" ? " winner" : "");
+
+  /* ── HERO DE RESULTADO (Parecer 13) — um número, acima da dobra ── */
+  renderResultHero(c, per, mostraPeriodo, vencFinal, mesesLabel);
 
   const ep = el("econPill");
   const perVeic = "por veículo / ano";
