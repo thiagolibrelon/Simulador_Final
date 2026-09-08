@@ -341,7 +341,14 @@
         </div>
 
         <div class="field-group">
-          <div class="f-label">Custo de indisponibilidade / ano <span class="tip" data-tip="Gastos anuais com aluguel temporário, Uber ou táxi durante manutenção, sinistro ou pane do veículo próprio.">?</span></div>
+          <div class="f-label">Custo de indisponibilidade / ano <span class="tip" data-tip="Gastos anuais com aluguel temporário, Uber ou táxi durante manutenção, sinistro ou pane do veículo próprio.">?</span>
+            <label class="modo-switch" title="Ligado: o valor digitado é o total da frota, e o simulador divide pela quantidade sozinho.">
+              <input type="checkbox" id="indispModo" onchange="calc()"/>
+              <span class="track"></span>
+              <span class="txt txt-off">Por veículo</span>
+              <span class="txt txt-on">Total da frota</span>
+            </label>
+          </div>
           <div class="input-row">
             <div class="input-wrap"><div class="input-unit">R$</div><input id="indisponibilidadeAno" type="number" value="0" step="500" oninput="calc()"/></div>
             <div class="chip"><div class="chip-l">Impacto/ano</div><div class="chip-v r" id="outIndisp">R$ 0</div></div>
@@ -404,7 +411,14 @@
         </div>
 
         <div class="field-group">
-          <div class="f-label">Administração de frota / mês <span class="tip" data-tip="Sistemas, RH dedicado e controles de multas. Frequentemente esquecido na conta.">?</span></div>
+          <div class="f-label">Administração de frota / mês <span class="tip" data-tip="Sistemas, RH dedicado e controles de multas. Frequentemente esquecido na conta.">?</span>
+            <label class="modo-switch" title="Ligado: o valor digitado é o total mensal da frota, e o simulador divide pela quantidade sozinho.">
+              <input type="checkbox" id="admModo" onchange="calc()"/>
+              <span class="track"></span>
+              <span class="txt txt-off">Por veículo</span>
+              <span class="txt txt-on">Total da frota</span>
+            </label>
+          </div>
           <div class="input-row">
             <div class="input-wrap"><div class="input-unit">R$</div><input id="admFrotaMensal" type="number" value="0" step="50" oninput="calc()"/></div>
             <div></div>
@@ -729,6 +743,10 @@
         </div>
       </div>
 
+      <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted2);margin-bottom:8px;cursor:pointer">
+        <input type="checkbox" id="incluirMemoriaCalculo" style="accent-color:var(--green)"/>
+        Incluir memória de cálculo detalhada (apêndice técnico com as fórmulas)
+      </label>
       <div class="dash-pdf-btn">
         <button class="pdf-btn" onclick="exportPDF()">📄 Exportar PDF Executivo</button>
       </div>
@@ -810,6 +828,10 @@
           <option value="presumido">Lucro Presumido</option>
         </select>
         <button class="fc-bar-btn" onclick="importarDoSimulador()" title="Importa os dados atuais do Simulador como novo modelo">⬇ Importar do Simulador</button>
+        <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted2);cursor:pointer;white-space:nowrap">
+          <input type="checkbox" id="fc_incluirMemoriaCalculo" style="accent-color:var(--green)"/>
+          Memória de cálculo no PDF
+        </label>
         <button class="fc-bar-btn green" onclick="exportPDFFrota()">📄 PDF</button>
       </div>
     </div>
@@ -880,9 +902,23 @@
             <div class="input-wrap"><select id="fc_estado"><option value="0">Isento – 0,0%</option><option value="2">Acre – 2,0%</option><option value="3.25">Alagoas – 3,25%</option><option value="3">Amapá – 3,0%</option><option value="3">Amazonas – 3,0%</option><option value="2.5">Bahia – 2,5%</option><option value="3.5">Ceará – 3,5%</option><option value="3.5">Distrito Federal – 3,5%</option><option value="2">Espírito Santo – 2,0%</option><option value="3.75">Goiás – 3,75%</option><option value="2.5">Maranhão – 2,5%</option><option value="3">Mato Grosso – 3,0%</option><option value="3">Mato Grosso do Sul – 3,0%</option><option value="4">Minas Gerais – 4,0%</option><option value="2.5">Pará – 2,5%</option><option value="2.5">Paraíba – 2,5%</option><option value="3.5">Paraná – 3,5%</option><option value="2">Pernambuco – 2,0%</option><option value="3">Piauí – 3,0%</option><option value="4">Rio de Janeiro – 4,0%</option><option value="3">Rio Grande do Norte – 3,0%</option><option value="3">Rio Grande do Sul – 3,0%</option><option value="3">Rondônia – 3,0%</option><option value="3">Roraima – 3,0%</option><option value="2">Santa Catarina – 2,0%</option><option value="4">São Paulo – 4,0%</option><option value="3">Sergipe – 3,0%</option><option value="4">Tocantins – 4,0%</option></select></div></div>
           <div class="fc-fg"><label>Licenciamento</label>
             <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_licenciamentoAno" type="number" value="0" step="50"/></div></div>
-          <div class="fc-fg"><label>Indisponibilidade / ano</label>
+          <div class="fc-fg"><div class="fc-fg-label">Indisponibilidade / ano <span class="tip" data-tip="Gastos anuais com aluguel temporário, Uber ou táxi durante manutenção, sinistro ou pane do veículo próprio.">?</span>
+              <label class="modo-switch" title="Ligado: o valor digitado é o total da linha (frota), e o simulador divide pela quantidade sozinho.">
+                <input type="checkbox" id="fc_indispModo"/>
+                <span class="track"></span>
+                <span class="txt txt-off">Por veículo</span>
+                <span class="txt txt-on">Total da frota</span>
+              </label>
+            </div>
             <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_indisponibilidadeAno" type="number" value="3000" step="500"/></div></div>
-          <div class="fc-fg"><label>Adm. de frota / mês</label>
+          <div class="fc-fg"><div class="fc-fg-label">Adm. de frota / mês <span class="tip" data-tip="Sistemas, RH dedicado e controles de multas.">?</span>
+              <label class="modo-switch" title="Ligado: o valor digitado é o total mensal da linha (frota), e o simulador divide pela quantidade sozinho.">
+                <input type="checkbox" id="fc_admModo"/>
+                <span class="track"></span>
+                <span class="txt txt-off">Por veículo</span>
+                <span class="txt txt-on">Total da frota</span>
+              </label>
+            </div>
             <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_admFrotaMensal" type="number" value="0" step="50"/></div></div>
           <div class="fc-fg"><label>Custo de Ativação <span class="tip" data-tip="Despesas para colocar o veículo em operação: frete/transporte interestadual até a empresa, deslocamento da equipe, seguro de transporte, combustível e taxas de documentação na retirada.">?</span></label>
             <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_custoAtivacao" type="number" value="0" step="100"/></div></div>

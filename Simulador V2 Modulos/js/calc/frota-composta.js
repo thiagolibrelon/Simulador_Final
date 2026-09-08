@@ -9,6 +9,12 @@
    agora usam o produto único decidido no login. */
 function calcModelo(m, perfil) {
   const ipvaRatePct = parseFloat(m.estado) || 0;
+  /* indispModo/admModo (liga/desliga, true = "Total da frota"): desligado
+     (padrão) = valor já é por veículo; ligado = valor digitado é o total da
+     linha (mais fácil quando o cliente informa o custo consolidado da
+     frota), dividido aqui pela qtd antes do motor único — que segue
+     recebendo só valores por veículo, como sempre. */
+  const qtdM = +m.qtd || 1;
   const c = calcCusto({
     valorVeiculoBruto: +m.valorVeiculoBruto || 0,
     descontoPct: +m.descontoPct || 0,
@@ -21,8 +27,8 @@ function calcModelo(m, perfil) {
     seguroPct: +m.seguroPct || 0,
     ipvaRatePct,
     licenciamentoAno: +m.licenciamentoAno || 0,
-    indisponibilidadeAno: +m.indisponibilidadeAno || 0,
-    admFrotaMensal: +m.admFrotaMensal || 0,
+    indisponibilidadeAno: m.indispModo ? (+m.indisponibilidadeAno || 0) / qtdM : (+m.indisponibilidadeAno || 0),
+    admFrotaMensal: m.admModo ? (+m.admFrotaMensal || 0) / qtdM : (+m.admFrotaMensal || 0),
     custoAtivacao: +m.custoAtivacao || 0,
     custoDesativacao: +m.custoDesativacao || 0,
     modoDepreciacao: m.modoDepreciacao,

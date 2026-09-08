@@ -116,8 +116,12 @@ function calc() {
     seguroPct: n("seguroPct"),
     ipvaRatePct,
     licenciamentoAno: n("licenciamentoAno"),
-    indisponibilidadeAno: n("indisponibilidadeAno"),
-    admFrotaMensal: n("admFrotaMensal"),
+    /* "Digitado como" (indispModo/admModo): por padrão o valor já é por veículo.
+       Se o executivo marcar "Total da frota" (mais fácil quando o cliente informa
+       o custo consolidado), divide pela quantidade antes de entrar no motor —
+       que continua trabalhando só com valores por veículo, como sempre. */
+    indisponibilidadeAno: el("indispModo")?.checked ? n("indisponibilidadeAno") / qtdVeiculos : n("indisponibilidadeAno"),
+    admFrotaMensal: el("admModo")?.checked ? n("admFrotaMensal") / qtdVeiculos : n("admFrotaMensal"),
     custoAtivacao: n("custoAtivacao"),
     custoDesativacao: n("custoDesativacao"),
     modoDepreciacao: el("modoDepreciacao").value,
@@ -325,8 +329,8 @@ function gerarConclusao(c, qtd) {
 ══════════════════════════════════════════ */
 const LS_IDS = [
   "valorVeiculoBruto","descontoPct","entradaPct","parcelas","jurosMensalPct",
-  "oportunidadePct","manutencaoPct","seguroPct","estado","indisponibilidadeAno",
-  "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal",
+  "oportunidadePct","manutencaoPct","seguroPct","estado","indisponibilidadeAno","indispModo",
+  "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal","admModo",
   "custoAtivacao","custoDesativacao",
   "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim",
   "prazoContratoMeses","categoriaVeiculo","precoRevendaEstimado",
@@ -339,7 +343,7 @@ const LS_IDS = [
 function saveLS() {
   try {
     const d = {};
-    LS_IDS.forEach(id => { const e = el(id); if (e) d[id] = e.value; });
+    LS_IDS.forEach(id => { const e = el(id); if (e) d[id] = e.type === "checkbox" ? e.checked : e.value; });
     d._perfil = perfil;
     d._step   = currentStep;
     localStorage.setItem("sim-inputs", JSON.stringify(d));
@@ -355,7 +359,7 @@ function restoreState() {
     const d = JSON.parse(localStorage.getItem("sim-inputs") || "{}");
     LS_IDS.forEach(id => {
       const e = el(id);
-      if (e && d[id] !== undefined) e.value = d[id];
+      if (e && d[id] !== undefined) { if (e.type === "checkbox") e.checked = !!d[id]; else e.value = d[id]; }
     });
     /* syncProdutoUI reconstrói o seletor de prazo e força o default do produto
        (RAC 12 · GF = loginPrazoContratoMeses) — como no comportamento anterior,

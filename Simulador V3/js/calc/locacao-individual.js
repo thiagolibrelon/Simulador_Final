@@ -174,8 +174,12 @@ function calc() {
     seguroPct: n("seguroPct"),
     ipvaRatePct,
     licenciamentoAno: n("licenciamentoAno"),
-    indisponibilidadeAno: n("indisponibilidadeAno"),
-    admFrotaMensal: n("admFrotaMensal"),
+    /* "Digitado como" (indispModo/admModo): por padrão o valor já é por veículo.
+       Se o executivo marcar "Total da frota" (mais fácil quando o cliente informa
+       o custo consolidado), divide pela quantidade antes de entrar no motor —
+       que continua trabalhando só com valores por veículo, como sempre. */
+    indisponibilidadeAno: el("indispModo")?.checked ? n("indisponibilidadeAno") / qtdVeiculos : n("indisponibilidadeAno"),
+    admFrotaMensal: el("admModo")?.checked ? n("admFrotaMensal") / qtdVeiculos : n("admFrotaMensal"),
     custoAtivacao: n("custoAtivacao"),
     custoDesativacao: n("custoDesativacao"),
     modoDepreciacao: el("modoDepreciacao").value,
@@ -277,8 +281,12 @@ function calc() {
   const per = c.periodo;
   const mesesLabel = per.meses + " meses";
   /* Para contrato de 12 meses, "no contrato" == comparação anual (o snapshot
-     validado) — não duplica. Para prazos ≠ 12, mostra a projeção do período. */
-  const mostraPeriodo = per.meses !== 12;
+     validado) — não duplica. Para prazos ≠ 12, mostra a projeção do período.
+     Exceção: se o financiamento (np parcelas) for mais longo que o contrato,
+     sobra saldo devedor não quitado ao fim — o snapshot anual não desconta
+     esse saldo do crédito de revenda (só o período faz isso, ver saldoFim em
+     calcCusto.js), então os dois deixam de coincidir mesmo em 12 meses. */
+  const mostraPeriodo = per.meses !== 12 || c.np > per.meses;
   set("vFrotaVal",   R(c.fAno));
   set("vAluguelVal", R(c.cAlq));
   el("vFrotaContratoTotal").style.display   = mostraPeriodo ? "block" : "none";
@@ -298,17 +306,21 @@ function calc() {
   /* ── HERO DE RESULTADO (Parecer 13) — um número, acima da dobra ── */
   renderResultHero(c, per, mostraPeriodo, vencFinal, mesesLabel);
 
+  /* Mesma regra do hero (linha ~294): em 12 meses com financiamento mais
+     longo que o contrato, o snapshot (c.venc/c.econAbs) diverge do período —
+     usa vencFinal/econVeicFinal pra não contradizer o hero acima. */
   const ep = el("econPill");
-  const perVeic = "por veículo / ano";
-  if (c.venc === "aluguel") {
+  const perVeic = mostraPeriodo ? "por veículo · contrato de " + mesesLabel : "por veículo / ano";
+  const econVeicFinal = mostraPeriodo ? per.econAbs : c.econAbs;
+  if (vencFinal === "aluguel") {
     ep.className = "econ-pill";
     set("epLabel", "Economia estimada com locação");
-    set("epVal",   R(c.econAbs));
+    set("epVal",   R(econVeicFinal));
     set("epSub",   perVeic);
-  } else if (c.venc === "propria") {
+  } else if (vencFinal === "propria") {
     ep.className = "econ-pill red";
     set("epLabel", "Vantagem da frota própria");
-    set("epVal",   R(c.econAbs));
+    set("epVal",   R(econVeicFinal));
     set("epSub",   perVeic);
   } else {
     ep.className = "econ-pill";
@@ -386,8 +398,8 @@ function gerarConclusao(c, qtd) {
 ══════════════════════════════════════════ */
 const LS_IDS = [
   "valorVeiculoBruto","descontoPct","entradaPct","parcelas","jurosMensalPct",
-  "oportunidadePct","manutencaoPct","seguroPct","estado","indisponibilidadeAno",
-  "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal",
+  "oportunidadePct","manutencaoPct","seguroPct","estado","indisponibilidadeAno","indispModo",
+  "modoDepreciacao","depreciacaoPct","licenciamentoAno","admFrotaMensal","admModo",
   "custoAtivacao","custoDesativacao",
   "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim",
   "prazoContratoMeses","categoriaVeiculo","precoRevendaEstimado",
@@ -400,7 +412,7 @@ const LS_IDS = [
 function saveLS() {
   try {
     const d = {};
-    LS_IDS.forEach(id => { const e = el(id); if (e) d[id] = e.value; });
+    LS_IDS.forEach(id => { const e = el(id); if (e) d[id] = e.type === "checkbox" ? e.checked : e.value; });
     d._perfil = perfil;
     d._step   = currentStep;
     localStorage.setItem("sim-inputs", JSON.stringify(d));
@@ -416,7 +428,7 @@ function restoreState() {
     const d = JSON.parse(localStorage.getItem("sim-inputs") || "{}");
     LS_IDS.forEach(id => {
       const e = el(id);
-      if (e && d[id] !== undefined) e.value = d[id];
+      if (e && d[id] !== undefined) { if (e.type === "checkbox") e.checked = !!d[id]; else e.value = d[id]; }
     });
     /* syncProdutoUI reconstrói o seletor de prazo e força o default do produto
        (RAC 12 · GF = loginPrazoContratoMeses) — como no comportamento anterior,

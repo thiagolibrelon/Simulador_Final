@@ -182,6 +182,7 @@
 .fc-fsec-title::after{content:'';flex:1;height:1px;background:var(--bd2)}
 .fc-fg{display:flex;flex-direction:column;gap:5px}
 .fc-fg label{font-size:11px;font-weight:600;color:var(--muted)}
+.fc-fg-label{font-size:11px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:5px}
 .fc-grid{display:grid;gap:9px}
 .fc-g2{grid-template-columns:1fr 1fr}
 .fc-g3{grid-template-columns:1fr 1fr 1fr}

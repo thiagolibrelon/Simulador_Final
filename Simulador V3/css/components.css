@@ -44,6 +44,19 @@
 .input-unit{padding:0 11px 0 2px;font-size:11px;font-weight:600;color:var(--muted2);white-space:nowrap;flex-shrink:0}
 select option{background:var(--s1);color:var(--text)}
 
+/* Liga/desliga "por veículo × total da frota" — ao lado do rótulo do campo */
+.modo-switch{display:inline-flex;align-items:center;gap:6px;cursor:pointer;margin-left:6px;user-select:none}
+.modo-switch input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.modo-switch .track{width:28px;height:16px;border-radius:999px;background:var(--bd2);position:relative;flex-shrink:0;transition:background .18s}
+.modo-switch .track::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--s1);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .18s}
+.modo-switch input:checked + .track{background:var(--green)}
+.modo-switch input:checked + .track::after{transform:translateX(12px)}
+.modo-switch input:focus-visible + .track{outline:2px solid var(--green);outline-offset:2px}
+.modo-switch .txt{font-size:11px;font-weight:600;color:var(--muted2);white-space:nowrap}
+.modo-switch .txt-on{display:none}
+.modo-switch input:checked ~ .txt-on{display:inline}
+.modo-switch input:checked ~ .txt-off{display:none}
+
 /* ── <details class="adv"> — "Ajustes avançados" recolhível (Parecer 13, item 03) ── */
 details.adv{margin:14px 0;border:1px solid var(--bd);border-radius:10px;background:var(--s2);overflow:hidden}
 details.adv > summary{

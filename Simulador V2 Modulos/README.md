@@ -175,11 +175,18 @@ zera os 3 campos. **Não persistem em localStorage** (removidos de `LS_IDS`) —
 desmarcado a cada sessão. Só no Simulador (o modal da Frota Composta mantém os campos visíveis).
 
 **Motor plurianual (`result.periodo`, implementado 31/08/2026 — base: Parecer 11 do Heitor).**
-Vale para RAC e GF. `calcCusto()` continua retornando o snapshot anual (`fAno`/`cAlq`/`econ`,
-intocado) e agora também `periodo` com o **contrato inteiro** — a comparação-título para prazos
-≠ 12 meses. **Para prazo = 12 meses a UI/PDF NÃO mostram o bloco de período** (o snapshot anual
-já é a comparação de 12 meses, e é o modelo validado); para np > 12 os dois divergem por
-diferença de tratamento do saldo devedor, por isso o guard `meses !== 12`.
+Vale para RAC e GF. `calcCusto()` continua retornando o snapshot anual (`fAno`/`cAlq`/`econ`)
+e agora também `periodo` com o **contrato inteiro** — a comparação-título para prazos
+≠ 12 meses. **Para prazo = 12 meses a UI/PDF NÃO mostram o bloco de período** (o snapshot
+anual já é a comparação de 12 meses).
+**Correção de 04/09/2026:** até então, o snapshot anual (`revnd`, dentro de `fAno`/`cAlq`)
+não descontava o saldo devedor do financiamento ainda em aberto após 12 meses — só o
+período fazia isso (`revendaFimLiq`/`saldoFim`) — então para `np > 12` os dois podiam
+divergir mesmo em contratos de 12 meses, incluindo o veredito de qual lado vence. Corrigido
+reaproveitando `saldo` (já calculado, nunca usado): `revnd = precoRevenda − impGanhoCap −
+saldo`, espelhando `revendaFimLiq`. Como `saldo` (ano‑1) e `saldoFim` com `meses=12` são a
+mesma fórmula, os dois cálculos agora **convergem por construção** quando o prazo é de
+12 meses — não é mais preciso nenhum guard especial pra decidir qual mostrar nesse caso.
 Classificação (Parecer 11): aquisição = `entrada + parcelas pagas dentro do contrato` **uma
 vez**; saldo devedor ao fim quitado com o produto da revenda (`revendaFimLiq = revenda − imp.
 ganho − saldoFim`); ativação/desativação **uma vez**; revenda **uma vez** sobre `valorContabilFim

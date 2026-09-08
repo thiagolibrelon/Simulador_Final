@@ -159,7 +159,7 @@ function fcFillModalDefaults() {
     valorVeiculoBruto: 0, descontoPct: 0, entradaPct: 0, parcelas: 1,
     jurosMensalPct: 0, oportunidadePct: 0,
     manutencaoPct: 0, manutIncrementoAnualPct: 15, seguroPct: 0, licenciamentoAno: 0,
-    indisponibilidadeAno: 0, admFrotaMensal: 0,
+    indisponibilidadeAno: 0, admFrotaMensal: 0, indispModo: false, admModo: false,
     custoAtivacao: 0, custoDesativacao: 0,
     modoDepreciacao: "contabil", depreciacaoPct: 0, precoRevendaEstimado: 0,
     aluguelMensal: 0, admAluguel: 0, atividadeFim: "sim",
@@ -172,11 +172,11 @@ function fcFillModalDefaults() {
 function fcFillModal(m) {
   ["descricao","qtd","valorVeiculoBruto","descontoPct","entradaPct","parcelas",
    "jurosMensalPct","oportunidadePct","manutencaoPct","manutIncrementoAnualPct","seguroPct","licenciamentoAno",
-   "indisponibilidadeAno","admFrotaMensal","custoAtivacao","custoDesativacao",
+   "indisponibilidadeAno","indispModo","admFrotaMensal","admModo","custoAtivacao","custoDesativacao",
    "modoDepreciacao","depreciacaoPct","precoRevendaEstimado",
    "aluguelMensal","admAluguel","adicSeguroTotal","adicVidros","adicTelemetria","pneusAnual","atividadeFim","produtoLocacao","prazoContratoMeses","carroReservaGf","categoriaVeiculo",
    "pisPropPct","irpjPropPct","csllPropPct"
-  ].forEach(id => { const e = el("fc_" + id); if (e && m[id] !== undefined) e.value = m[id]; });
+  ].forEach(id => { const e = el("fc_" + id); if (e && m[id] !== undefined) { if (e.type === "checkbox") e.checked = !!m[id]; else e.value = m[id]; } });
   const eEl = el("fc_estado");
   if (eEl && m.estado !== undefined)
     [...eEl.options].forEach(o => { o.selected = (parseFloat(o.value) === parseFloat(m.estado)); });
@@ -188,11 +188,11 @@ function saveModelo() {
   const m = {};
   ["descricao","qtd","valorVeiculoBruto","descontoPct","entradaPct","parcelas",
    "jurosMensalPct","oportunidadePct","manutencaoPct","manutIncrementoAnualPct","seguroPct","licenciamentoAno",
-   "indisponibilidadeAno","admFrotaMensal","custoAtivacao","custoDesativacao",
+   "indisponibilidadeAno","indispModo","admFrotaMensal","admModo","custoAtivacao","custoDesativacao",
    "modoDepreciacao","depreciacaoPct","precoRevendaEstimado",
    "aluguelMensal","admAluguel","adicSeguroTotal","adicVidros","adicTelemetria","pneusAnual","atividadeFim","produtoLocacao","prazoContratoMeses","carroReservaGf","categoriaVeiculo",
    "pisPropPct","irpjPropPct","csllPropPct"
-  ].forEach(id => { const e = el("fc_" + id); if (e) m[id] = e.value; });
+  ].forEach(id => { const e = el("fc_" + id); if (e) m[id] = e.type === "checkbox" ? e.checked : e.value; });
   const eEl = el("fc_estado");
   m.estado = eEl ? parseFloat(eEl.options[eEl.selectedIndex].value) : 0;
   if (fcEditId === null) frota.push(m); else frota[fcEditId] = m;
@@ -236,7 +236,7 @@ function selectRegimeFC(r) {
 function importarDoSimulador() {
   const FIELDS = ["valorVeiculoBruto","descontoPct","entradaPct","parcelas",
     "jurosMensalPct","oportunidadePct","manutencaoPct","seguroPct",
-    "licenciamentoAno","indisponibilidadeAno","admFrotaMensal",
+    "licenciamentoAno","indisponibilidadeAno","indispModo","admFrotaMensal","admModo",
     "custoAtivacao","custoDesativacao","modoDepreciacao",
     "depreciacaoPct","precoRevendaEstimado","aluguelMensal","admAluguel",
     "adicSeguroTotal","adicVidros","adicTelemetria","atividadeFim",
@@ -251,7 +251,7 @@ function importarDoSimulador() {
     manutIncrementoAnualPct: el("manutIncrementoAnualPct")?.value || 15,
     carroReservaGf: (el("carroReservaGf") && !el("carroReservaGf").checked) ? "nao" : "sim"
   };
-  FIELDS.forEach(f => { const e = el(f); if (e) m[f] = e.value; });
+  FIELDS.forEach(f => { const e = el(f); if (e) m[f] = e.type === "checkbox" ? e.checked : e.value; });
   const eEl = el("estado");
   m.estado = eEl ? parseFloat(eEl.options[eEl.selectedIndex].value) : 0;
   frota.push(m);

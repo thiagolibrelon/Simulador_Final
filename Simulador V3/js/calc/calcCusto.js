@@ -60,13 +60,20 @@ function calcCusto(p) {
   /* ── Depreciação (ano 1) ── */
   const deprPct = p.modoDepreciacao === "contabil" ? 20 : p.modoDepreciacao === "utilitario" ? 25 : (p.depreciacaoPct || 10);
   const deprA   = vV * pc(deprPct);
-  const valorContabil = Math.max(0, vV - deprA - saldo);
+  /* Igual valorContabilFim (linha ~194): o valor contábil do bem NÃO depende
+     do saldo devedor do financiamento — depende só do custo e da depreciação. */
+  const valorContabil = Math.max(0, vV - deprA);
 
   /* ── Ganho de capital na revenda (Real e Presumido — não é crédito de aluguel, é regra própria) ── */
   const precoRevenda = (p.precoRevendaEstimado || 0) > 0 ? p.precoRevendaEstimado : valorContabil;
   const ganhoCapital = Math.max(0, precoRevenda - valorContabil);
   const impGanhoCap  = ganhoCapital * (pc(p.irpjPropPct || 0) + pc(p.csllPropPct || 0));
-  const revnd        = Math.max(0, precoRevenda - impGanhoCap);
+  /* Espelha revendaFimLiq (saldoFim): se você vendesse o carro ao fim do ano 1, o saldo
+     devedor do financiamento sai primeiro do produto da revenda — igual já é feito no
+     período completo (Parecer 11). `saldo` (linha ~38) já existia calculado mas nunca
+     era usado; esse era o bug (fAno/cAlq podiam discordar de periodo.custoPropria mesmo
+     em contratos de 12 meses, sempre que o financiamento fosse mais longo que 12 meses). */
+  const revnd        = Math.max(0, precoRevenda - impGanhoCap - saldo);
 
   /* ── Tributos Frota — base = manutenção + pneus + depreciação (Lucro Real) ── */
   const baseManutDepr = manut + pneusAnual + deprA;
