@@ -174,7 +174,7 @@ function fcFillModalDefaults() {
     custoAtivacao: 0, custoDesativacao: 0,
     modoDepreciacao: "contabil", depreciacaoPct: 0, precoRevendaEstimado: 0,
     aluguelMensal: 0, admAluguel: 0, atividadeFim: "sim",
-    adicSeguroTotal: 0, adicVidros: 0, adicTelemetria: 0, pneusAnual: 0,
+    adicSeguroTotal: 0, adicVidros: 0, adicTelemetria: 0,
     produtoLocacao: "rac", prazoContratoMeses: 12, carroReservaGf: "sim", categoriaVeiculo: "Econômico",
     pisPropPct: 9.25, irpjPropPct: 25, csllPropPct: 9, estado: 0
   });
@@ -185,7 +185,7 @@ function fcFillModal(m) {
    "jurosMensalPct","oportunidadePct","manutencaoPct","manutIncrementoAnualPct","seguroPct","licenciamentoAno",
    "indisponibilidadeAno","indispModo","admFrotaMensal","admModo","custoAtivacao","custoDesativacao",
    "modoDepreciacao","depreciacaoPct","precoRevendaEstimado",
-   "aluguelMensal","admAluguel","adicSeguroTotal","adicVidros","adicTelemetria","pneusAnual","atividadeFim","produtoLocacao","prazoContratoMeses","carroReservaGf","categoriaVeiculo",
+   "aluguelMensal","admAluguel","adicSeguroTotal","adicVidros","adicTelemetria","atividadeFim","produtoLocacao","prazoContratoMeses","carroReservaGf","categoriaVeiculo",
    "pisPropPct","irpjPropPct","csllPropPct"
   ].forEach(id => { const e = el("fc_" + id); if (e && m[id] !== undefined) { if (e.type === "checkbox") e.checked = !!m[id]; else e.value = m[id]; } });
   const eEl = el("fc_estado");
@@ -201,7 +201,7 @@ function saveModelo() {
    "jurosMensalPct","oportunidadePct","manutencaoPct","manutIncrementoAnualPct","seguroPct","licenciamentoAno",
    "indisponibilidadeAno","indispModo","admFrotaMensal","admModo","custoAtivacao","custoDesativacao",
    "modoDepreciacao","depreciacaoPct","precoRevendaEstimado",
-   "aluguelMensal","admAluguel","adicSeguroTotal","adicVidros","adicTelemetria","pneusAnual","atividadeFim","produtoLocacao","prazoContratoMeses","carroReservaGf","categoriaVeiculo",
+   "aluguelMensal","admAluguel","adicSeguroTotal","adicVidros","adicTelemetria","atividadeFim","produtoLocacao","prazoContratoMeses","carroReservaGf","categoriaVeiculo",
    "pisPropPct","irpjPropPct","csllPropPct"
   ].forEach(id => { const e = el("fc_" + id); if (e) m[id] = e.type === "checkbox" ? e.checked : e.value; });
   const eEl = el("fc_estado");
@@ -258,7 +258,6 @@ function importarDoSimulador() {
     qtd: qtdVeiculos || 1,
     /* Produto vem do login (global), não é mais um campo do wizard do Simulador */
     produtoLocacao: loginProduto,
-    pneusAnual: el("pneusAnual")?.value || 0,
     manutIncrementoAnualPct: el("manutIncrementoAnualPct")?.value || 15,
     carroReservaGf: (el("carroReservaGf") && !el("carroReservaGf").checked) ? "nao" : "sim"
   };

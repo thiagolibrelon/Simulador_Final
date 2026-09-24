@@ -40,11 +40,9 @@
         <div class="regime-grid" style="margin-bottom:0">
           <div class="regime-card selected" id="startPcRac" onclick="selectStartProduto('rac')">
             <div class="regime-name">RAC</div>
-            <div class="regime-desc"></div>
           </div>
           <div class="regime-card" id="startPcGf" onclick="selectStartProduto('gf')">
             <div class="regime-name">GF</div>
-            <div class="regime-desc"></div>
           </div>
         </div>
       </div>
@@ -230,12 +228,12 @@
           </div>
 
           <div class="field-group acquisition-resale-field">
-            <div class="f-label">Preço estimado de revenda <span class="tip" data-tip="Valor de mercado esperado na venda do carro ao final do ciclo. Se maior que o valor contábil (custo − depreciação), a diferença é ganho de capital, tributável mesmo no Lucro Presumido.">?</span></div>
+            <div class="f-label">Preço estimado de revenda ao fim do contrato <span class="tip" data-tip="Valor de mercado esperado na venda do carro ao fim do prazo do contrato. Deixe 0 para usar a referência de mercado (1º ano = depreciação contábil; anos seguintes ≈ 10% a.a. — estimativa pendente de validação). Se maior que o valor contábil ao fim, a diferença é ganho de capital, tributável mesmo no Lucro Presumido.">?</span></div>
             <div class="input-row">
               <div class="input-wrap"><div class="input-unit">R$</div><input id="precoRevendaEstimado" type="number" value="0" step="500" oninput="calc()"/></div>
               <div class="chip"><div class="chip-l">Imposto s/ ganho capital</div><div class="chip-v r" id="outImpGanhoCap">R$ 0</div></div>
             </div>
-            <div class="acquisition-book-value">Valor contábil líquido (custo − depreciação): <strong id="outValorContabil">R$ 0</strong> <span aria-hidden="true">·</span> <a href="#" onclick="usarValorContabil();return false">usar como revenda</a></div>
+            <div class="acquisition-book-value">Ao fim de <span id="outRevendaMeses">12</span> meses — valor contábil (custo − depreciação): <strong id="outValorContabil">R$ 0</strong> <span aria-hidden="true">·</span> referência de mercado: <strong id="outRevendaRef">R$ 0</strong> <span aria-hidden="true">·</span> <a href="#" onclick="usarValorContabil();return false">usar referência como revenda</a></div>
           </div>
         </section>
 
@@ -311,11 +309,11 @@
 
         <div class="slider-row">
           <div class="slider-head">
-            <span class="slider-name">Manutenção anual <span style="font-weight:500;color:var(--muted)"></span></span>
+            <span class="slider-name">Manutenção anual</span>
             <span class="slider-val"><span id="slManut">1.5</span>% · <span id="slManutR">R$ 0</span></span>
           </div>
           <input type="range" id="manutencaoPct" min="0" max="10" step="0.1" value="0" oninput="sliderUpdate('manutencaoPct','slManut','slManutR');calc()"/>
-          <div class="slider-hint">Revisões, peças e mão de obra —  (lançados à parte no campo abaixo). Referência: 1,5–2,5% (carro novo) · 2,5–3,5% (com 1 ano de uso, fora de garantia/1ª revisão)</div>
+          <div class="slider-hint">Revisões, peças, mão de obra e pneus. Referência: 1,5–2,5% (carro novo) · 2,5–3,5% (com 1 ano de uso, fora de garantia/1ª revisão)</div>
         </div>
 
         <div class="field-group" id="manutIncWrap" style="display:none">
@@ -813,11 +811,11 @@
     <div class="gloss-section">
       <div class="gloss-stitle"><span data-ic="wrench"></span> Custos Operacionais</div>
       <div class="gloss-grid">
-        <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🔩</div><div class="gcard-term">Manutenção</div><div class="gcard-tag">Slider %</div></div><div class="gcard-def">Custo anual com revisões, peças e mão de obra — <strong>não inclui pneus</strong>, que entram em campo próprio. Referência: 1,5–2,5% a.a. sobre o valor do veículo.</div><div class="gcard-form">Manutenção = Valor Veículo × Taxa%</div></div>
+        <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🔩</div><div class="gcard-term">Manutenção</div><div class="gcard-tag">Slider %</div></div><div class="gcard-def">Custo anual com revisões, peças, mão de obra e pneus. Referência: 1,5–2,5% a.a. sobre o valor do veículo.</div><div class="gcard-form">Manutenção = Valor Veículo × Taxa%</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🛡️</div><div class="gcard-term">Seguro Anual</div><div class="gcard-tag">Slider %</div></div><div class="gcard-def">Prêmio anual contra danos, furto e responsabilidade civil. Varia por perfil, uso e cobertura. Referência: 2–4% a.a.</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🏛️</div><div class="gcard-term">IPVA</div><div class="gcard-tag">Por estado</div></div><div class="gcard-def">Imposto estadual sobre propriedade de veículos. Alíquota preenchida automaticamente conforme o estado selecionado.</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">⏸️</div><div class="gcard-term">Custo de Indisponibilidade</div><div class="gcard-tag">R$/ano</div></div><div class="gcard-def">Gasto para manter a operação durante manutenção, sinistro ou pane do veículo próprio (aluguel temporário, Uber, táxi).</div></div>
-        <div class="gcard"><div class="gcard-h"><div class="gcard-icon">📉</div><div class="gcard-term">Depreciação</div><div class="gcard-tag">Calculado</div></div><div class="gcard-def">Contábil/Fiscal: 20% a.a. (RIR/2018). Real/Mercado: 8–15% conforme FIPE. Impacta o valor de revenda.</div><div class="gcard-form">Revenda = Veículo − Depreciação − Saldo Financ.</div></div>
+        <div class="gcard"><div class="gcard-h"><div class="gcard-icon">📉</div><div class="gcard-term">Depreciação</div><div class="gcard-tag">Calculado</div></div><div class="gcard-def">Contábil/Fiscal: 20% a.a. (RIR/2018). Real/Mercado: 8–15% conforme FIPE. Referência de revenda ao fim do contrato: 1º ano = contábil; anos seguintes ≈ 10% a.a. (estimativa).</div><div class="gcard-form">Revenda = Veículo − Depreciação − Saldo Financ.</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">🚚</div><div class="gcard-term">Custo de Ativação</div><div class="gcard-tag">R$/ano · Frota própria</div></div><div class="gcard-def">Despesas para colocar o veículo em operação: frete/transporte interestadual até a empresa, deslocamento da equipe, seguro de transporte, combustível e taxas de documentação na retirada. Não se aplica à locação — a locadora já entrega o veículo pronto para uso.</div></div>
         <div class="gcard"><div class="gcard-h"><div class="gcard-icon">📦</div><div class="gcard-term">Custo de Desativação</div><div class="gcard-tag">R$/ano · Frota própria</div></div><div class="gcard-def">Despesas para tirar o veículo de operação: frete/transporte até outro estado para revenda, preparação (revisão, higienização, funilaria leve), anúncio/comissão e taxas de baixa ou transferência.</div></div>
       </div>
@@ -927,7 +925,7 @@
             <div class="input-wrap"><select id="fc_parcelas"><option value="1">À vista</option><option value="12" selected>12 meses</option><option value="24">24 meses</option><option value="36">36 meses</option><option value="48">48 meses</option><option value="60">60 meses</option></select></div></div>
           <div class="fc-fg"><label>Juros mensais</label>
             <div class="input-wrap"><input id="fc_jurosMensalPct" type="number" value="0" step="0.1"/><div class="input-unit">% a.m.</div></div></div>
-          <div class="fc-fg"><label>Custo de capital (TMA)</label>
+          <div class="fc-fg"><label>Custo de oportunidade (TMA)</label>
             <div class="input-wrap"><input id="fc_oportunidadePct" type="number" value="14.5" step="0.5"/><div class="input-unit">% a.a.</div></div></div>
         </div>
       </div>
@@ -935,13 +933,11 @@
       <div class="fc-fsec">
         <div class="fc-fsec-title">Custos Operacionais</div>
         <div class="fc-grid fc-g2">
-          <div class="fc-fg"><label>Manutenção anual <span style="font-weight:400;color:var(--muted)">(exceto pneus)</span></label>
+          <div class="fc-fg"><label>Manutenção anual <span style="font-weight:400;color:var(--muted)">(inclui pneus)</span></label>
             <div class="input-wrap"><input id="fc_manutencaoPct" type="number" value="1.5" step="0.1"/><div class="input-unit">% a.a.</div></div>
           </div>
           <div class="fc-fg"><label>Aumento anual da manutenção <span class="tip" data-tip="Só aplica em contratos GF (projeção plurianual). Estimativa de mercado, pendente de validação contábil.">?</span></label>
             <div class="input-wrap"><input id="fc_manutIncrementoAnualPct" type="number" value="15" step="1"/><div class="input-unit">% a.a.</div></div></div>
-          <div class="fc-fg"><label>Pneus / ano <span class="tip" data-tip="Valor anual fixo, à parte da manutenção.">?</span></label>
-            <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_pneusAnual" type="number" value="0" step="50"/></div></div>
           <div class="fc-fg"><label>Seguro anual</label>
             <div class="input-wrap"><input id="fc_seguroPct" type="number" value="2" step="0.1"/><div class="input-unit">% a.a.</div></div></div>
           <div class="fc-fg" style="grid-column:span 2"><label>Estado (IPVA)</label>
@@ -980,7 +976,7 @@
             <div class="input-wrap"><select id="fc_modoDepreciacao" onchange="fcToggleDepr()"><option value="contabil" selected>Contábil / Fiscal (20% a.a.)</option><option value="utilitario">Utilitário / Fiscal (25% a.a.)</option><option value="real">Real / Mercado</option></select></div></div>
           <div class="fc-fg" id="fc_boxDeprReal" style="display:none"><label>Taxa real</label>
             <div class="input-wrap"><input id="fc_depreciacaoPct" type="number" value="0" step="0.5"/><div class="input-unit">% a.a.</div></div></div>
-          <div class="fc-fg"><label>Preço estimado de revenda <span class="tip" data-tip="Se maior que o valor contábil, a diferença é ganho de capital tributável (Real e Presumido).">?</span></label>
+          <div class="fc-fg"><label>Revenda ao fim do contrato <span class="tip" data-tip="Deixe 0 para usar a referência de mercado (1º ano = contábil; anos seguintes ≈ 10% a.a.). Se maior que o valor contábil ao fim, a diferença é ganho de capital tributável (Real e Presumido).">?</span></label>
             <div class="input-wrap"><div class="input-unit">R$</div><input id="fc_precoRevendaEstimado" type="number" value="0" step="500"/></div></div>
         </div>
       </div>

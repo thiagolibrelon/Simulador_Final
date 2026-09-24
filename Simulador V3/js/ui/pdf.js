@@ -61,13 +61,12 @@ function renderMemoriaCalculo(c, raw) {
     ${c.np > 1 ? linha(`Parcela (Price · ${c.np}× · ${fmtPctMC(raw.jurosMensalPct)} a.m.)`, R2(c.parc) + "/mês") : linha("Pagamento", "à vista")}
     ${c.np > 1 ? linha("Juros totais no financiamento", R(c.jTot)) : ""}
     ${linha(`Parcelas pagas no ano 1 (${mesesFin1}×)`, R(c.gParc))}
-    ${linha(`Custo de capital / TMA (${fmtPctMC(raw.oportunidadePct)} a.a. sobre entrada + parcelas)`, R(c.opor))}
+    ${linha(`Custo de oportunidade / TMA (${fmtPctMC(raw.oportunidadePct)} a.a. sobre entrada + parcelas)`, R(c.opor))}
     <div style="border-top:1px solid #E6E6E6;margin-top:6px;padding-top:6px">${linha("Total aquisição (ano 1)", R(c.aqAno))}</div>
   `);
 
   const operacional = bloco("2 · Custos operacionais (ano 1)", `
     ${linha(`Manutenção (${fmtPctMC(raw.manutencaoPct)} sobre ${R(c.vV)})`, R(c.manut))}
-    ${c.pneusAnual > 0 ? linha("Pneus (valor fixo anual)", R(c.pneusAnual)) : ""}
     ${linha(`Seguro (${fmtPctMC(raw.seguroPct)} sobre ${R(c.vV)})`, R(c.seg))}
     ${linha(`IPVA (${fmtPctMC(raw.ipvaRatePct)}${raw.estadoNome ? " — " + raw.estadoNome : ""})`, R(c.ipva))}
     ${linha("Licenciamento", R(c.lic))}
@@ -120,11 +119,14 @@ function renderMemoriaCalculo(c, raw) {
     periodoHtml = bloco(`6 · Contrato completo — ${per.meses} meses (Parecer 11)`, `
       ${linha("Entrada + parcelas pagas no contrato", R(per.aqUnica))}
       ${per.saldoFim > 0 ? linha(`Saldo devedor ao fim (${c.np - per.meses} parcela(s) em aberto)`, "− " + R(per.saldoFim) + " (abatido da revenda)") : ""}
-      ${linha("Custo de capital no período", R(per.oporPeriodo))}
-      ${linha("Operacional + manutenção + pneus no período", R(per.opexRecorr + per.manutTotal + per.pneusPeriodo))}
+      ${linha("Custo de oportunidade / TMA no período", R(per.oporPeriodo))}
+      ${linha("Operacional + manutenção no período", R(per.opexRecorr + per.manutTotal))}
       ${per.ativDesativ > 0 ? linha("Ativação + desativação (única)", R(per.ativDesativ)) : ""}
       ${per.tribP > 0 ? linha("− Créditos tributários no período", "− " + R(per.tribP)) : ""}
       ${linha("Valor contábil ao fim do contrato", R(per.valorContabilFim))}
+      ${linha(`Referência de mercado ao fim (1º ano ${fmtPctMC(c.deprPct)}; demais ${fmtPctMC(per.taxaMercadoPos)} a.a.)`, R(per.revendaReferenciaFim))}
+      ${linha(`Preço de revenda considerado${per.precoRevendaFim === per.revendaReferenciaFim ? " (referência)" : " (informado)"}`, R(per.precoRevendaFim))}
+      ${per.ganhoCapFim > 0 ? linha("Imposto s/ ganho de capital ao fim", "− " + R(per.impGanhoCapFim)) : ""}
       ${linha("− Revenda líquida ao fim (revenda − imposto − saldo devedor)", "− " + R(per.revendaFimLiq))}
       <div style="border-top:2px solid #018444;margin-top:8px;padding-top:8px">
         ${linha("Custo no contrato — Frota Própria", R(per.custoPropria))}
@@ -148,10 +150,7 @@ function gerarConclusaoPDF(c, qtd) {
   const unitTxt = qtd > 1
     ? ` (${R(per.econAbs)} por veículo, considerando uma frota de ${qtd} veículos)`
     : "";
-  const basePct = per.venc === "aluguel" ? per.custoPropria : per.custoAluguel;
-  const pctSav = basePct > 0
-    ? ((per.econAbs / basePct) * 100).toFixed(1).replace(".", ",")
-    : "0";
+  const pctSav = fmtPctEcon(pctEconomia(per.venc, per.econAbs, per.custoPropria, per.custoAluguel));
   const valorAno = qtd > 1 ? R(c.econAbs * qtd) : R(c.econAbs);
   const unitAno = qtd > 1 ? ` (${R(c.econAbs)} por veículo)` : "";
   const referenciaAno = c.venc === "aluguel"
@@ -207,6 +206,11 @@ function exportPDF() {
       : "alternativas em equivalência econômica";
   const custoPropriaResumo = usaContratoCompleto ? c.periodo.custoPropria : c.fAno;
   const custoLocacaoResumo = usaContratoCompleto ? c.periodo.custoAluguel : c.cAlq;
+  const pctDestaque = pctEconomia(resultadoDestaque.venc, resultadoDestaque.econAbs, custoPropriaResumo, custoLocacaoResumo);
+  const pctDestaqueHTML = pctDestaque === null ? "" : `<div style="margin-top:14px">
+      <div style="font-size:15px;color:#fff;font-weight:700">≈ ${fmtPctEcon(pctDestaque)}% ${resultadoDestaque.venc === "aluguel" ? "sobre o custo da frota própria" : "abaixo do custo da locação"}</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.65);margin-top:3px;line-height:1.45">Percentual específico desta simulação — varia conforme veículo, prazo, regime tributário e premissas informadas; não representa economia fixa.</div>
+    </div>`;
 
   const totalBrutoFrota = c.aqAno + c.opAno + c.deprA;
   const barW = v => Math.max(4, Math.min(100, (Math.abs(v) / (totalBrutoFrota || 1)) * 100)).toFixed(0);
@@ -370,6 +374,7 @@ body{
       <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${rotuloResultado}${rotuloPeriodo}</div>
       <div style="font-size:52px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-2.5px;line-height:1">${R(valorDestaque)}</div>
       <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:8px;font-weight:500">${usaContratoCompleto ? (qtdVeiculos > 1 ? `${qtdVeiculos} veículos · resultado acumulado em ${mesesDestaque} meses` : `resultado acumulado em ${mesesDestaque} meses · por veículo`) : (qtdVeiculos > 1 ? qtdVeiculos + " veículos · " + R(c.econAbs * qtdVeiculos / 12) + "/mês" : R(c.econAbs/12) + "/mês · por veículo")}</div>
+      ${pctDestaqueHTML}
     </div>
     ${qtdVeiculos > 1 ? `<div style="text-align:right;border-left:1px solid rgba(255,255,255,.2);padding-left:24px">
       <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Por Veículo / ${usaContratoCompleto ? "Contrato" : "Ano"}</div>
@@ -405,11 +410,12 @@ ${usaContratoCompleto ? `<div style="font-size:10.5px;color:#6E6E6E;margin:-3px 
 <div class="cost-wrap">
   <div class="cb">
     <div class="cb-title">Frota Própria</div>
-    <div class="cl"><span>(+) Aquisição (Ano 1)</span><strong>${R(c.aqAno)}</strong></div>
-    <div class="barmini"><div class="bf" style="width:${barW(c.aqAno)}%"></div></div>
+    <div class="cl"><span>(+) Aquisição — entrada + parcelas (ano 1)</span><strong>${R(c.entr + c.gParc)}</strong></div>
+    <div class="barmini"><div class="bf" style="width:${barW(c.entr + c.gParc)}%"></div></div>
+    ${c.saldo > 0 ? `<div class="cl-sub">Saldo devedor após 12 meses: ${R(c.saldo)} (abatido do valor de revenda)</div>` : ""}
+    <div class="cl"><span>(+) Custo de oportunidade / TMA (ano 1)</span><strong>${R(c.opor)}</strong></div>
     <div class="cl"><span>(+) Operação + Depreciação</span><strong>${R(c.opAno + c.deprA)}</strong></div>
     <div class="barmini"><div class="bf orange" style="width:${barW(c.opAno + c.deprA)}%"></div></div>
-    ${c.pneusAnual > 0 ? `<div class="cl-sub">Inclui pneus (linha separada da manutenção): ${R(c.pneusAnual)}/ano</div>` : ""}
     <div class="cl neg"><span>(−) Créditos Tributários</span><strong>${R(c.tribP)}</strong></div>
     <div class="cl-sub">PIS/COFINS ${R(c.pisP)} · IRPJ ${R(c.irjP)} · CSLL ${R(c.cslP)}</div>
     <div class="cl neg"><span>(−) Valor de Revenda</span><strong>${R(c.revnd)}</strong></div>
@@ -441,13 +447,13 @@ ${c.np > 1 && c.np > c.periodo.meses ? `<div style="font-size:10px;color:#A0631A
     <div class="cb-title">Frota Própria — ${c.periodo.meses} meses</div>
     <div class="cl"><span>(+) Aquisição — entrada + parcelas pagas no contrato</span><strong>${R(c.periodo.aqUnica)}</strong></div>
     ${c.periodo.saldoFim > 0 ? `<div class="cl-sub">Saldo devedor ao fim do contrato: ${R(c.periodo.saldoFim)} (abatido do valor de revenda)</div>` : ""}
-    <div class="cl"><span>(+) Custo de capital / TMA no período</span><strong>${R(c.periodo.oporPeriodo)}</strong></div>
-    <div class="cl"><span>(+) Operacional + manutenção + pneus no período</span><strong>${R(c.periodo.opexRecorr + c.periodo.manutTotal + c.periodo.pneusPeriodo)}</strong></div>
-    <div class="cl-sub">Manutenção (curva por idade): ${R(c.periodo.manutTotal)}${c.periodo.pneusPeriodo > 0 ? ` · pneus: ${R(c.periodo.pneusPeriodo)}` : ""}</div>
+    <div class="cl"><span>(+) Custo de oportunidade / TMA no período</span><strong>${R(c.periodo.oporPeriodo)}</strong></div>
+    <div class="cl"><span>(+) Operacional + manutenção no período</span><strong>${R(c.periodo.opexRecorr + c.periodo.manutTotal)}</strong></div>
+    <div class="cl-sub">Manutenção (curva por idade): ${R(c.periodo.manutTotal)}</div>
     ${c.periodo.ativDesativ > 0 ? `<div class="cl"><span>(+) Ativação + desativação (única)</span><strong>${R(c.periodo.ativDesativ)}</strong></div>` : ""}
     <div class="cl neg"><span>(−) Créditos tributários no período</span><strong>${R(c.periodo.tribP)}</strong></div>
     <div class="cl neg"><span>(−) Revenda ao fim (líq. de imposto)</span><strong>${R(c.periodo.revendaFimLiq)}</strong></div>
-    <div class="cl-sub">Valor contábil ao fim: ${R(c.periodo.valorContabilFim)} · preço estimado: ${R(c.periodo.precoRevendaFim)}${c.periodo.ganhoCapFim > 0 ? ` · imposto s/ ganho: ${R(c.periodo.impGanhoCapFim)}` : ""}</div>
+    <div class="cl-sub">Valor contábil ao fim: ${R(c.periodo.valorContabilFim)} · preço estimado: ${R(c.periodo.precoRevendaFim)}${c.periodo.precoRevendaFim === c.periodo.revendaReferenciaFim ? " (referência de mercado)" : ""}${c.periodo.ganhoCapFim > 0 ? ` · imposto s/ ganho: ${R(c.periodo.impGanhoCapFim)}` : ""}</div>
     <div class="cl total"><span>= Custo no contrato</span><strong>${R(c.periodo.custoPropria)}</strong></div>
   </div>
   <div class="cb">
@@ -455,7 +461,6 @@ ${c.np > 1 && c.np > c.periodo.meses ? `<div style="font-size:10px;color:#A0631A
     <div class="cl"><span>(+) Aluguel (${c.periodo.meses}×)</span><strong>${R(c.periodo.locAluguel)}</strong></div>
     <div class="cl"><span>(+) Administrativo</span><strong>${R(c.periodo.locAdm)}</strong></div>
     ${c.periodo.locAdic > 0 ? `<div class="cl"><span>(+) Adicionais</span><strong>${R(c.periodo.locAdic)}</strong></div>` : ""}
-    ${c.periodo.locPneus > 0 ? `<div class="cl"><span>(+) Pneus</span><strong>${R(c.periodo.locPneus)}</strong></div>` : ""}
     ${c.periodo.locIndisp > 0 ? `<div class="cl"><span>(+) Indisponibilidade (sem carro reserva)</span><strong>${R(c.periodo.locIndisp)}</strong></div>` : ""}
     <div class="cl neg"><span>(−) Créditos tributários no período</span><strong>${R(c.periodo.locTrib)}</strong></div>
     <div class="cl total"><span>= Custo no contrato</span><strong>${R(c.periodo.custoAluguel)}</strong></div>
@@ -471,7 +476,6 @@ ${c.produtoLoc === "gf" ? `
 <div class="stitle">Observações do Contrato GF</div>
 <div style="background:#F7F7F7;border:1px solid #E6E6E6;border-radius:10px;padding:16px 18px;margin-bottom:20px;font-size:11px;color:#4A4A4A;line-height:1.7">
   ${c.franquiaKm ? `<div>Franquia de Km (referência contratual): <strong>${c.franquiaKm}</strong></div>` : ""}
-  <div>Pneus: o pacote GF já inclui troca de pneus. Do lado da frota própria, o desgaste/reposição foi estimado em <strong>${R(c.pneusAnual)}/ano</strong> (linha separada da manutenção).</div>
   <div>Carro reserva: <strong>${c.carroReserva ? "incluído no contrato" : "não incluído — custo de indisponibilidade aplicado também ao lado do aluguel"}</strong></div>
   ${c.projecaoManutencao ? `<div style="margin-top:6px">Projeção de manutenção ao longo do contrato — aumento de <strong>${(+c.manutIncrementoAnualPct).toFixed(1)}% a.a.</strong> informado na simulação <em>(estimativa, pendente de validação contábil)</em>: ${c.projecaoManutencao.map(a => `Ano ${a.ano}: ${a.pct.toFixed(1)}%${a.fracao < 1 ? " (parcial)" : ""} — ${R(a.valor)}`).join(" · ")} — total: <strong>${R(c.manutTotalContrato)}</strong></div>` : ""}
   ${c.riscoReclassificacaoArrendamento ? `<div style="margin-top:6px;color:#A0631A">⚠ Prazo ≥ 45 meses se aproxima de 75% da vida útil fiscal (60 meses) — risco de reclassificação para arrendamento mercantil financeiro (Res. BACEN 2.309/96), o que mudaria a dedutibilidade do aluguel. Confirmar com a área contábil antes de fechar o contrato.</div>` : ""}

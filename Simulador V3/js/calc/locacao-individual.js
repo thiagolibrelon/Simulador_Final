@@ -7,8 +7,10 @@ function autoDepr() {
   el("boxDepreciacaoReal").style.display = isReal ? "block" : "none";
 }
 
+/* Preenche a revenda com a referência de mercado ao FIM DO CONTRATO
+   (calcCusto.js → valorReferenciaRevenda), não com o contábil do ano 1. */
 function usarValorContabil() {
-  el("precoRevendaEstimado").value = Math.round(lastCalc.valorContabil || 0);
+  el("precoRevendaEstimado").value = Math.round(lastCalc.periodo?.revendaReferenciaFim || 0);
   calc();
 }
 
@@ -197,7 +199,6 @@ function calc() {
     perfil,
     produtoLocacao: loginProduto,
     prazoContratoMeses: n("prazoContratoMeses"),
-    pneusAnual: n("pneusAnual"),
     franquiaKm: el("franquiaKm")?.value || "",
     carroReservaGf: el("carroReservaGf") ? el("carroReservaGf").checked : true
   });
@@ -244,8 +245,10 @@ function calc() {
   set("outIpva",          R(c.ipva));
   set("outIndisp",        R(c.parad));
   set("outDepreciacao",   R(c.deprA));
-  set("outValorContabil", R(c.valorContabil));
-  set("outImpGanhoCap",   R(c.impGanhoCap));
+  set("outValorContabil", R(c.periodo.valorContabilFim));
+  set("outRevendaRef",    R(c.periodo.revendaReferenciaFim));
+  set("outRevendaMeses",  c.periodo.meses);
+  set("outImpGanhoCap",   R(c.periodo.impGanhoCapFim));
   set("outLic",           R(c.lic));
   set("outAtivacao",      R(c.ativ));
   set("outDesativacao",   R(c.desativ));
@@ -260,7 +263,6 @@ function calc() {
   set("outAdicSeguro",     R(n("adicSeguroTotal") * 12));
   set("outAdicVidros",     R(n("adicVidros") * 12));
   set("outAdicTelemetria", R(n("adicTelemetria") * 12));
-  if (el("outPneusAnual")) set("outPneusAnual", R(c.pneusAnual));
   renderProjecaoGF(c);
 
   /* ── Executive Dashboard ── */
@@ -380,8 +382,17 @@ function calc() {
 /* ══════════════════════════════════════════
    TEXTO DE CONCLUSÃO
 ══════════════════════════════════════════ */
+/* % de economia com a base certa: locação vence → sobre o custo da frota própria;
+   própria vence → sobre o custo da locação. Empate/base zero → null.
+   Usado na conclusão (tela e PDF) e no destaque do PDF — mesmo número nos três. */
+function pctEconomia(venc, econAbs, custoPropria, custoAluguel) {
+  const base = venc === "aluguel" ? custoPropria : venc === "propria" ? custoAluguel : 0;
+  return base > 0 ? (econAbs / base) * 100 : null;
+}
+const fmtPctEcon = v => v === null ? "0" : v.toFixed(1).replace(".", ",");
+
 function gerarConclusao(c, qtd) {
-  const pctSav  = c.fAno > 0 ? ((c.econAbs / c.fAno) * 100).toFixed(1).replace(".",",") : "0";
+  const pctSav  = fmtPctEcon(pctEconomia(c.venc, c.econAbs, c.fAno, c.cAlq));
   const regime  = c.perfil === "real" ? "Lucro Real" : "Lucro Presumido";
   const valorPrincipal = qtd > 1 ? R(c.econAbs * qtd) : R(c.econAbs);
   const unitTxt = qtd > 1 ? ` (${R(c.econAbs)} por veículo, considerando uma frota de ${qtd} veículos)` : "";
@@ -403,7 +414,7 @@ const LS_IDS = [
   "custoAtivacao","custoDesativacao",
   "pisPropPct","irpjPropPct","csllPropPct","aluguelMensal","admAluguel","atividadeFim",
   "prazoContratoMeses","categoriaVeiculo","precoRevendaEstimado",
-  "franquiaKm","pneusAnual","manutIncrementoAnualPct"
+  "franquiaKm","manutIncrementoAnualPct"
 ];
 /* adicSeguroTotal/adicVidros/adicTelemetria NÃO são persistidos — o toggle
    "Incluir itens opcionais" começa desmarcado a cada sessão (spin: economia

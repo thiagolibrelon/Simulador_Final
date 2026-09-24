@@ -17,6 +17,21 @@ function manutPctNoAno(basePct, ano, incrementoPct) {
   return basePct * Math.pow(1 + inc / 100, ano - 1);
 }
 
+/* ══════════════════════════════════════════
+   REVENDA — VALOR DE REFERÊNCIA DE MERCADO
+   No 1º ano a depreciação real ≈ contábil (20%/25% a.a.); a partir do 2º ano
+   o mercado desvaloriza bem menos que a depreciação fiscal linear (que zera o
+   carro em 5 anos). Referência: 1º ano = contábil; anos seguintes perdem
+   `taxaPos` % a.a. sobre o valor do ano anterior. Default 10% a.a. —
+   estimativa, pendente de validação com dados da Localiza Seminovos.
+══════════════════════════════════════════ */
+const TAXA_MERCADO_POS_ANO1_PCT_DEFAULT = 10;
+
+function valorReferenciaRevenda(vV, deprPct, taxaPos, meses) {
+  if (meses <= 12) return Math.max(0, vV * (1 - pc(deprPct) * meses / 12));
+  return Math.max(0, vV * (1 - pc(deprPct)) * Math.pow(1 - pc(taxaPos), (meses - 12) / 12));
+}
+
 /* ── Motor único ──
    p: objeto de entrada já resolvido (sem tocar DOM) — cada aba monta esse
    objeto a partir dos seus próprios campos e chama calcCusto(p). */
@@ -41,10 +56,9 @@ function calcCusto(p) {
   const aqAno  = entr + gParc + opor;
 
   /* ── Operacional (ano 1) ──
-     Pneus (`pneusAnual`): custo de FROTA PRÓPRIA — desgaste/reposição que a
-     percepção usual de "manutenção" costuma esquecer. Linha separada da
-     manutenção (rótulo "exceto pneus"), mas do mesmo lado da conta. GF/locadora
-     já inclui troca de pneus no pacote — por isso não entra no custo do aluguel. */
+     Pneus: o campo separado foi removido em 09/2026 — pneus passam a estar
+     contidos no % de manutenção. `p.pneusAnual` fica aceito (default 0) só por
+     compatibilidade com simulações salvas; nenhuma tela o preenche mais. */
   const manutPctBase = p.manutencaoPct || 0;
   const manut  = vV * pc(manutPctBase);
   const pneusAnual = p.pneusAnual || 0;
@@ -64,8 +78,17 @@ function calcCusto(p) {
      do saldo devedor do financiamento — depende só do custo e da depreciação. */
   const valorContabil = Math.max(0, vV - deprA);
 
-  /* ── Ganho de capital na revenda (Real e Presumido — não é crédito de aluguel, é regra própria) ── */
-  const precoRevenda = (p.precoRevendaEstimado || 0) > 0 ? p.precoRevendaEstimado : valorContabil;
+  /* ── Prazo do contrato (definido cedo: a revenda do snapshot depende dele) ── */
+  const produtoLoc = p.produtoLocacao === "gf" ? "gf" : "rac";
+  const prazoMeses = produtoLoc === "gf"
+    ? (p.prazoContratoMeses || 36)
+    : (p.prazoContratoMeses || 12);
+
+  /* ── Ganho de capital na revenda (Real e Presumido — não é crédito de aluguel, é regra própria) ──
+     `precoRevendaEstimado` é o preço ao FIM DO CONTRATO. Em contratos > 12 meses ele é
+     o preço de um carro mais velho — não serve pro snapshot do ano 1, que então usa
+     a referência do 1º ano (= valor contábil, sem ganho de capital). */
+  const precoRevenda = (p.precoRevendaEstimado || 0) > 0 && prazoMeses <= 12 ? p.precoRevendaEstimado : valorContabil;
   const ganhoCapital = Math.max(0, precoRevenda - valorContabil);
   const impGanhoCap  = ganhoCapital * (pc(p.irpjPropPct || 0) + pc(p.csllPropPct || 0));
   /* Espelha revendaFimLiq (saldoFim): se você vendesse o carro ao fim do ano 1, o saldo
@@ -88,12 +111,6 @@ function calcCusto(p) {
   const fAnoR   = aqAno + opAno - tribP - revnd;
   const fAnoPr  = aqAno + opAno - revnd;
   const fAno    = perfil === "real" ? fAnoR : fAnoPr;
-
-  /* ── Produto de locação ── */
-  const produtoLoc = p.produtoLocacao === "gf" ? "gf" : "rac";
-  const prazoMeses = produtoLoc === "gf"
-    ? (p.prazoContratoMeses || 36)
-    : (p.prazoContratoMeses || 12);
 
   /* ── Aluguel ── */
   const alqM   = p.aluguelMensal || 0;
@@ -199,7 +216,11 @@ function calcCusto(p) {
   const pneusPeriodo = pneusAnual * anosFr;
   const deprAcum    = Math.min(vV, deprA * anosFr);
   const valorContabilFim = Math.max(0, vV - deprAcum);
-  const precoRevendaFim  = (p.precoRevendaEstimado || 0) > 0 ? p.precoRevendaEstimado : valorContabilFim;
+  const taxaMercadoPos   = p.modoDepreciacao === "real" ? deprPct : TAXA_MERCADO_POS_ANO1_PCT_DEFAULT;
+  const revendaReferenciaFim = valorReferenciaRevenda(vV, deprPct, taxaMercadoPos, meses);
+  /* Campo vazio → referência de mercado (não o contábil): em 36m o contábil fiscal
+     (−60%) subestima muito o que o carro vale na venda. */
+  const precoRevendaFim  = (p.precoRevendaEstimado || 0) > 0 ? p.precoRevendaEstimado : revendaReferenciaFim;
   const ganhoCapFim      = Math.max(0, precoRevendaFim - valorContabilFim);
   const impGanhoCapFim   = ganhoCapFim * (pc(p.irpjPropPct || 0) + pc(p.csllPropPct || 0));
   const revendaFimLiq    = Math.max(0, precoRevendaFim - impGanhoCapFim - saldoFim);
@@ -240,7 +261,8 @@ function calcCusto(p) {
     locAluguel, locAdm, locAdic, locIndisp, locTrib,
     aqUnica, parcPeriodo, saldoFim, oporPeriodo, opexRecorr, manutTotal: manutTotalContrato,
     pneusPeriodo, ativDesativ: ativ + desativ, tribP: tribPPeriodo,
-    deprAcum, valorContabilFim, precoRevendaFim, ganhoCapFim, impGanhoCapFim, revendaFimLiq
+    deprAcum, valorContabilFim, precoRevendaFim, ganhoCapFim, impGanhoCapFim, revendaFimLiq,
+    revendaReferenciaFim, taxaMercadoPos
   };
 
   return result;

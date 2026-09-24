@@ -6,6 +6,20 @@ com o "tapa no visual". Mesmo motor de cálculo (`js/calc/calcCusto.js` **inalte
 
 ## O que mudou
 
+### Revenda, pneus e PDF (24/09/2026 — reunião pós-apresentação RMR)
+- **Revenda = fim do contrato.** `precoRevendaEstimado` passou a ser o preço ao fim do
+  prazo. Vazio → referência de mercado (`valorReferenciaRevenda` em `calcCusto.js`):
+  1º ano = depreciação contábil; anos seguintes −10% a.a. sobre o ano anterior
+  (`TAXA_MERCADO_POS_ANO1_PCT_DEFAULT`, ou a taxa Real/Mercado se esse método for escolhido).
+  Estimativa pendente de validação com dados da Localiza Seminovos. O snapshot do 1º ano só
+  usa o preço digitado quando o prazo é ≤ 12 meses. Link "usar referência como revenda"
+  corrigido (antes usava o contábil de 1 ano mesmo em 36m).
+- **Pneus removidos de vez** (Simulador, Frota Composta, PDF, glossário) — ficam contidos no
+  % de manutenção.
+- **PDF:** aquisição (entrada + parcelas) e custo de oportunidade/TMA em linhas separadas no
+  quadro anual; % de economia no destaque com nota "varia conforme cenário"; mesmo % na
+  conclusão (`pctEconomia()` — antes, com a própria vencendo, a base estava errada).
+
 ### PDF executivo — contratos acima de 12 meses (08/09/2026)
 - O hero, o vencedor, os custos-resumo e a conclusão agora usam o resultado acumulado do
   contrato inteiro. A visão dos primeiros 12 meses permanece como referência complementar,

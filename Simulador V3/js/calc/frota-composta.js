@@ -46,7 +46,6 @@ function calcModelo(m, perfil) {
     perfil,
     produtoLocacao: m.produtoLocacao === "gf" ? "gf" : "rac",
     prazoContratoMeses: +m.prazoContratoMeses || (m.produtoLocacao === "gf" ? 36 : 12),
-    pneusAnual: +m.pneusAnual || 0,
     carroReservaGf: m.carroReservaGf !== "nao"
   });
 
