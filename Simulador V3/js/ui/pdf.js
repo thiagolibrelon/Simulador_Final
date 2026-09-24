@@ -151,21 +151,18 @@ function gerarConclusaoPDF(c, qtd) {
     ? ` (${R(per.econAbs)} por veículo, considerando uma frota de ${qtd} veículos)`
     : "";
   const pctSav = fmtPctEcon(pctEconomia(per.venc, per.econAbs, per.custoPropria, per.custoAluguel));
-  const valorAno = qtd > 1 ? R(c.econAbs * qtd) : R(c.econAbs);
-  const unitAno = qtd > 1 ? ` (${R(c.econAbs)} por veículo)` : "";
-  const referenciaAno = c.venc === "aluguel"
-    ? `Como referência complementar, no primeiro ano isolado a locação apresenta economia estimada de <strong>${valorAno}</strong>${unitAno}.`
-    : c.venc === "propria"
-      ? `Como referência complementar, no primeiro ano isolado a frota própria apresenta vantagem estimada de <strong>${valorAno}</strong>${unitAno}.`
-      : "Como referência complementar, o primeiro ano isolado apresenta equivalência econômica entre as alternativas.";
+  /* Média anual = total do contrato ÷ anos. Não usar o snapshot do 1º ano aqui:
+     é outra conta (revenda ao fim de 12 meses) e daria um segundo "por ano" diferente. */
+  const mediaAno = per.econAbs / per.anos;
+  const mediaTxt = ` Em média, isso equivale a <strong>${R(mediaAno * (qtd > 1 ? qtd : 1))} por ano</strong>${qtd > 1 ? ` (${R(mediaAno)} por veículo)` : ""} ao longo do contrato.`;
 
   if (per.venc === "aluguel") {
-    return `Ao longo do contrato de <strong>${per.meses} meses</strong>, neste cenário de ${regime}, a locação gera uma economia total estimada de <strong>${valorPrincipal}</strong>${unitTxt} (${pctSav}% sobre o custo da frota própria no período). A locação transforma CAPEX em OPEX previsível, libera capital de giro e reduz a exposição à depreciação, aos custos administrativos e aos riscos operacionais de gestão de frota. ${referenciaAno}`;
+    return `Ao longo do contrato de <strong>${per.meses} meses</strong>, neste cenário de ${regime}, a locação gera uma economia total estimada de <strong>${valorPrincipal}</strong>${unitTxt} (${pctSav}% sobre o custo da frota própria no período). A locação transforma CAPEX em OPEX previsível, libera capital de giro e reduz a exposição à depreciação, aos custos administrativos e aos riscos operacionais de gestão de frota.${mediaTxt}`;
   }
   if (per.venc === "propria") {
-    return `Ao longo do contrato de <strong>${per.meses} meses</strong>, neste cenário de ${regime}, a frota própria apresenta uma vantagem total estimada de <strong>${valorPrincipal}</strong>${unitTxt} (${pctSav}% abaixo do custo da locação no período). Recomenda-se considerar também a carga administrativa de gestão da frota, o risco de obsolescência e a imobilização de capital antes da decisão definitiva. ${referenciaAno}`;
+    return `Ao longo do contrato de <strong>${per.meses} meses</strong>, neste cenário de ${regime}, a frota própria apresenta uma vantagem total estimada de <strong>${valorPrincipal}</strong>${unitTxt} (${pctSav}% abaixo do custo da locação no período). Recomenda-se considerar também a carga administrativa de gestão da frota, o risco de obsolescência e a imobilização de capital antes da decisão definitiva.${mediaTxt}`;
   }
-  return `Ao longo do contrato de <strong>${per.meses} meses</strong>, as alternativas apresentam resultado economicamente equivalente (diferença inferior a R$ 50). A decisão deve considerar flexibilidade operacional, previsibilidade de custos, foco no negócio principal e gestão de ativos. ${referenciaAno}`;
+  return `Ao longo do contrato de <strong>${per.meses} meses</strong>, as alternativas apresentam resultado economicamente equivalente (diferença inferior a R$ 50). A decisão deve considerar flexibilidade operacional, previsibilidade de custos, foco no negócio principal e gestão de ativos.`;
 }
 
 function exportPDF() {
@@ -199,15 +196,12 @@ function exportPDF() {
     : (resultadoDestaque.venc === "aluguel" ? "Economia por Veículo" : resultadoDestaque.venc === "propria" ? "Vantagem por Veículo" : "Diferença por Veículo");
   const rotuloPeriodo = usaContratoCompleto ? ` no Contrato de ${mesesDestaque} Meses` : " / Ano";
   const valorDestaque = resultadoDestaque.econAbs * (qtdVeiculos > 1 ? qtdVeiculos : 1);
-  const referenciaAno = c.venc === "aluguel"
-    ? `locação economiza ${R(c.econAbs * (qtdVeiculos > 1 ? qtdVeiculos : 1))}`
-    : c.venc === "propria"
-      ? `frota própria economiza ${R(c.econAbs * (qtdVeiculos > 1 ? qtdVeiculos : 1))}`
-      : "alternativas em equivalência econômica";
+  /* Média do contrato (total ÷ prazo) — só para contratos ≠ 12 meses. */
+  const mediaAnoUn = usaContratoCompleto ? c.periodo.econAbs / c.periodo.anos : c.econAbs;
   const custoPropriaResumo = usaContratoCompleto ? c.periodo.custoPropria : c.fAno;
   const custoLocacaoResumo = usaContratoCompleto ? c.periodo.custoAluguel : c.cAlq;
   const pctDestaque = pctEconomia(resultadoDestaque.venc, resultadoDestaque.econAbs, custoPropriaResumo, custoLocacaoResumo);
-  const pctDestaqueHTML = pctDestaque === null ? "" : `<div style="margin-top:14px">
+  const pctDestaqueHTML = pctDestaque === null ? "" : `<div style="border-top:1px solid rgba(255,255,255,.2);margin-top:18px;padding-top:12px">
       <div style="font-size:15px;color:#fff;font-weight:700">≈ ${fmtPctEcon(pctDestaque)}% ${resultadoDestaque.venc === "aluguel" ? "sobre o custo da frota própria" : "abaixo do custo da locação"}</div>
       <div style="font-size:10px;color:rgba(255,255,255,.65);margin-top:3px;line-height:1.45">Percentual específico desta simulação — varia conforme veículo, prazo, regime tributário e premissas informadas; não representa economia fixa.</div>
     </div>`;
@@ -373,16 +367,15 @@ body{
     <div>
       <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${rotuloResultado}${rotuloPeriodo}</div>
       <div style="font-size:52px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-2.5px;line-height:1">${R(valorDestaque)}</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:8px;font-weight:500">${usaContratoCompleto ? (qtdVeiculos > 1 ? `${qtdVeiculos} veículos · resultado acumulado em ${mesesDestaque} meses` : `resultado acumulado em ${mesesDestaque} meses · por veículo`) : (qtdVeiculos > 1 ? qtdVeiculos + " veículos · " + R(c.econAbs * qtdVeiculos / 12) + "/mês" : R(c.econAbs/12) + "/mês · por veículo")}</div>
-      ${pctDestaqueHTML}
+      <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:8px;font-weight:500">${usaContratoCompleto ? (qtdVeiculos > 1 ? `≈ ${R(mediaAnoUn * qtdVeiculos)}/ano · ${R(mediaAnoUn * qtdVeiculos / 12)}/mês em média · ${qtdVeiculos} veículos` : `≈ ${R(mediaAnoUn)}/ano · ${R(mediaAnoUn / 12)}/mês em média · por veículo`) : (qtdVeiculos > 1 ? qtdVeiculos + " veículos · " + R(c.econAbs * qtdVeiculos / 12) + "/mês" : R(c.econAbs/12) + "/mês · por veículo")}</div>
     </div>
     ${qtdVeiculos > 1 ? `<div style="text-align:right;border-left:1px solid rgba(255,255,255,.2);padding-left:24px">
       <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Por Veículo / ${usaContratoCompleto ? "Contrato" : "Ano"}</div>
       <div style="font-size:32px;font-weight:900;color:#fff;font-family:'Playfair Display',serif;letter-spacing:-1.5px;line-height:1">${R(resultadoDestaque.econAbs)}</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:8px;font-weight:500">${usaContratoCompleto ? `${mesesDestaque} meses · por unidade` : `${R(c.econAbs/12)}/mês &nbsp;·&nbsp; por unidade`}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:8px;font-weight:500">${usaContratoCompleto ? `≈ ${R(mediaAnoUn)}/ano em média · por unidade` : `${R(c.econAbs/12)}/mês &nbsp;·&nbsp; por unidade`}</div>
     </div>` : ""}
   </div>
-  ${usaContratoCompleto ? `<div style="border-top:1px solid rgba(255,255,255,.2);margin-top:18px;padding-top:11px;font-size:11px;color:rgba(255,255,255,.72)">Referência do primeiro ano: ${referenciaAno}${qtdVeiculos > 1 ? ` para a frota (${R(c.econAbs)} por veículo)` : ""}.</div>` : ""}
+  ${pctDestaqueHTML}
 </div>
 
 <!-- CUSTOS DE REFERÊNCIA -->
