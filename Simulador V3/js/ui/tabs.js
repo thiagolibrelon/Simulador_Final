@@ -13,3 +13,32 @@ function switchTab(t) {
   if (t === "sim") calc();
   else if (t === "fc") calcFrota();
 }
+
+/* Ferramentas internas do Glossário.
+   Atalho deliberadamente não exposto na interface: Ctrl+Shift+M. */
+function toggleGlossSecretTools(force) {
+  const tools = el("glossSecretTools");
+  if (!tools) return;
+  const abrir = typeof force === "boolean" ? force : tools.hidden;
+  tools.hidden = !abrir;
+  tools.setAttribute("aria-hidden", abrir ? "false" : "true");
+  if (abrir) {
+    tools.scrollIntoView({ behavior: "smooth", block: "center" });
+    el("incluirMemoriaCalculo")?.focus({ preventScroll: true });
+  }
+}
+
+function resetInternalPdfTools() {
+  ["incluirMemoriaCalculo", "fc_incluirMemoriaCalculo"].forEach(id => {
+    const option = el(id);
+    if (option) option.checked = false;
+  });
+  toggleGlossSecretTools(false);
+}
+
+document.addEventListener("keydown", event => {
+  const glossAtivo = el("panelGloss")?.classList.contains("active");
+  if (!glossAtivo || !event.ctrlKey || !event.shiftKey || event.key.toLowerCase() !== "m") return;
+  event.preventDefault();
+  toggleGlossSecretTools();
+});

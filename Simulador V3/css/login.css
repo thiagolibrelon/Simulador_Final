@@ -75,15 +75,6 @@
 .login-btn-tour:hover{background:rgba(0,132,61,.06);border-color:#00843D}
 .login-footer{margin-top:16px;text-align:center;font-size:10px;color:#9A9C90}
 
-/* ── LOGO OFICIAL INTRO ── */
-.localiza-brand{
-  display:flex;align-items:center;gap:12px;
-  margin-bottom:16px;padding-bottom:14px;
-  border-bottom:1px solid #EBE9E1;
-}
-.lb-accent{width:4px;height:34px;background:#00843D;border-radius:2px;flex-shrink:0}
-.localiza-logo-img{height:30px;object-fit:contain;display:block}
-
 /* ── LABEL DE SEÇÃO NA INTRO ── */
 .login-section-label{
   font-size:9.5px;font-weight:700;text-transform:uppercase;
@@ -133,4 +124,3 @@
   color:#FF6600;font-family:'Playfair Display',serif;
 }
 .fleet-econ-sub{font-size:10px;color:var(--muted);margin-top:3px}
-

@@ -7,17 +7,14 @@
 
 /* ── TOPBAR ── */
 .topbar{
-  background:linear-gradient(135deg,var(--topbar-a),var(--topbar-b));
+  background:#05662B;
   border-bottom:1px solid rgba(0,200,83,.14);
   height:54px;padding:0 18px;
   display:flex;align-items:center;justify-content:space-between;gap:10px;
   position:sticky;top:0;z-index:200;
 }
-.tb-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.tb-logo-accent{width:4px;height:30px;background:#00843D;border-radius:2px;flex-shrink:0}
-.tb-logo-name{font-size:16px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1.1}
-.tb-logo-name em{color:rgba(255,255,255,.7);font-style:normal;font-weight:400}
-.tb-logo-sub{font-size:10px;color:rgba(255,255,255,.4);font-weight:500}
+.tb-logo{height:42px;display:flex;align-items:center;flex-shrink:0}
+.tb-logo-img{height:38px;width:auto;display:block;object-fit:contain}
 
 .tb-client{
   display:flex;align-items:center;gap:9px;
@@ -143,4 +140,3 @@ body.pres-mode .right-pane{position:static!important;max-height:none!important;o
 body.pres-mode .ev-col-left{display:none!important}
 body.pres-mode .ev-grid{grid-template-columns:1fr!important}
 .tb-btn.pres-active{background:rgba(255,102,0,.12)!important;border-color:rgba(255,102,0,.4)!important;color:#FF6600!important}
-

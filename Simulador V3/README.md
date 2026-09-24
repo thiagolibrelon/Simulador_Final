@@ -68,8 +68,7 @@ global mutável e config compartilhada entre abas, incluindo `loginProduto`/
 `js/ui/tabs.js` (`switchTab()`), `js/ui/checklist.js` (modal de checklist para o Teams),
 `js/ui/presentation.js` (modo apresentação), `js/ui/tour.js` (tour guiado),
 `js/ui/pdf.js` (as 2 funções de exportação de PDF: `exportPDF()` e
-`exportPDFFrota()` — mantidas juntas porque compartilham o asset `LOGO_OFICIAL` e o mesmo
-padrão de popup de impressão).
+`exportPDFFrota()` — mantidas juntas porque compartilham o mesmo padrão de popup de impressão).
 
 ## Verificação realizada
 
@@ -130,8 +129,9 @@ alterado aqui, é só o que ficou mais visível depois de separar por arquivo:
   cabem numa extração estrutural sem risco de regressão visual.
 - **Glossário e Decisões são 100% estáticos** — não têm arquivo `calc/` ou `ui/` próprio porque
   não há JS dedicado a eles no original além do `switchTab()` compartilhado.
-- `LOGO_OFICIAL` (constante base64 do logo, ~30KB) foi colocada em `js/ui/pdf.js` porque é o
-  único consumidor identificado no código original (usada nos cabeçalhos/rodapés dos 3 PDFs).
+- A marca oficial usada na topbar e no PDF fica em `assets/localiza-logo-oficial-cropped.png`.
+  O recorte preserva os pixels da imagem-fonte e reduz apenas a margem verde para manter boa
+  leitura nos tamanhos compactos; a imagem original também permanece em `assets/`.
 
 ## Motor GF (26/08/2026)
 

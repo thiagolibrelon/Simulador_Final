@@ -10,7 +10,7 @@ const TOUR_STEPS = [
   },
   {
     title: "1 · O veículo",
-    desc: "Preço de tabela, desconto e entrada. Nos passos seguintes: custo de capital, custos de operar e impostos. Campos raros ficam recolhidos em \"Ajustes avançados\".",
+    desc: "Preço de tabela, desconto, entrada, depreciação e valor esperado de revenda. Nos passos seguintes: custo de capital, custos de operar e impostos. Campos raros ficam recolhidos em \"Ajustes avançados\".",
     target: "#step0", wizardStep: 0, tab: "sim"
   },
   {
@@ -152,4 +152,3 @@ function posTooltipCenter(tooltip) {
   tooltip.style.left = Math.max(10, (window.innerWidth  - 320) / 2) + "px";
   tooltip.style.top  = Math.max(10, (window.innerHeight - 290) / 2) + "px";
 }
-

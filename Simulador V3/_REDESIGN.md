@@ -6,6 +6,31 @@ com o "tapa no visual". Mesmo motor de cálculo (`js/calc/calcCusto.js` **inalte
 
 ## O que mudou
 
+### PDF executivo — contratos acima de 12 meses (08/09/2026)
+- O hero, o vencedor, os custos-resumo e a conclusão agora usam o resultado acumulado do
+  contrato inteiro. A visão dos primeiros 12 meses permanece como referência complementar,
+  identificada explicitamente para não competir com o resultado principal.
+- O detalhamento do contrato completo começa em uma nova página, evitando título órfão no
+  rodapé da página anterior. Contratos de 12 meses preservam a apresentação anual existente.
+
+### Atualização da marca (08/09/2026)
+- Removido o pequeno logotipo e o divisor do topo do card de login.
+- A topbar e o relatório executivo passaram a usar a nova marca Localiza fornecida, com um
+  recorte proporcional próprio para leitura em cabeçalhos e rodapés compactos.
+
+### Modo interno da memória de cálculo (08/09/2026)
+- Os controles de memória de cálculo foram removidos das telas do Simulador e da Frota
+  Composta. Na aba Glossário, `Ctrl+Shift+M` revela as duas opções internas de teste.
+- As opções não persistem e são desmarcadas ao voltar à tela inicial, reduzindo o risco de
+  enviar acidentalmente o apêndice técnico em uma simulação comercial.
+
+### Depreciação no início do wizard (08/09/2026)
+- Método de depreciação e preço estimado de revenda foram movidos de Operação para Aquisição,
+  em um bloco destacado e sempre visível. A taxa de mercado continua aparecendo quando esse
+  método é selecionado, e o atalho com o valor contábil líquido acompanha o campo de revenda.
+- O motor de cálculo e os identificadores dos campos foram preservados; a mudança é de ordem,
+  hierarquia e ênfase visual.
+
 ### P0
 - **Hero de resultado fixo no topo do painel direito** (`.result-hero` / `renderResultHero()`
   em `js/calc/locacao-individual.js`). Um número grande — a economia por veículo, na base do
@@ -50,7 +75,6 @@ com o "tapa no visual". Mesmo motor de cálculo (`js/calc/calcCusto.js` **inalte
 - `_REDESIGN.md` (este)
 
 ## Ainda não feito (fora das sugestões da Julia)
-- Logo do login ainda é o base64 de baixa resolução (trocar pelo `LOGO_OFICIAL` do `pdf.js`).
 - Ícones por-termo do glossário (`.gcard-icon`) continuam emoji — Julia pediu só os títulos
   de seção.
 - Item 05 do Parecer 12 (contradição PIS/COFINS sobre depreciação) — é decisão de cálculo,

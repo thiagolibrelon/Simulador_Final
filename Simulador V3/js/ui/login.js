@@ -71,10 +71,10 @@ function startWithTour() {
    VOLTAR À TELA INICIAL
 ══════════════════════════════════════════ */
 function goToStart() {
+  resetInternalPdfTools();
   el("mainApp").style.display = "none";
   const ls = el("loginScreen");
   ls.style.transition = "none";
   ls.style.opacity    = "1";
   ls.style.display    = "block";
 }
-
