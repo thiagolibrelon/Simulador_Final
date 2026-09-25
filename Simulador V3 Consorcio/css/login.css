@@ -1,0 +1,126 @@
+/* login / start screen */
+/* ══════════════════════════════════════════
+   TELA DE INÍCIO — TEMA LIGHT CORPORATIVO
+══════════════════════════════════════════ */
+.login-screen{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px 16px;
+  background:#F1F0EC;
+  position:relative;overflow-y:auto;
+}
+@media (max-height:760px){.login-screen{align-items:flex-start}}
+.login-bg-ring{
+  position:absolute;border-radius:50%;border:1px solid rgba(120,222,31,.07);pointer-events:none;
+}
+.login-bg-ring:nth-child(1){width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.login-bg-ring:nth-child(2){width:800px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.login-bg-ring:nth-child(3){width:1100px;height:1100px;top:50%;left:50%;transform:translate(-50%,-50%)}
+
+.login-card{
+  position:relative;z-index:1;
+  background:#FFFFFF;
+  border:1px solid #E4E2DA;
+  border-radius:18px;
+  padding:28px 30px 26px;
+  width:100%;max-width:440px;
+  box-shadow:0 4px 40px rgba(0,52,24,.08);
+  animation:loginIn .5s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes loginIn{
+  from{opacity:0;transform:translateY(20px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.login-headline{font-size:18px;font-weight:700;color:#26281F;margin-bottom:3px;letter-spacing:-.3px}
+.login-desc{font-size:11.5px;color:#5B5D53;line-height:1.5}
+.login-field{margin-bottom:8px}
+.login-field label{
+  display:block;font-size:10px;font-weight:700;
+  color:#5B5D53;
+  text-transform:uppercase;letter-spacing:.9px;margin-bottom:5px;
+}
+.login-field label .opt{font-weight:600;letter-spacing:0;text-transform:none;color:#8A8C81;margin-left:4px}
+.login-field input{
+  width:100%;
+  background:#FFFFFF;
+  border:1px solid #DDDBD2;
+  border-radius:9px;
+  padding:10px 13px;
+  color:#26281F;
+  font-family:Inter,sans-serif;font-size:14px;font-weight:500;
+  outline:none;transition:border-color .15s,box-shadow .15s;
+}
+.login-field input::placeholder{color:#9A9C90}
+.login-field input:focus{
+  border-color:#00843D;
+  box-shadow:0 0 0 3px rgba(0,132,61,.12);
+}
+.login-error{font-size:11px;color:#B4322C;margin-bottom:8px;padding:8px 12px;background:rgba(180,50,44,.05);border:1px solid rgba(180,50,44,.15);border-radius:8px}
+.login-btn{
+  width:100%;margin-top:8px;
+  padding:13px;
+  background:#00843D;border:none;border-radius:10px;
+  color:#fff;font-size:14.5px;font-weight:700;letter-spacing:.2px;
+  transition:filter .15s,transform .15s;
+}
+.login-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.login-btn:active{transform:translateY(0)}
+.login-btn-tour{
+  width:100%;margin-top:7px;padding:10px;
+  background:transparent;border:1px solid #C9D8CC;border-radius:10px;
+  color:#00622D;font-size:12.5px;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:.15s;
+}
+.login-btn-tour:hover{background:rgba(0,132,61,.06);border-color:#00843D}
+.login-footer{margin-top:16px;text-align:center;font-size:10px;color:#9A9C90}
+
+/* ── LABEL DE SEÇÃO NA INTRO ── */
+.login-section-label{
+  font-size:9.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.3px;color:#00622D;
+  margin:12px 0 9px;display:flex;align-items:center;gap:8px;
+}
+.login-section-label::after{content:'';flex:1;height:1px;background:rgba(0,132,61,.18)}
+
+/* ── BLOCO DE VALOR ── */
+.login-value-block{
+  background:rgba(120,222,31,.06);
+  border:1px solid rgba(120,222,31,.2);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;margin-top:4px;
+}
+.lvb-title{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:#6E6E6E;margin-bottom:10px;
+}
+.lvb-item{
+  font-size:12px;color:#4A4A4A;padding:3px 0;
+  display:flex;align-items:center;gap:9px;
+}
+.lvb-check{
+  color:#00843D;font-weight:900;font-size:13px;flex-shrink:0;width:14px;text-align:center;
+}
+
+/* ── RESUMO DA FROTA (PAINEL DIREITO) ── */
+.fleet-summary{
+  background:linear-gradient(135deg,rgba(120,222,31,.05),rgba(255,102,0,.05));
+  border:1px solid rgba(255,102,0,.28);
+  border-radius:12px;padding:14px;text-align:center;margin-top:10px;
+}
+.fleet-summary-title{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.2px;color:var(--muted);margin-bottom:8px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.fleet-summary-title::before{content:'';width:3px;height:12px;background:#FF6600;border-radius:2px;flex-shrink:0}
+.fleet-qty-badge{
+  display:inline-block;background:#FF6600;color:#fff;
+  font-size:11px;font-weight:700;padding:3px 12px;
+  border-radius:10px;margin-bottom:10px;
+}
+.fleet-econ-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+.fleet-econ-val{
+  font-size:26px;font-weight:900;letter-spacing:-1.5px;
+  color:#FF6600;font-family:'Playfair Display',serif;
+}
+.fleet-econ-sub{font-size:10px;color:var(--muted);margin-top:3px}

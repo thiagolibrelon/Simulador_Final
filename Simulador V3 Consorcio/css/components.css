@@ -1,0 +1,74 @@
+/* shared building blocks: field groups, tooltips, input wrappers */
+/* Fields */
+.field-group{margin-bottom:17px}
+.field-group:last-child{margin-bottom:0}
+.f-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.step-field-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px}
+
+/* ── Tooltip: abre no hover E no toque/foco (Parecer 13, item 09) ── */
+.tip{
+  width:16px;height:16px;border-radius:50%;
+  background:var(--s3);border:1px solid var(--bd2);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;color:var(--muted);cursor:help;
+  position:relative;flex-shrink:0;
+}
+.tip:hover,.tip:focus-visible{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-tx)}
+.tip::after{
+  content:attr(data-tip);
+  position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-45%);
+  background:var(--s1);border:1px solid var(--bd2);border-radius:10px;
+  padding:10px 13px;font-size:11.5px;font-weight:400;color:var(--text);
+  z-index:400;width:250px;max-width:78vw;white-space:normal;line-height:1.45;
+  box-shadow:var(--shadow-lg);
+  opacity:0;visibility:hidden;transform:translateX(-45%) translateY(-4px);
+  transition:opacity .14s,transform .14s,visibility .14s;pointer-events:none;
+}
+.tip:hover::after,.tip:focus::after,.tip.open::after{
+  opacity:1;visibility:visible;transform:translateX(-45%) translateY(0);
+}
+
+.input-row{display:grid;grid-template-columns:1fr 130px;align-items:center;gap:10px}
+.input-wrap{
+  display:flex;align-items:center;
+  background:var(--input-bg);border:1px solid var(--bd2);
+  border-radius:8px;overflow:hidden;transition:border-color .15s,box-shadow .15s;
+}
+.input-wrap:focus-within{border-color:var(--green-l);box-shadow:0 0 0 3px var(--green-bg)}
+.input-wrap input,.input-wrap select{
+  background:transparent;border:none;outline:none;
+  padding:9px 11px;color:var(--text);
+  font-family:Inter,sans-serif;font-size:13px;font-weight:500;
+  width:100%;min-width:0;
+}
+.input-unit{padding:0 11px 0 2px;font-size:11px;font-weight:600;color:var(--muted2);white-space:nowrap;flex-shrink:0}
+select option{background:var(--s1);color:var(--text)}
+
+/* Liga/desliga "por veículo × total da frota" — ao lado do rótulo do campo */
+.modo-switch{display:inline-flex;align-items:center;gap:6px;cursor:pointer;margin-left:6px;user-select:none}
+.modo-switch input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.modo-switch .track{width:28px;height:16px;border-radius:999px;background:var(--bd2);position:relative;flex-shrink:0;transition:background .18s}
+.modo-switch .track::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--s1);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .18s}
+.modo-switch input:checked + .track{background:var(--green)}
+.modo-switch input:checked + .track::after{transform:translateX(12px)}
+.modo-switch input:focus-visible + .track{outline:2px solid var(--green);outline-offset:2px}
+.modo-switch .txt{font-size:11px;font-weight:600;color:var(--muted2);white-space:nowrap}
+.modo-switch .txt-on{display:none}
+.modo-switch input:checked ~ .txt-on{display:inline}
+.modo-switch input:checked ~ .txt-off{display:none}
+
+/* ── <details class="adv"> — "Ajustes avançados" recolhível (Parecer 13, item 03) ── */
+details.adv{margin:14px 0;border:1px solid var(--bd);border-radius:10px;background:var(--s2);overflow:hidden}
+details.adv > summary{
+  list-style:none;cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+  padding:11px 14px;
+  font-size:12.5px;font-weight:600;color:var(--muted);
+}
+details.adv > summary::-webkit-details-marker{display:none}
+details.adv > summary:hover{color:var(--text)}
+details.adv > summary .ic{transition:transform .2s}
+details.adv[open] > summary .ic{transform:rotate(90deg)}
+details.adv > summary::after{content:"opcional";margin-left:auto;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);background:var(--s3);padding:2px 7px;border-radius:100px}
+.adv-body{padding:4px 14px 14px;border-top:1px solid var(--bd)}
+.adv-body .field-group{margin-bottom:13px}

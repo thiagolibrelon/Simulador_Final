@@ -1,0 +1,63 @@
+/* reset, design tokens (light/dark theme vars), base typography */
+/* ══════════════════════════════════════════
+   VARIÁVEIS DE TEMA — revisão Parecer 13 (Julia Rennó)
+   · dark: uma família de superfícies quentes, contraste de texto ≥ 4,5:1
+   · light: ink real (#26281F) no lugar do cinza #4A4A4A
+   · winner: verde institucional (#00843D / --green-l) no lugar do
+     #78DE1F fluorescente — que fica só como cor de acento/detalhe
+══════════════════════════════════════════ */
+[data-theme="dark"]{
+  --green:#5FB825; --green-l:#7FD348; --green-d:#BCEFA6; --green-tx:#8FD95F;
+  --green-bg:rgba(95,184,37,.14); --green-bd:rgba(95,184,37,.34);
+  --win:#7FD348; --win-bg:rgba(127,211,72,.13); --win-bd:rgba(127,211,72,.40);
+  --bg:#12140F; --s1:#1B1E16; --s2:#23261D; --s3:#2B2F24;
+  --bd:rgba(236,239,226,.12); --bd2:rgba(236,239,226,.22);
+  --text:#ECEFE2; --text2:#C2C7B4;
+  --muted:#9AA28E; --muted2:#727866;
+  --red:#E7605A; --red-bg:rgba(231,96,90,.12); --red-bd:rgba(231,96,90,.30);
+  --amber:#E0A94A; --amber-bg:rgba(224,169,74,.12); --amber-bd:rgba(224,169,74,.30);
+  --orange:#F08A3C; --orange-bg:rgba(240,138,60,.12); --orange-bd:rgba(240,138,60,.30);
+  --topbar-a:#0A1E10; --topbar-b:#123D20;
+  --input-bg:#20241B; --shadow:0 4px 6px -1px rgb(0 0 0/.4),0 2px 4px -2px rgb(0 0 0/.4);
+  --shadow-lg:0 12px 22px -6px rgb(0 0 0/.55),0 4px 8px -4px rgb(0 0 0/.5);
+  --radius:0.5rem;
+}
+[data-theme="light"]{
+  --green:#78DE1F; --green-l:#00843D; --green-d:#003418; --green-tx:#00622D;
+  --green-bg:rgba(0,132,61,.07); --green-bd:rgba(0,132,61,.20);
+  --win:#00843D; --win-bg:rgba(0,132,61,.08); --win-bd:rgba(0,132,61,.28);
+  --bg:#F1F0EC; --s1:#FFFFFF; --s2:#ECEBE5; --s3:#E3E2DB;
+  --bd:#E2E0D8; --bd2:#CFCDC3;
+  --text:#26281F; --text2:#54564C;
+  --muted:#5B5D53; --muted2:#8A8C81;
+  --red:#B4322C; --red-bg:rgba(180,50,44,.06); --red-bd:rgba(180,50,44,.18);
+  --amber:#8A5A00; --amber-bg:rgba(138,90,0,.06); --amber-bd:rgba(138,90,0,.18);
+  --orange:#C2540A; --orange-bg:rgba(194,84,10,.06); --orange-bd:rgba(194,84,10,.2);
+  --topbar-a:#003418; --topbar-b:#00843D;
+  --input-bg:#FFFFFF; --shadow:0 4px 6px -1px rgb(0 0 0/.08),0 2px 4px -2px rgb(0 0 0/.08);
+  --shadow-lg:0 12px 22px -6px rgb(0 0 0/.14),0 4px 8px -4px rgb(0 0 0/.1);
+  --radius:0.5rem;
+}
+
+/* ══════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,sans-serif;
+  background:var(--bg);color:var(--text);
+  font-size:13px;line-height:1.6;
+  transition:background .3s,color .3s;
+  min-height:100vh;
+}
+button{font-family:Inter,sans-serif;cursor:pointer}
+:focus-visible{outline:2px solid var(--green-l);outline-offset:2px;border-radius:3px}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ── Ícones SVG inline (substituem emoji estrutural — Parecer 13, item 05) ── */
+.ic{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;flex-shrink:0;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ic-lg{width:2.4rem;height:2.4rem;stroke-width:1.4}
